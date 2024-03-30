@@ -1,4 +1,3 @@
-#Trabajar con expresiones regulares
 import re
 from typing import Dict
 from flask import jsonify
@@ -11,7 +10,7 @@ class UsuarioGenerico:
 
 
     def __init__(self, data: dict) -> None:
-        self._id = data.get("_id")
+        #self._id = data.get("_id")
         self.nombre = data.get("nombre")
         self.nombre_usuario = data.get("nombre_usuario")
         self.password = data.get("password")
@@ -19,7 +18,7 @@ class UsuarioGenerico:
         self.telefono = data.get("telefono")
         self.edad = data.get("edad")
         self.seguidos = data.get("seguidos", [])
-        self.preferencia = data.get("preferencias", [])
+        self.preferencias = data.get("preferencias", [])
         
     def insertar(self):
         data_insertar = self.__dict__
@@ -31,18 +30,19 @@ class UsuarioGenerico:
 
         data_insertar["password"] = hash_password
 
-        id = mongo.db.users.insert_one(data_insertar).inserted_id
+        id = str(mongo.db.users.insert_one(data_insertar).inserted_id)
 
-        if id != -1:
-            return jsonify({"message": "Usuario con id: " + id + " creado con éxito"}), 200
+
+        
+        return jsonify({"message": "Usuario con id: " + id + "  creado con éxito"}), 200
 
     def eliminar(id):
-        usuario_a_eliminar = mongo.db.users.find_one({"_id": id})
+        usuario_a_eliminar = mongo.db.users.find_one({"_id": ObjectId(id)})
 
         if not usuario_a_eliminar:
             return jsonify({"error": "Usuario no encontrado"}), 404   
         
-        resultado = mongo.db.users.delete_one({"_id": id})
+        resultado = mongo.db.users.delete_one({"_id": ObjectId(id)})
     
         if resultado.deleted_count == 0:
             return jsonify({"error": "No se pudo eliminar el usuario"}), 500
@@ -55,9 +55,41 @@ class UsuarioGenerico:
 
 
     def consultar_usuario(id):
-        usuario = mongo.db.users.find_one({"_id": id}) #Por que no ObjectId
+        usuario = mongo.db.users.find_one({"_id": ObjectId(id)})
         respuesta = json_util.dumps(usuario)
         return respuesta
+
+
+
+
+    def actualizar_usuario(id, data):
+            usuario_actual = mongo.db.users.find_one({"_id": ObjectId(id)})
+
+            
+            cambios = {}
+
+            for campo, valor in data.items():
+                
+                if campo == 'password':
+                    
+                    if not usuario_actual.get(campo) and check_password_hash(usuario_actual[campo], valor):
+                        cambios[campo] = generate_password_hash(valor)
+                
+                elif usuario_actual.get(campo) != valor:
+                    cambios[campo] = valor
+
+            
+            if cambios:
+                resultado = mongo.db.users.update_one({"_id": ObjectId(id)}, {"$set": cambios})
+                if resultado.modified_count == 1:
+                    return jsonify({"message": f"Usuario con ID " + id + " actualizado con éxito"}), 200
+                else:
+                    return jsonify({"error": "No se pudo actualizar el usuario"}), 500
+
+            return jsonify({"message": "No hubo cambios para actualizar"}), 200
+
+
+
 
 
     @classmethod

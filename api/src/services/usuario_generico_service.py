@@ -33,3 +33,12 @@ def consultar_usuarios():
 def consultar_unico_usuario(id):
     respuesta = UsuarioGenerico.consultar_usuario(id)
     return Response(respuesta, mimetype="application/json")
+
+#Actualizar algún dato del Usuario Genérico
+@blueprint.route("/<id>", methods=["PUT"])
+def actualizar_usuario(id):
+    data = request.json
+
+    respuesta = UsuarioGenerico.actualizar_usuario(id, data)
+
+    return respuesta

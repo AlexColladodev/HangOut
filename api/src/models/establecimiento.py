@@ -9,3 +9,5 @@ class Establecimiento:
         self.ofertas = data.get("ofertas", [])
         self.eventos = data.get("eventos", [])
         self.reviews = data.get("reviews", [])
+
+    
