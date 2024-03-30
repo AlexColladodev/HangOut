@@ -9,6 +9,7 @@ public class Establecimiento{
     private AdministradorEstablecimiento admin;
     private ArrayList<Oferta> ofertas;
     private ArrayList<Evento> eventos;
+    private ArrayList<Reseña> reseñas;
 
     Establecimiento(String CIF, AdministradorEstablecimiento admin, String nombreEstablecimiento){
         this.CIF = CIF;
@@ -18,6 +19,7 @@ public class Establecimiento{
         ofertas = new ArrayList<>();
         Ambiente = new HashSet<>();
         eventos = new ArrayList<>();
+        reseñas = new ArrayList<>();
 
         admin.addEstablecimiento(this); // Al crear establecimiento, al ADMIN se le asocia directamente
     }
@@ -30,6 +32,8 @@ public class Establecimiento{
         ofertas = new ArrayList<>();
         Ambiente = new HashSet<>();
         eventos = new ArrayList<>();
+        reseñas = new ArrayList<>();
+
     }
 
     //Getters y Setters
@@ -80,6 +84,14 @@ public class Establecimiento{
 
     public void setEvento(ArrayList<Evento> eventos) {
         this.eventos = eventos;
+    }
+
+    public ArrayList<Reseña> getReseñas() {
+        return reseñas;
+    }
+
+    public void setReseñas(ArrayList<Reseña> reseña) {
+        this.reseñas = reseña;
     }
 
     //Fin Getters y Setters

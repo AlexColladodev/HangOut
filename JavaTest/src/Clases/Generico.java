@@ -1,10 +1,14 @@
 
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Generico extends Usuario{
 
     Set<String> preferencias;
+    private ArrayList<Actividad> actividadCreada;
+    private ArrayList<Actividad> actividadParticipa;
+    private ArrayList<Evento> eventoParticipa;
 
     Generico(){
         preferencias = new HashSet<>();
@@ -33,5 +37,13 @@ public class Generico extends Usuario{
 
     void imprimirInforUsuarioGenerico(){
         System.out.println("Preferencias: " + preferencias);
+    }
+
+    void addActividadParticipa(Actividad actividad){
+        actividadParticipa.add(actividad);
+    }
+
+    void addActividadCreada(Actividad actividad){
+        actividadCreada.add(actividad);
     }
 }

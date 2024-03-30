@@ -420,5 +420,21 @@ public class Main {
         }
     }
 
+    private static void usuarioCreaActividad(){
+
+    }
+
+    private static void usuarioParticipaActividad(){
+
+    }
+
+    private static void establecimientoCreaEvento(){
+
+    }
+
+    private static void usuarioParticipaEvento(){
+        
+    }
+
     
 }
