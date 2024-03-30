@@ -20,7 +20,7 @@ class UsuarioGenerico:
         self.seguidos = data.get("seguidos", [])
         self.preferencias = data.get("preferencias", [])
         
-    def insertar(self):
+    def insertar_usuario_generico(self):
         data_insertar = self.__dict__
 
         if not (UsuarioGenerico.correo_es_valido(data_insertar.get("email"))):
@@ -30,19 +30,19 @@ class UsuarioGenerico:
 
         data_insertar["password"] = hash_password
 
-        id = str(mongo.db.users.insert_one(data_insertar).inserted_id)
+        id = str(mongo.db.usuarios_genericos.insert_one(data_insertar).inserted_id)
 
 
         
         return jsonify({"message": "Usuario con id: " + id + "  creado con éxito"}), 200
 
-    def eliminar(id):
-        usuario_a_eliminar = mongo.db.users.find_one({"_id": ObjectId(id)})
+    def eliminar_usuario_generico(id):
+        usuario_a_eliminar = mongo.db.usuarios_genericos.find_one({"_id": ObjectId(id)})
 
         if not usuario_a_eliminar:
             return jsonify({"error": "Usuario no encontrado"}), 404   
         
-        resultado = mongo.db.users.delete_one({"_id": ObjectId(id)})
+        resultado = mongo.db.usuarios_genericos.delete_one({"_id": ObjectId(id)})
     
         if resultado.deleted_count == 0:
             return jsonify({"error": "No se pudo eliminar el usuario"}), 500
@@ -50,12 +50,12 @@ class UsuarioGenerico:
         return jsonify({"message": "Usuario " + id + " eliminado con éxito"}), 200
     
     def consultar_todos_usuarios():
-        usuarios = mongo.db.users.find()
+        usuarios = mongo.db.usuarios_genericos.find()
         return json_util.dumps(usuarios)
 
 
     def consultar_usuario(id):
-        usuario = mongo.db.users.find_one({"_id": ObjectId(id)})
+        usuario = mongo.db.usuarios_genericos.find_one({"_id": ObjectId(id)})
         respuesta = json_util.dumps(usuario)
         return respuesta
 
@@ -63,7 +63,7 @@ class UsuarioGenerico:
 
 
     def actualizar_usuario(id, data):
-            usuario_actual = mongo.db.users.find_one({"_id": ObjectId(id)})
+            usuario_actual = mongo.db.usuarios_genericos.find_one({"_id": ObjectId(id)})
 
             
             cambios = {}
@@ -80,7 +80,7 @@ class UsuarioGenerico:
 
             
             if cambios:
-                resultado = mongo.db.users.update_one({"_id": ObjectId(id)}, {"$set": cambios})
+                resultado = mongo.db.usuarios_genericos.update_one({"_id": ObjectId(id)}, {"$set": cambios})
                 if resultado.modified_count == 1:
                     return jsonify({"message": f"Usuario con ID " + id + " actualizado con éxito"}), 200
                 else:

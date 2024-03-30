@@ -1,0 +1,82 @@
+[
+    {
+        "cif": "621054h",
+        "nombre_establecimiento": "Wolf Inc",
+        "ambiente": ["clásica"],
+        "ofertas": [],
+        "eventos": [],
+        "reviews": []
+    },
+    {
+        "cif": "122150z",
+        "nombre_establecimiento": "Wilkins-Barrera",
+        "ambiente": ["clásica", "reggaeton"],
+        "ofertas": [],
+        "eventos": [],
+        "reviews": []
+    },
+    {
+        "cif": "628625o",
+        "nombre_establecimiento": "Suarez, Hinton and Mccarthy",
+        "ambiente": ["reggaeton", "clásica"],
+        "ofertas": [],
+        "eventos": [],
+        "reviews": []
+    },
+    {
+        "cif": "361008a",
+        "nombre_establecimiento": "Rivera, Lynn and Dawson",
+        "ambiente": ["jazz"],
+        "ofertas": [],
+        "eventos": [],
+        "reviews": []
+    },
+    {
+        "cif": "919192p",
+        "nombre_establecimiento": "Martin, Santiago and Morales",
+        "ambiente": ["electrónica"],
+        "ofertas": [],
+        "eventos": [],
+        "reviews": []
+    },
+    {
+        "cif": "996208s",
+        "nombre_establecimiento": "Dudley-Fleming",
+        "ambiente": ["reggaeton", "clásica", "clásica"],
+        "ofertas": [],
+        "eventos": [],
+        "reviews": []
+    },
+    {
+        "cif": "653158v",
+        "nombre_establecimiento": "Foster LLC",
+        "ambiente": ["clásica", "pop", "clásica"],
+        "ofertas": [],
+        "eventos": [],
+        "reviews": []
+    },
+    {
+        "cif": "655814f",
+        "nombre_establecimiento": "Reyes LLC",
+        "ambiente": ["clásica", "jazz", "electrónica"],
+        "ofertas": [],
+        "eventos": [],
+        "reviews": []
+    },
+    {
+        "cif": "753617t",
+        "nombre_establecimiento": "White Inc",
+        "ambiente": ["pop"],
+        "ofertas": [],
+        "eventos": [],
+        "reviews": []
+    },
+    {
+        "cif": "031824l",
+        "nombre_establecimiento": "Lopez, Hess and Diaz",
+        "ambiente": ["pop", "reggaeton", "reggaeton"],
+        "ofertas": [],
+        "eventos": [],
+        "reviews": []
+    }
+]

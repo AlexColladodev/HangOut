@@ -10,14 +10,14 @@ blueprint = Blueprint("UsuarioGenerico", "usuario_generico", url_prefix="/usuari
 def crear_usuario():
     data = request.json
     usuario_generico = UsuarioGenerico(data)
-    resultado = usuario_generico.insertar()
+    resultado = usuario_generico.insertar_usuario_generico()
     return resultado
 
 
 #Eliminar Usuario
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_usuario(id):
-    respuesta = UsuarioGenerico.eliminar(id)
+    respuesta = UsuarioGenerico.eliminar_usuario_generico(id)
     return respuesta
 
 

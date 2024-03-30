@@ -1,0 +1,42 @@
+[
+    {
+        "nombre_oferta": "Mojitos a Mitad de Precio",
+        "descripcion_oferta": "Todos los mojitos a mitad de precio cada miércoles.",
+        "precio_oferta": "4.50"
+    },
+    {
+        "nombre_oferta": "Noche de Tapas y Vino",
+        "descripcion_oferta": "Disfruta de una selección de tapas y una copa de vino a precio especial.",
+        "precio_oferta": "12.00"
+    },
+    {
+        "nombre_oferta": "Descuento en Cocteles de la Casa",
+        "descripcion_oferta": "Ven y prueba nuestros cocteles especiales con un 20% de descuento.",
+        "precio_oferta": "7.50"
+    },
+    {
+        "nombre_oferta": "Domingo de Sangría y Paella",
+        "descripcion_oferta": "Disfruta de nuestra sangría y paella especial cada domingo.",
+        "precio_oferta": "15.00"
+    },
+    {
+        "nombre_oferta": "Karaoke Night con Descuentos en Bebidas",
+        "descripcion_oferta": "Ven a cantar en nuestro Karaoke y disfruta descuentos en todas las bebidas.",
+        "precio_oferta": "5.00"
+    },
+    {
+        "nombre_oferta": "Happy Hour 2x1 en Cervezas",
+        "descripcion_oferta": "Disfruta de nuestras cervezas seleccionadas, dos por el precio de una.",
+        "precio_oferta": "5.99"
+    },
+    {
+        "nombre_oferta": "Jueves de Ladies Night",
+        "descripcion_oferta": "Las damas obtienen un 30% de descuento en todas las bebidas.",
+        "precio_oferta": "4.00"
+    },
+    {
+        "nombre_oferta": "Promoción en Shots de Tequila",
+        "descripcion_oferta": "Shots de tequila al 2x1 toda la noche.",
+        "precio_oferta": "3.50"
+    }
+]

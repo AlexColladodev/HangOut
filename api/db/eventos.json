@@ -1,0 +1,51 @@
+[
+    {
+        "nombre_evento": "Noche de Karaoke",
+        "descripcion_evento": "Demuestra tus habilidades de canto y gana premios.",
+        "fecha_evento": "2024-01-14",
+        "precio": "70.62",
+        "hora_evento": "03:38:57"
+    },
+    {
+        "nombre_evento": "Noche de DJ Internacional",
+        "descripcion_evento": "Disfruta de la música de un famoso DJ internacional.",
+        "fecha_evento": "2025-06-01",
+        "precio": "36.89",
+        "hora_evento": "20:07:47"
+    },
+    {
+        "nombre_evento": "Cata de Vinos y Quesos",
+        "descripcion_evento": "Disfruta de una selección exclusiva de vinos y quesos.",
+        "fecha_evento": "2024-07-04",
+        "precio": "78.70",
+        "hora_evento": "22:09:50"
+    },
+    {
+        "nombre_evento": "Tributo a los 80s",
+        "descripcion_evento": "Revive los mejores hits de los años 80 en una noche inolvidable.",
+        "fecha_evento": "2025-07-02",
+        "precio": "97.52",
+        "hora_evento": "18:52:32"
+    },
+    {
+        "nombre_evento": "Fiesta Semáforo",
+        "descripcion_evento": "Vístete según como te sientas: rojo para ocupado, verde para disponible.",
+        "fecha_evento": "2023-03-18",
+        "precio": "91.27",
+        "hora_evento": "20:55:41"
+    },
+    {
+        "nombre_evento": "Festival de la Cerveza Artesanal",
+        "descripcion_evento": "Prueba las mejores cervezas artesanales de la región.",
+        "fecha_evento": "2023-04-23",
+        "precio": "31.64",
+        "hora_evento": "12:19:20"
+    },
+    {
+        "nombre_evento": "Stand-up Comedy Night",
+        "descripcion_evento": "Ríe con los mejores comediantes en una noche de humor.",
+        "fecha_evento": "2024-06-27",
+        "precio": "80.23",
+        "hora_evento": "06:20:07"
+    }
+]

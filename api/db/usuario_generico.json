@@ -1,0 +1,52 @@
+[
+{
+    "nombre": "Alexander Collado",
+    "nombre_usuario": "AlexCollado00",
+    "password": "AlexColladoRojas",
+    "email": "colladoalex@correo.ugr",
+    "telefono": "643604419",
+    "edad": "23",
+    "seguidos": "",
+    "preferencias": ["reggaeton"]
+},
+{
+    "nombre": "Ines Ruiz",
+    "nombre_usuario": "InesRuiz00",
+    "password": "InesRuizSan",
+    "email": "inerusa@correo.ugr",
+    "telefono": "65224143",
+    "edad": "23",
+    "seguidos": "",
+    "preferencias": ["pop"]
+},
+{
+    "nombre": "Benito Martinez",
+    "nombre_usuario": "BenitoMar00",
+    "password": "BenitoMar",
+    "email": "benito@correo.ugr",
+    "telefono": "7875213",
+    "edad": "29",
+    "seguidos": "",
+    "preferencias": ["reggaeton"]
+},
+{
+    "nombre": "Alberto Collado",
+    "nombre_usuario": "AlbertCollado00",
+    "password": "AlbertZsaq",
+    "email": "alberto@correo.ugr",
+    "telefono": "111222333",
+    "edad": "33",
+    "seguidos": "",
+    "preferencias": ["pop"]
+},
+{
+    "nombre": "Wii Sports",
+    "nombre_usuario": "WiiSports",
+    "password": "1245688",
+    "email": "wii@correo.ugr",
+    "telefono": "852136947",
+    "edad": "37",
+    "seguidos": "",
+    "preferencias": []
+}
+]

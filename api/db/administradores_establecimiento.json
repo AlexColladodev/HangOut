@@ -1,0 +1,82 @@
+[
+    {
+        "nombre": "Justin Durham",
+        "nombre_usuario": "romansuzanne",
+        "password": "%CDE)rQe&7",
+        "email_empresa": "mullenbenjamin@jacobs-carpenter.com",
+        "dni": "26741423",
+        "establecimientos": []
+    },
+    {
+        "nombre": "Karen Smith",
+        "nombre_usuario": "terrysandra",
+        "password": "$Y^7uVttfd",
+        "email_empresa": "lauramcguire@kidd.info",
+        "dni": "78472541",
+        "establecimientos": []
+    },
+    {
+        "nombre": "Amy King",
+        "nombre_usuario": "ashleylambert",
+        "password": "d$4XV^gf)K",
+        "email_empresa": "crystalrhodes@thomas.com",
+        "dni": "33591751",
+        "establecimientos": []
+    },
+    {
+        "nombre": "Charles Brown",
+        "nombre_usuario": "mwagner",
+        "password": "126fK*xII_",
+        "email_empresa": "joshuaweber@murphy.com",
+        "dni": "32945845",
+        "establecimientos": []
+    },
+    {
+        "nombre": "David Franklin",
+        "nombre_usuario": "taylorgerald",
+        "password": "+48$HATt80",
+        "email_empresa": "nriley@valentine-jones.com",
+        "dni": "44154857",
+        "establecimientos": []
+    },
+    {
+        "nombre": "Dominique Gregory",
+        "nombre_usuario": "johnsonmary",
+        "password": "z%47Td@zbi",
+        "email_empresa": "amandataylor@luna.com",
+        "dni": "59528737",
+        "establecimientos": []
+    },
+    {
+        "nombre": "Laura Mitchell",
+        "nombre_usuario": "shawjason",
+        "password": "prDIHsSE(4",
+        "email_empresa": "hawkinsvirginia@briggs.biz",
+        "dni": "15255270",
+        "establecimientos": []
+    },
+    {
+        "nombre": "Robert Wall",
+        "nombre_usuario": "pwilson",
+        "password": "LAEb4PTvM!",
+        "email_empresa": "mbrown@ferguson.com",
+        "dni": "08273263",
+        "establecimientos": []
+    },
+    {
+        "nombre": "Margaret Ross",
+        "nombre_usuario": "rdunn",
+        "password": "jXWktZf_@1",
+        "email_empresa": "rasmussenmichael@pratt.net",
+        "dni": "10439194",
+        "establecimientos": []
+    },
+    {
+        "nombre": "Samuel Oconnor",
+        "nombre_usuario": "xmitchell",
+        "password": "_1XprInXlN",
+        "email_empresa": "breweramber@hall.com",
+        "dni": "23451243",
+        "establecimientos": []
+    }
+]
