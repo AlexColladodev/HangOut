@@ -1,7 +1,9 @@
 from flask import Blueprint, request
 from models.administrador_establecimiento import AdministradorEstablecimiento
 from typing import Dict
-from flask import request, Response
+from flask import request, Response, jsonify
+from schemas.administrador_establecimiento_schema import AdministradorEstablecimientoSchema
+from marshmallow import ValidationError
 
 blueprint = Blueprint("AdministradorEstablecimiento", "administrador_establecimiento", url_prefix="/administrador_establecimiento")
 
@@ -9,9 +11,15 @@ blueprint = Blueprint("AdministradorEstablecimiento", "administrador_establecimi
 @blueprint.route("", methods=["POST"])
 def crear_administrador_establecimiento():
     data = request.json
-    administrador_establecimiento = AdministradorEstablecimiento(data)
-    resultado = administrador_establecimiento.insertar_administrador_establecimiento()
-    return resultado
+    schema = AdministradorEstablecimientoSchema()
+
+    try:
+        datos_validados = schema.load(data)
+        administrador_establecimiento = AdministradorEstablecimiento(datos_validados)
+        resultado = administrador_establecimiento.insertar_administrador_establecimiento()
+        return resultado
+    except ValidationError as err:
+        return jsonify({"error": "Validación fallida", "detalles": err.messages}), 400
 
 
 #Eliminar Administrador de Establecimiento
@@ -32,4 +40,10 @@ def consultar_administradores_establecimiento():
 @blueprint.route("/<id>", methods=["GET"])
 def consultar_administrador_establecimiento(id):
     respuesta = AdministradorEstablecimiento.consultar_administrador_establecimiento(id)
+    return Response(respuesta, mimetype="application/json")
+
+#Consultar si se hace esta manera o con sesiones
+@blueprint.route("/<id>/establecimientos", methods=["POST"])
+def aniadir_nuevo_establecimiento(id):
+    respuesta = AdministradorEstablecimiento.aniadir_establecimiento(id)
     return Response(respuesta, mimetype="application/json")

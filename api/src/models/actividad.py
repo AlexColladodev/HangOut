@@ -5,6 +5,10 @@ from bson import json_util
 from bson.objectid import ObjectId
 from datetime import date, datetime
 
+#from flask_restx
+
+#Trabajar con TimeStamp
+
 class Actividad:
 
     def __init__(self, data: Dict) -> None:
@@ -16,11 +20,30 @@ class Actividad:
 
 
     def insertar_actividad(self):
-        data_insertar = self.__dict__
+        if self.fecha_actividad is not None:
+            self.fecha_actividad = datetime.combine(self.fecha_actividad, datetime.min.time())
+
+            if self.hora_actividad is not None:
+                self.fecha_actividad = datetime.combine(self.fecha_actividad, self.hora_actividad)
+                self.hora_actividad = self.hora_actividad.isoformat()
+            else:
+                pass
+        else:
+
+            if self.hora_actividad is not None:
+                self.hora_actividad = self.hora_actividad.isoformat()
+
+        data_insertar = {
+            "nombre_actividad": self.nombre_actividad,
+            "descripcion_actividad": self.descripcion_actividad,
+            "fecha_actividad": self.fecha_actividad,
+            "hora_actividad": self.hora_actividad if self.hora_actividad is not None else "No especificado",
+            "ubicacion": self.ubicacion
+        }
 
         id = str(mongo.db.actividades.insert_one(data_insertar).inserted_id)
-        
-        return jsonify({"message": "Actividad con id: " + id + "  creado con éxito"}), 200
+
+        return jsonify({"message": "Actividad con id: " + id + " creada con éxito"}), 200
     
 
     def eliminar_actividad(id):

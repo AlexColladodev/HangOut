@@ -10,7 +10,6 @@ class UsuarioGenerico:
 
 
     def __init__(self, data: dict) -> None:
-        #self._id = data.get("_id")
         self.nombre = data.get("nombre")
         self.nombre_usuario = data.get("nombre_usuario")
         self.password = data.get("password")
@@ -60,8 +59,6 @@ class UsuarioGenerico:
         return respuesta
 
 
-
-
     def actualizar_usuario(id, data):
             usuario_actual = mongo.db.usuarios_genericos.find_one({"_id": ObjectId(id)})
 
@@ -87,9 +84,6 @@ class UsuarioGenerico:
                     return jsonify({"error": "No se pudo actualizar el usuario"}), 500
 
             return jsonify({"message": "No hubo cambios para actualizar"}), 200
-
-
-
 
 
     @classmethod

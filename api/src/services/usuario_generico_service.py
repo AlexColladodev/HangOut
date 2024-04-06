@@ -2,16 +2,23 @@ from flask import Blueprint, request, jsonify
 from models.usuario_generico import UsuarioGenerico
 from typing import Dict
 from flask import request, Response
+from schemas.usuario_generico_schema import UsuarioGenericoSchema
+from marshmallow import ValidationError
 
 blueprint = Blueprint("UsuarioGenerico", "usuario_generico", url_prefix="/usuario_generico")
 
-#Insertar Usuario
 @blueprint.route("", methods=["POST"])
-def crear_usuario():
-    data = request.json
-    usuario_generico = UsuarioGenerico(data)
-    resultado = usuario_generico.insertar_usuario_generico()
-    return resultado
+def crear_usuario_generico():
+    datos_usuario = request.json
+    schema = UsuarioGenericoSchema()
+    try:
+        datos_validados = schema.load(datos_usuario)
+        nuevo_usuario = UsuarioGenerico(datos_validados)
+        nuevo_usuario.insertar_usuario_generico()
+
+        return {"mensaje": "Usuario creado con éxito"}
+    except ValidationError as err:
+        return {"error": "Validación fallida", "detalles": err.messages}
 
 
 #Eliminar Usuario

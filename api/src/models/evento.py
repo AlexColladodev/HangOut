@@ -3,7 +3,7 @@ from flask import jsonify
 from db import mongo
 from bson import json_util
 from bson.objectid import ObjectId
-from datetime import date, datetime
+from datetime import date, datetime, time
 
 
 class Evento:
@@ -16,11 +16,31 @@ class Evento:
         self.hora_evento = datetime.strptime(data.get("hora_evento"), '%H:%M:%S').time() if data.get("hora_evento") else None
 
     def insertar_evento(self):
-        data_insertar = self.__dict__
+
+        if self.fecha_evento is not None:
+            self.fecha_evento = datetime.combine(self.fecha_evento, datetime.min.time())
+
+            if self.hora_evento is not None:
+                self.fecha_evento = datetime.combine(self.fecha_evento, self.hora_evento)
+                self.hora_evento = self.hora_evento.isoformat()
+            else:
+                pass
+        else:
+
+            if self.hora_evento is not None:
+                self.hora_evento = self.hora_evento.isoformat()
+
+        data_insertar = {
+            "nombre_evento": self.nombre_evento,
+            "descripcion_evento": self.descripcion_evento,
+            "fecha_evento": self.fecha_evento,
+            "precio": self.precio,
+            "hora_evento": self.hora_evento if self.hora_evento is not None else "No especificado"
+        }
 
         id = str(mongo.db.eventos.insert_one(data_insertar).inserted_id)
-        
-        return jsonify({"message": "Evento con id: " + id + "  creado con éxito"}), 200
+
+        return jsonify({"message": "Evento con id: " + id + " creado con éxito"}), 200
     
 
     def eliminar_evento(id):

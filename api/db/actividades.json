@@ -1,0 +1,72 @@
+[
+    {
+        "nombre_actividad": "ESN Tapas",
+        "descripcion_actividad": "Ven a Bamboleo por tapas de ESN",
+        "fecha_actividad": "2024-08-29",
+        "hora_actividad": "01:13:42",
+        "ubicacion": "Bamboleo Granada"
+    },
+    {
+        "nombre_actividad": "Noche de Trivia",
+        "descripcion_actividad": "Participa en nuestra noche de trivia y gana premios",
+        "fecha_actividad": "2025-02-12",
+        "hora_actividad": "12:17:50",
+        "ubicacion": "El Secretario Bar"
+    },
+    {
+        "nombre_actividad": "Cine al Aire Libre",
+        "descripcion_actividad": "Disfruta de clásicos del cine bajo las estrellas",
+        "fecha_actividad": "2023-07-09",
+        "hora_actividad": "08:20:25",
+        "ubicacion": "Parque de las Ciencias"
+    },
+    {
+        "nombre_actividad": "Taller de Salsa",
+        "descripcion_actividad": "Aprende a bailar salsa con instructores profesionales",
+        "fecha_actividad": "2024-08-04",
+        "hora_actividad": "08:34:38",
+        "ubicacion": "Casa del Arte"
+    },
+    {
+        "nombre_actividad": "Degustación de Vinos",
+        "descripcion_actividad": "Explora variedades de vino locales e internacionales",
+        "fecha_actividad": "2025-02-27",
+        "hora_actividad": "12:41:56",
+        "ubicacion": "Vinoteca La Reserva"
+    },
+    {
+        "nombre_actividad": "Karaoke Night",
+        "descripcion_actividad": "Canta tus canciones favoritas en una noche llena de música",
+        "fecha_actividad": "2025-01-08",
+        "hora_actividad": "21:29:38",
+        "ubicacion": "Krazy Karaoke"
+    },
+    {
+        "nombre_actividad": "Open Mic Night",
+        "descripcion_actividad": "Demuestra tu talento en nuestra noche de micrófono abierto",
+        "fecha_actividad": "2024-03-16",
+        "hora_actividad": "03:02:06",
+        "ubicacion": "La Fábrica Creativa"
+    },
+    {
+        "nombre_actividad": "Torneo de Ajedrez",
+        "descripcion_actividad": "Compite en nuestro torneo de ajedrez mensual",
+        "fecha_actividad": "2024-04-05",
+        "hora_actividad": "12:31:26",
+        "ubicacion": "Club de Ajedrez Rey"
+    },
+    {
+        "nombre_actividad": "Mercado de Arte",
+        "descripcion_actividad": "Explora arte local en nuestro mercado mensual",
+        "fecha_actividad": "2024-12-02",
+        "hora_actividad": "01:51:16",
+        "ubicacion": "Plaza Nueva"
+    },
+    {
+        "nombre_actividad": "Yoga Matinal",
+        "descripcion_actividad": "Empieza tu día con una sesión revitalizante de yoga",
+        "fecha_actividad": "2024-10-25",
+        "hora_actividad": "13:51:33",
+        "ubicacion": "Jardines del Triunfo"
+    }
+]

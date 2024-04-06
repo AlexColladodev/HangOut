@@ -1,7 +1,9 @@
 from flask import Blueprint, request
 from models.oferta import Oferta
 from typing import Dict
-from flask import request, Response
+from flask import request, Response, jsonify
+from schemas.oferta_schema import OfertaSchema
+from marshmallow import ValidationError
 
 blueprint = Blueprint("Oferta", "ofertas", url_prefix="/ofertas")
 
@@ -9,9 +11,15 @@ blueprint = Blueprint("Oferta", "ofertas", url_prefix="/ofertas")
 @blueprint.route("", methods=["POST"])
 def crear_oferta():
     data = request.json
-    oferta = Oferta(data)
-    resultado = oferta.insertar_oferta()
-    return resultado
+    schema = OfertaSchema()
+
+    try:
+        datos_validados = schema.load(data)
+        oferta = Oferta(datos_validados)
+        resultado = oferta.insertar_oferta()
+        return resultado
+    except ValidationError as err:
+        return jsonify({"error": "Validación fallida", "detalles": err.messages}), 400
 
 
 #Eliminar Oferta
