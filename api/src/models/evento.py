@@ -14,6 +14,7 @@ class Evento:
         self.fecha_evento = date.fromisoformat(data.get("fecha_evento")) if data.get("fecha_evento") else None
         self.precio = data.get("precio")
         self.hora_evento = datetime.strptime(data.get("hora_evento"), '%H:%M:%S').time() if data.get("hora_evento") else None
+        self.id_establecimiento = data.get("id_establecimiento")
 
     def insertar_evento(self):
 
@@ -35,12 +36,14 @@ class Evento:
             "descripcion_evento": self.descripcion_evento,
             "fecha_evento": self.fecha_evento,
             "precio": self.precio,
-            "hora_evento": self.hora_evento if self.hora_evento is not None else "No especificado"
+            "hora_evento": self.hora_evento if self.hora_evento is not None else "No especificado",
+            "id_establecimiento": self.id_establecimiento
         }
 
         id = str(mongo.db.eventos.insert_one(data_insertar).inserted_id)
 
-        return jsonify({"message": "Evento con id: " + id + " creado con éxito"}), 200
+        return jsonify({"message": "Evento con id: " + id + " creado con éxito",
+                        "id": id}), 200
     
 
     def eliminar_evento(id):

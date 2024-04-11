@@ -2,7 +2,9 @@ from marshmallow import Schema, fields, validate, ValidationError
 from db import mongo
 
 def validar_nombre_usuario_unico(value):
-    if mongo.db.usuarios.find_one({"nombre_usuario": value}):
+    nombre_usuario_sin_espacios = value.strip()
+
+    if mongo.db.administradores_establecimientos.find_one({"nombre_usuario": nombre_usuario_sin_espacios}) or mongo.db.usuarios_genericos.find_one({"nombre_usuario": nombre_usuario_sin_espacios}):
         raise ValidationError("El nombre de usuario ya está en uso.")
 
 class UsuarioGenericoSchema(Schema):

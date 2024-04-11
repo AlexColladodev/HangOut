@@ -65,6 +65,11 @@ class AdministradorEstablecimiento:
         else:
             return False
     
+    def add_establecimiento_administrador(id_administrador, id_establecimiento):
+        mongo.db.administradores_establecimientos.update_one(
+            {"_id": ObjectId(id_administrador)},
+            {"$addToSet": {"establecimientos": id_establecimiento}} #No guardar ObjectId por problemas en create_access_token
+        )
 
 
 

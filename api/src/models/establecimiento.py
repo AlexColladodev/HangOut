@@ -9,6 +9,7 @@ class Establecimiento:
     def __init__(self, data: Dict) -> None:
         self.cif = data.get("cif")
         self.nombre_establecimiento = data.get("nombre_establecimiento")
+        self.id_administrador = data.get("id_administrador")
         self.ambiente = data.get("ambiente", [])
         self.ofertas = data.get("ofertas", [])
         self.eventos = data.get("eventos", [])
@@ -20,7 +21,8 @@ class Establecimiento:
 
         id = str(mongo.db.establecimientos.insert_one(data_insertar).inserted_id)
         
-        return jsonify({"message": "Establecimiento con id: " + id + "  creado con éxito"}), 200
+        return jsonify({"message": "Establecimiento con id: " + id + "  creado con éxito",
+                       "id": id}), 200
     
 
     def eliminar_establecimiento(id):
@@ -46,3 +48,9 @@ class Establecimiento:
         establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
         respuesta = json_util.dumps(establecimiento)
         return respuesta
+    
+    def add_evento_establecimiento(id_establecimiento, id_evento):
+        resultado = mongo.db.establecimientos.update_one(
+            {"_id": ObjectId(id_establecimiento)},
+            {"$addToSet": {"eventos": id_evento}}
+        )

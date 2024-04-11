@@ -1,5 +1,4 @@
-from marshmallow import Schema, fields, validate, ValidationError
-from db import mongo
+from marshmallow import Schema, fields, validate
 
 class ActividadSchema(Schema):
         nombre_actividad = fields.Str(required=True, validate=[validate.Length(min=1)])

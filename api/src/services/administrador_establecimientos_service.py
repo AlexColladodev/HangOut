@@ -4,6 +4,8 @@ from typing import Dict
 from flask import request, Response, jsonify
 from schemas.administrador_establecimiento_schema import AdministradorEstablecimientoSchema
 from marshmallow import ValidationError
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+import requests
 
 blueprint = Blueprint("AdministradorEstablecimiento", "administrador_establecimiento", url_prefix="/administrador_establecimiento")
 
@@ -47,3 +49,29 @@ def consultar_administrador_establecimiento(id):
 def aniadir_nuevo_establecimiento(id):
     respuesta = AdministradorEstablecimiento.aniadir_establecimiento(id)
     return Response(respuesta, mimetype="application/json")
+
+@blueprint.route("/nuevo_establecimiento", methods=["POST"])
+@jwt_required()
+def crear_establecimiento():
+    data = request.json
+    administrador = get_jwt_identity()
+    id_administrador = administrador.get("_id")
+
+    data['id_administrador'] = str(id_administrador)
+
+    try:
+        respuesta_json = requests.post("http://127.0.0.1:5000/establecimientos", json=data).json()
+        id_establecimiento = respuesta_json.get("id")
+
+        AdministradorEstablecimiento.add_establecimiento_administrador(id_administrador, id_establecimiento)
+
+        return respuesta_json
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+
+
+
+
+
+

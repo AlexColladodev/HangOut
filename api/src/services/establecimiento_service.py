@@ -4,6 +4,7 @@ from typing import Dict
 from flask import request, Response, jsonify
 from schemas.establecimiento_schema import EstablecimientosSchema
 from marshmallow import ValidationError
+import requests
 
 
 blueprint = Blueprint("Establecimiento", "establecimientos", url_prefix="/establecimientos")
@@ -44,14 +45,21 @@ def consultar_establecimiento(id):
     respuesta = Establecimiento.consultar_establecimiento(id)
     return Response(respuesta, mimetype="application/json")
 
+@blueprint.route("/eventos", methods=["POST"])
+def aniadir_evento():
+    data = request.json
 
-#Consultar
-@blueprint.route("/<id>/ofertas", methods=["POST"])
-def aniadir_oferta(id):
-    respuesta = Establecimiento.aniadir_oferta(id)
-    return Response(respuesta, mimetype="application/json")
+    id_establecimiento = data.get("id_establecimiento")
+    data["id_establecimiento"] = id_establecimiento
 
-@blueprint.route("/<id>/eventos", methods=["POST"])
-def aniadir_evento(id):
-    respuesta = Establecimiento.aniadir_evento(id)
-    return Response(respuesta, mimetype="application/json")
+    try:
+        respuesta_json = requests.post("http://127.0.0.1:5000/eventos", json=data).json()
+        id_evento = respuesta_json.get("id")
+
+        Establecimiento.add_evento_establecimiento(id_establecimiento, id_evento)
+
+        return respuesta_json
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+
