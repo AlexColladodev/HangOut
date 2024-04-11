@@ -17,6 +17,8 @@ class Actividad:
         self.ubicacion = data.get("ubicacion")
         self.fecha_actividad = date.fromisoformat(data.get("fecha_actividad")) if data.get("fecha_actividad") else None
         self.hora_actividad = datetime.strptime(data.get("hora_actividad"), '%H:%M:%S').time() if data.get("hora_actividad") else None
+        self.id_usuario_creador = data.get("id_usuario_creador")
+        self.participantes = data.get("participantes", [])
 
 
     def insertar_actividad(self):
@@ -38,12 +40,15 @@ class Actividad:
             "descripcion_actividad": self.descripcion_actividad,
             "fecha_actividad": self.fecha_actividad,
             "hora_actividad": self.hora_actividad if self.hora_actividad is not None else "No especificado",
-            "ubicacion": self.ubicacion
+            "ubicacion": self.ubicacion,
+            "id_usuario_creador": self.id_usuario_creador,
+            "participantes": self.participantes
         }
 
         id = str(mongo.db.actividades.insert_one(data_insertar).inserted_id)
 
-        return jsonify({"message": "Actividad con id: " + id + " creada con éxito"}), 200
+        return jsonify({"message": "Actividad con id: " + id + " creada con éxito",
+                        "id": id}), 200
     
 
     def eliminar_actividad(id):

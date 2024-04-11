@@ -10,6 +10,7 @@ class Oferta:
         self.nombre_oferta = data.get("nombre_oferta")
         self.descripcion_oferta = data.get("descripcion_oferta")
         self.precio_oferta = data.get("precio_oferta")
+        self.id_establecimiento = data.get("id_establecimiento")
         
 
     def insertar_oferta(self):
@@ -17,7 +18,8 @@ class Oferta:
 
         id = str(mongo.db.ofertas.insert_one(data_insertar).inserted_id)
         
-        return jsonify({"message": "Oferta con id: " + id + "  creado con éxito"}), 200
+        return jsonify({"message": "Oferta con id: " + id + "  creado con éxito",
+                        "id": id}), 200
     
 
     def eliminar_oferta(id):

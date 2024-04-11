@@ -4,6 +4,7 @@ from typing import Dict
 from flask import request, Response
 from schemas.usuario_generico_schema import UsuarioGenericoSchema
 from marshmallow import ValidationError
+import requests
 
 blueprint = Blueprint("UsuarioGenerico", "usuario_generico", url_prefix="/usuario_generico")
 
@@ -49,3 +50,21 @@ def actualizar_usuario(id):
     respuesta = UsuarioGenerico.actualizar_usuario(id, data)
 
     return respuesta
+
+
+@blueprint.route("/actividades", methods=["POST"])
+def add_actividad():
+    data = request.json
+
+    id_usuario_creador = data.get("id_usuario_creador")
+    data["id_usuario_creador"] = id_usuario_creador
+
+    try:
+        respuesta_json = requests.post("http://127.0.0.1:5000/actividades", json=data).json()
+        id_actividad = respuesta_json.get("id")
+
+        UsuarioGenerico.add_actividad_usuario(id_usuario_creador, id_actividad)
+
+        return respuesta_json
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400

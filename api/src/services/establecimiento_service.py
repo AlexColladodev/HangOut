@@ -39,14 +39,26 @@ def consultar_establecimientos():
     return Response(respuesta, mimetype="application/json")
 
 
-#Consultar a UN solo Establecimiento
-@blueprint.route("/<id>", methods=["GET"])
-def consultar_establecimiento(id):
-    respuesta = Establecimiento.consultar_establecimiento(id)
-    return Response(respuesta, mimetype="application/json")
+@blueprint.route("/ofertas", methods=["POST"])
+def add_evento():
+    data = request.json
+
+    id_establecimiento = data.get("id_establecimiento")
+    data["id_establecimiento"] = id_establecimiento
+
+    try:
+        respuesta_json = requests.post("http://127.0.0.1:5000/ofertas", json=data).json()
+        id_oferta = respuesta_json.get("id")
+
+        Establecimiento.add_ofertas_establecimiento(id_establecimiento, id_oferta)
+
+        return respuesta_json
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    
 
 @blueprint.route("/eventos", methods=["POST"])
-def aniadir_evento():
+def add_oferta():
     data = request.json
 
     id_establecimiento = data.get("id_establecimiento")

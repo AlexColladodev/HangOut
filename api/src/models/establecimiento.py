@@ -50,7 +50,13 @@ class Establecimiento:
         return respuesta
     
     def add_evento_establecimiento(id_establecimiento, id_evento):
-        resultado = mongo.db.establecimientos.update_one(
+        mongo.db.establecimientos.update_one(
             {"_id": ObjectId(id_establecimiento)},
             {"$addToSet": {"eventos": id_evento}}
+        )
+
+    def add_ofertas_establecimiento(id_establecimiento, id_oferta):
+        mongo.db.establecimientos.update_one(
+            {"_id": ObjectId(id_establecimiento)},
+            {"$addToSet": {"ofertas": id_oferta}}
         )

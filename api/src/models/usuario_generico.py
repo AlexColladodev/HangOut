@@ -18,6 +18,7 @@ class UsuarioGenerico:
         self.edad = data.get("edad")
         self.seguidos = data.get("seguidos", [])
         self.preferencias = data.get("preferencias", [])
+        self.actividades_creadas = data.get("actividades_creadas", [])
         
     def insertar_usuario_generico(self):
         data_insertar = self.__dict__
@@ -95,5 +96,11 @@ class UsuarioGenerico:
             return True
         else:
             return False
+        
+    def add_actividad_usuario(id_usuario_creador, id_actividad):
+        mongo.db.usuarios_genericos.update_one(
+            {"_id": ObjectId(id_usuario_creador)},
+            {"$addToSet": {"actividades_creadas": id_actividad}}
+        )
     
 
