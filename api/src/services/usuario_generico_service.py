@@ -5,6 +5,8 @@ from flask import request, Response
 from schemas.usuario_generico_schema import UsuarioGenericoSchema
 from marshmallow import ValidationError
 import requests
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from db import mongo
 
 blueprint = Blueprint("UsuarioGenerico", "usuario_generico", url_prefix="/usuario_generico")
 
@@ -52,7 +54,7 @@ def actualizar_usuario(id):
     return respuesta
 
 
-@blueprint.route("/actividades", methods=["POST"])
+@blueprint.route("/nueva_actividad", methods=["POST"])
 def add_actividad():
     data = request.json
 
@@ -68,3 +70,30 @@ def add_actividad():
         return respuesta_json
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+    
+
+@blueprint.route("/seguir_usuario", methods=["POST"])
+@jwt_required()
+def seguir_usuario():
+    data = request.json
+    nombre_usuario = data.get("nombre_usuario")
+    usuario = get_jwt_identity()
+    id_usuario = usuario.get("_id")
+
+    respuesta_bool, id_seguir_usuario = UsuarioGenerico.existe_nombre_usuario(nombre_usuario)
+
+    if(respuesta_bool):
+        try:
+
+            respuesta = UsuarioGenerico.add_seguidos_usuario(id_usuario, id_seguir_usuario)
+
+            return respuesta
+        except Exception as e:
+            return jsonify({"error": str(e)}), 400
+        
+    else:
+        return jsonify({"message": "No existe el usuario con nombre: " + nombre_usuario})
+
+
+    
+    

@@ -39,7 +39,7 @@ def consultar_establecimientos():
     return Response(respuesta, mimetype="application/json")
 
 
-@blueprint.route("/ofertas", methods=["POST"])
+@blueprint.route("/nueva_oferta", methods=["POST"])
 def add_evento():
     data = request.json
 
@@ -57,7 +57,7 @@ def add_evento():
         return jsonify({"error": str(e)}), 400
     
 
-@blueprint.route("/eventos", methods=["POST"])
+@blueprint.route("/nuevo_evento", methods=["POST"])
 def add_oferta():
     data = request.json
 

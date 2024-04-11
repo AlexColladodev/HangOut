@@ -44,11 +44,6 @@ def consultar_administrador_establecimiento(id):
     respuesta = AdministradorEstablecimiento.consultar_administrador_establecimiento(id)
     return Response(respuesta, mimetype="application/json")
 
-#Consultar si se hace esta manera o con sesiones
-@blueprint.route("/<id>/establecimientos", methods=["POST"])
-def aniadir_nuevo_establecimiento(id):
-    respuesta = AdministradorEstablecimiento.aniadir_establecimiento(id)
-    return Response(respuesta, mimetype="application/json")
 
 @blueprint.route("/nuevo_establecimiento", methods=["POST"])
 @jwt_required()

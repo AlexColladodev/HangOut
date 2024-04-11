@@ -102,5 +102,24 @@ class UsuarioGenerico:
             {"_id": ObjectId(id_usuario_creador)},
             {"$addToSet": {"actividades_creadas": id_actividad}}
         )
+
+    def add_seguidos_usuario(id_usuario, id_seguir_usuario):
+        mongo.db.usuarios_genericos.update_one(
+            {"_id": ObjectId(id_usuario)},
+            {"$addToSet": {"seguidos": id_seguir_usuario}}
+        )
+
+        return jsonify({"message": "Se ha seguido al usuario con ID " + id_seguir_usuario}), 200
+    
+    
+    @classmethod
+    def existe_nombre_usuario(cls, nombre):
+        usuario = mongo.db.usuarios_genericos.find_one({"nombre_usuario": nombre})
+        if usuario is not None:
+            id_usuario = str(usuario.get("_id"))
+            return True, id_usuario
+        else:
+            return False, None
+
     
 
