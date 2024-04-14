@@ -74,3 +74,25 @@ class Actividad:
         actividad = mongo.db.actividades.find_one({"_id": ObjectId(id)})
         respuesta = json_util.dumps(actividad)
         return respuesta
+
+
+    def actualizar_actividad(id, data):
+
+        data.pop("participantes", None)
+        data.pop("id_usuario_creador", None)
+        
+        if 'fecha_actividad' in data:
+            data['fecha_actividad'] = date.fromisoformat(data['fecha_actividad'])
+        if 'hora_actividad' in data:
+            data['hora_actividad'] = datetime.strptime(data['hora_actividad'], '%H:%M:%S').time().isoformat()
+
+        
+        resultado = mongo.db.actividades.update_one(
+            {"_id": ObjectId(id)},
+            {"$set": data}
+        )
+
+        if resultado.modified_count == 0:
+            return jsonify({"error": "No se pudo actualizar la actividad"}), 500
+
+        return jsonify({"message": "Actividad con id: " + id + " actualizada con éxito"}), 200

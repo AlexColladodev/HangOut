@@ -44,6 +44,11 @@ def consultar_administrador_establecimiento(id):
     respuesta = AdministradorEstablecimiento.consultar_administrador_establecimiento(id)
     return Response(respuesta, mimetype="application/json")
 
+@blueprint.route("/<id>", methods=["PUT"])
+def actualizar_administrador_establecimiento(id):
+    data = request.json
+    respuesta = AdministradorEstablecimiento.actualizar_administrador_establecimiento(id, data)
+    return respuesta
 
 @blueprint.route("/nuevo_establecimiento", methods=["POST"])
 @jwt_required()

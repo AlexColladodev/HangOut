@@ -45,3 +45,17 @@ class Oferta:
         oferta = mongo.db.ofertas.find_one({"_id": ObjectId(id)})
         respuesta = json_util.dumps(oferta)
         return respuesta
+    
+    def actualizar_oferta(id, data):
+        
+        data.pop("id_establecimiento")
+
+        resultado = mongo.db.ofertas.update_one(
+            {"_id": ObjectId(id)},
+            {"$set": data}
+        )
+
+        if resultado.modified_count == 0:
+            return jsonify({"error": "No se pudo actualizar la oferta"}), 500
+
+        return jsonify({"message": "Oferta con id: " + id + " actualizada con éxito"}), 200

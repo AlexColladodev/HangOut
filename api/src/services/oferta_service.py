@@ -7,7 +7,6 @@ from marshmallow import ValidationError
 
 blueprint = Blueprint("Oferta", "ofertas", url_prefix="/ofertas")
 
-#Insertar Oferta
 @blueprint.route("", methods=["POST"])
 def crear_oferta():
     data = request.json
@@ -22,22 +21,26 @@ def crear_oferta():
         return jsonify({"error": "Validación fallida", "detalles": err.messages}), 400
 
 
-#Eliminar Oferta
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_oferta(id):
     respuesta = Oferta.eliminar_oferta(id)
     return respuesta
 
 
-#Consultar Todas las Oferta
 @blueprint.route("", methods=["GET"])
 def consultar_ofertas():
     respuesta = Oferta.consultar_ofertas()
     return Response(respuesta, mimetype="application/json")
 
 
-#Consultar a UNA sola Oferta
 @blueprint.route("/<id>", methods=["GET"])
 def consultar_oferta(id):
     respuesta = Oferta.consultar_oferta(id)
     return Response(respuesta, mimetype="application/json")
+
+
+@blueprint.route("/<id>", methods=["PUT"])
+def actualizar_oferta(id):
+    data = request.json
+    respuesta = Oferta.actualizar_oferta(id, data)
+    return respuesta

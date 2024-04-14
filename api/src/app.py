@@ -83,8 +83,5 @@ def preparar_para_jwt(objeto):
     return objeto
 
 
-
-
-
 if __name__ == "__main__":
     app.run()

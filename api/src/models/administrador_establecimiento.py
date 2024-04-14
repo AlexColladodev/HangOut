@@ -54,6 +54,34 @@ class AdministradorEstablecimiento:
         administradores_establecimientos = mongo.db.administradores_establecimientos.find_one({"_id": ObjectId(id)})
         respuesta = json_util.dumps(administradores_establecimientos)
         return respuesta
+    
+    def actualizar_administrador_establecimiento(id, data):
+
+        data.pop("dni", None)
+        data.pop("establecimientos", None)
+        data.pop("password", None)
+        data.pop("email_empresa", None)
+
+        nombre = data.get("nombre_usuario")
+        
+
+        administrador = mongo.db.administradores_establecimientos.find_one({"nombre_usuario": nombre})
+
+        if administrador is not None:
+            return jsonify({"message": "Nombre de Usuario en uso"}), 400
+
+        resultado = mongo.db.administradores_establecimientos.update_one(
+            {"_id": ObjectId(id)},
+            {"$set": data}  # Pasar el diccionario 'data' en lugar de 'id'
+        )
+
+        if resultado.modified_count == 0:
+            return jsonify({"error": "No se pudo actualizar el administrador de establecimiento"}), 500
+
+        return jsonify({"message": "Administrador de establecimiento con id: " + str(id) + " actualizado con éxito"}), 200
+
+
+
 
     @classmethod
     def correo_es_valido(self, email):

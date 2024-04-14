@@ -62,18 +62,10 @@ class UsuarioGenerico:
 
     def actualizar_usuario(id, data):
             usuario_actual = mongo.db.usuarios_genericos.find_one({"_id": ObjectId(id)})
-
-            
             cambios = {}
 
             for campo, valor in data.items():
-                
-                if campo == 'password':
-                    
-                    if not usuario_actual.get(campo) and check_password_hash(usuario_actual[campo], valor):
-                        cambios[campo] = generate_password_hash(valor)
-                
-                elif usuario_actual.get(campo) != valor:
+                if usuario_actual.get(campo) != valor:
                     cambios[campo] = valor
 
             
@@ -103,6 +95,12 @@ class UsuarioGenerico:
             {"$addToSet": {"actividades_creadas": id_actividad}}
         )
 
+        mongo.db.actividades.update_one(
+            {"_id": ObjectId(id_actividad)},
+            {"$addToSet": {"participantes": id_usuario_creador}}
+        )
+
+
     def add_seguidos_usuario(id_usuario, id_seguir_usuario):
         mongo.db.usuarios_genericos.update_one(
             {"_id": ObjectId(id_usuario)},
@@ -110,6 +108,18 @@ class UsuarioGenerico:
         )
 
         return jsonify({"message": "Se ha seguido al usuario con ID " + id_seguir_usuario}), 200
+    
+    def usuario_participa_actividad(id_usuario, id_actividad):
+        mongo.db.actividades.update_one(
+            {"_id": id_actividad},
+            {"$addToSet": {"participantes": id_usuario}}
+        )
+
+    def usuario_no_participa_actividad(id_usuario, id_actividad):
+        mongo.db.actividades.update_one(
+            {"_id": id_actividad},
+            {"$pull": {"participantes": id_usuario}}
+        )
     
     
     @classmethod

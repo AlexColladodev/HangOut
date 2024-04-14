@@ -5,7 +5,7 @@ from flask import request, Response
 from schemas.usuario_generico_schema import UsuarioGenericoSchema
 from marshmallow import ValidationError
 import requests
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from db import mongo
 
 blueprint = Blueprint("UsuarioGenerico", "usuario_generico", url_prefix="/usuario_generico")
@@ -44,7 +44,8 @@ def consultar_unico_usuario(id):
     respuesta = UsuarioGenerico.consultar_usuario(id)
     return Response(respuesta, mimetype="application/json")
 
-#Actualizar algún dato del Usuario Genérico
+
+
 @blueprint.route("/<id>", methods=["PUT"])
 def actualizar_usuario(id):
     data = request.json
@@ -95,5 +96,30 @@ def seguir_usuario():
         return jsonify({"message": "No existe el usuario con nombre: " + nombre_usuario})
 
 
+@blueprint.route("/participa", methods=["POST"])
+@jwt_required()
+def participa():
+    data = request.json
+    id_actividad = data.get("id_actividad")
+    usuario = get_jwt_identity()
+    id_usuario = usuario.get("_id")
+    nombre_usuario = usuario.get("nombre_usuario")
+
+    UsuarioGenerico.usuario_participa_actividad(id_usuario, id_actividad)
+
+    return jsonify({"message": "El usuario " + nombre_usuario + " participa en la actividad " + str(id_actividad)})
+
     
-    
+
+@blueprint.route("/no_participa", methods=["POST"])
+@jwt_required()
+def no_participa():
+    data = request.json
+    id_actividad = data.get("id_actividad")
+    usuario = get_jwt_identity()
+    id_usuario = usuario.get("_id")
+    nombre_usuario = usuario.get("nombre_usuario")
+
+    UsuarioGenerico.usuario_no_participa_actividad(id_usuario, id_actividad)
+
+    return jsonify({"message": "El usuario " + nombre_usuario + " no participa en la actividad " + str(id_actividad)})
