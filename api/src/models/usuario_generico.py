@@ -30,11 +30,7 @@ class UsuarioGenerico:
 
         data_insertar["password"] = hash_password
 
-        id = str(mongo.db.usuarios_genericos.insert_one(data_insertar).inserted_id)
-
-
-        
-        return jsonify({"message": "Usuario con id: " + id + "  creado con éxito"}), 200
+        mongo.db.usuarios_genericos.insert_one(data_insertar).inserted_id
 
     def eliminar_usuario_generico(id):
         usuario_a_eliminar = mongo.db.usuarios_genericos.find_one({"_id": ObjectId(id)})
@@ -63,6 +59,15 @@ class UsuarioGenerico:
     def actualizar_usuario(id, data):
             usuario_actual = mongo.db.usuarios_genericos.find_one({"_id": ObjectId(id)})
             cambios = {}
+
+            nombre = data.get("nombre_usuario")
+        
+
+            usuario = mongo.db.usuarios_genericos.find_one({"nombre_usuario": nombre})
+            administrador = mongo.db.administradores_establecimientos.find_one({"nombre_usuario": nombre})
+
+            if usuario is not None or administrador is not None:
+                return jsonify({"message": "Nombre de Usuario en uso"}), 400
 
             for campo, valor in data.items():
                 if usuario_actual.get(campo) != valor:
@@ -132,4 +137,3 @@ class UsuarioGenerico:
             return False, None
 
     
-

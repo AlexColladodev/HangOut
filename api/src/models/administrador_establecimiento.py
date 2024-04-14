@@ -66,8 +66,9 @@ class AdministradorEstablecimiento:
         
 
         administrador = mongo.db.administradores_establecimientos.find_one({"nombre_usuario": nombre})
+        usuario = mongo.db.usuarios_genericos.find_one({"nombre_usuario": nombre})
 
-        if administrador is not None:
+        if administrador is not None or usuario is not None:
             return jsonify({"message": "Nombre de Usuario en uso"}), 400
 
         resultado = mongo.db.administradores_establecimientos.update_one(

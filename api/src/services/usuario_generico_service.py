@@ -19,9 +19,9 @@ def crear_usuario_generico():
         nuevo_usuario = UsuarioGenerico(datos_validados)
         nuevo_usuario.insertar_usuario_generico()
 
-        return {"mensaje": "Usuario creado con éxito"}
+        return jsonify({"message": "Usuario creado con éxito"}), 200
     except ValidationError as err:
-        return {"error": "Validación fallida", "detalles": err.messages}
+        return jsonify({"error": "Validación fallida", "detalles": err.messages}), 400
 
 
 #Eliminar Usuario
@@ -107,7 +107,7 @@ def participa():
 
     UsuarioGenerico.usuario_participa_actividad(id_usuario, id_actividad)
 
-    return jsonify({"message": "El usuario " + nombre_usuario + " participa en la actividad " + str(id_actividad)})
+    return jsonify({"message": "El usuario " + nombre_usuario + " participa en la actividad " + str(id_actividad)}), 200
 
     
 
