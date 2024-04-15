@@ -1,7 +1,5 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, Response, jsonify
 from models.oferta import Oferta
-from typing import Dict
-from flask import request, Response, jsonify
 from schemas.oferta_schema import OfertaSchema
 from marshmallow import ValidationError
 

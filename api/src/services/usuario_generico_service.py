@@ -1,12 +1,9 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from models.usuario_generico import UsuarioGenerico
-from typing import Dict
-from flask import request, Response
 from schemas.usuario_generico_schema import UsuarioGenericoSchema
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from marshmallow import ValidationError
 import requests
-from flask_jwt_extended import get_jwt_identity, jwt_required
-from db import mongo
 
 blueprint = Blueprint("UsuarioGenerico", "usuario_generico", url_prefix="/usuario_generico")
 

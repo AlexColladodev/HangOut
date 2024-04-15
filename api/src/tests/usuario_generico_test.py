@@ -120,7 +120,7 @@ def test_actualizar_usuario(client):
         "email": "actualizar@test.com",
         "telefono": "1234567811",
         "edad": 23,
-        "seguidos": "",
+        "seguidos": [],
         "preferencias": ["pop", "rock", "reggaeton", "bar"],
         "actividades_crear": []
     }

@@ -1,14 +1,10 @@
 from flask import Flask, request, jsonify
-from flask_restful import Api
+#from flask_restful import Api
 from services import usuario_generico_service, administrador_establecimientos_service, establecimiento_service, actividad_service, evento_service, oferta_service
 from db import init_mongo, mongo
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
-from models.administrador_establecimiento import AdministradorEstablecimiento
-from models.usuario_generico import UsuarioGenerico
 from werkzeug.security import check_password_hash
-
-
-
+from flask_restx import Api
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/HangOut"

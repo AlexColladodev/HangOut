@@ -2,7 +2,7 @@ import re
 from typing import Dict
 from flask import jsonify
 from db import mongo
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 from bson import json_util
 from bson.objectid import ObjectId
 

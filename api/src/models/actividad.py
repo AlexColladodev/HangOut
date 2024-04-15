@@ -5,10 +5,6 @@ from bson import json_util
 from bson.objectid import ObjectId
 from datetime import date, datetime
 
-#from flask_restx
-
-#Trabajar con TimeStamp
-
 class Actividad:
 
     def __init__(self, data: Dict) -> None:
@@ -55,7 +51,7 @@ class Actividad:
         actividad_eliminar = mongo.db.actividades.find_one({"_id": ObjectId(id)})
 
         if not actividad_eliminar:
-            return jsonify({"error": "Actividad no encontrado"}), 404   
+            return jsonify({"error": "Actividad no encontrada"}), 404   
         
         resultado = mongo.db.actividades.delete_one({"_id": ObjectId(id)})
     
@@ -81,10 +77,10 @@ class Actividad:
         data.pop("participantes", None)
         data.pop("id_usuario_creador", None)
         
-        if 'fecha_actividad' in data:
-            data['fecha_actividad'] = date.fromisoformat(data['fecha_actividad'])
-        if 'hora_actividad' in data:
-            data['hora_actividad'] = datetime.strptime(data['hora_actividad'], '%H:%M:%S').time().isoformat()
+        if "fecha_actividad" in data:
+            data["fecha_actividad"] = date.fromisoformat(data["fecha_actividad"])
+        if "hora_actividad" in data:
+            data["hora_actividad"] = datetime.strptime(data["hora_actividad"], '%H:%M:%S').time().isoformat()
 
         
         resultado = mongo.db.actividades.update_one(

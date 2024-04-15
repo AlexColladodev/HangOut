@@ -1,7 +1,5 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, Response, jsonify
 from models.actividad import Actividad
-from typing import Dict
-from flask import request, Response, jsonify
 from schemas.actividad_schema import ActividadSchema
 from marshmallow import ValidationError
 

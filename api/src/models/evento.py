@@ -3,7 +3,7 @@ from flask import jsonify
 from db import mongo
 from bson import json_util
 from bson.objectid import ObjectId
-from datetime import date, datetime, time
+from datetime import date, datetime
 
 
 class Evento:
@@ -74,10 +74,10 @@ class Evento:
 
         data.pop("id_establecimiento", None)
 
-        if 'fecha_evento' in data:
-            data['fecha_evento'] = date.fromisoformat(data['fecha_evento'])
-        if 'hora_evento' in data:
-            data['hora_evento'] = datetime.strptime(data['hora_evento'], '%H:%M:%S').time().isoformat()
+        if "fecha_evento" in data:
+            data["fecha_evento"] = date.fromisoformat(data["fecha_evento"])
+        if "hora_evento" in data:
+            data["hora_evento"] = datetime.strptime(data["hora_evento"], '%H:%M:%S').time().isoformat()
 
 
         resultado = mongo.db.eventos.update_one(

@@ -1,7 +1,5 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, Response, jsonify
 from models.establecimiento import Establecimiento
-from typing import Dict
-from flask import request, Response, jsonify
 from schemas.establecimiento_schema import EstablecimientosSchema
 from marshmallow import ValidationError
 import requests
@@ -40,7 +38,7 @@ def consultar_establecimientos():
 
 
 @blueprint.route("/nueva_oferta", methods=["POST"])
-def add_evento():
+def add_oferta():
     data = request.json
 
     id_establecimiento = data.get("id_establecimiento")
@@ -58,7 +56,7 @@ def add_evento():
     
 
 @blueprint.route("/nuevo_evento", methods=["POST"])
-def add_oferta():
+def add_evento():
     data = request.json
 
     id_establecimiento = data.get("id_establecimiento")
@@ -73,5 +71,12 @@ def add_oferta():
         return respuesta_json
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
+@blueprint.route("/filtrar", methods=["GET"])
+def filtrar():
+    ambientes_solicitados = request.args.getlist("ambiente")
+
+    respuesta = Establecimiento.filtrar_por_ambientes(ambientes_solicitados)
+    return jsonify(respuesta), 200
 
 

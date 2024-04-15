@@ -1,8 +1,7 @@
 import re
-from typing import Dict
 from flask import jsonify
 from db import mongo
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 from bson import json_util
 from bson.objectid import ObjectId
 
@@ -112,7 +111,7 @@ class UsuarioGenerico:
             {"$addToSet": {"seguidos": id_seguir_usuario}}
         )
 
-        return jsonify({"message": "Se ha seguido al usuario con ID " + id_seguir_usuario}), 200
+        return jsonify({"message": "Usuario seguido con éxito."}), 200
     
     def usuario_participa_actividad(id_usuario, id_actividad):
         mongo.db.actividades.update_one(

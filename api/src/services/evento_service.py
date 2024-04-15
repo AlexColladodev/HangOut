@@ -1,7 +1,5 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, Response, jsonify
 from models.evento import Evento
-from typing import Dict
-from flask import request, Response, jsonify
 from schemas.evento_schema import EventoSchema
 from marshmallow import ValidationError
 

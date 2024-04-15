@@ -13,7 +13,7 @@ class ObjectIdField(fields.Field):
         try:
             return ObjectId(value)
         except Exception:
-            raise MarshmallowValidationError('El ID proporcionado no es válido.')
+            raise MarshmallowValidationError("El ID proporcionado no es válido.")
 
 def validar_nombre_establecimiento_unico(value):
     if mongo.db.establecimientos.find_one({"nombre_establecimiento": value}):

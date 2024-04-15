@@ -14,7 +14,7 @@ class ObjectIdField(fields.Field):
         try:
             return ObjectId(value)
         except Exception:
-            raise MarshmallowValidationError('El ID proporcionado no es válido.')
+            raise MarshmallowValidationError("El ID proporcionado no es válido.")
         
 def validar_existencia_id(value):
     try:

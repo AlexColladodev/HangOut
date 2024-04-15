@@ -1,10 +1,8 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, Response, jsonify
 from models.administrador_establecimiento import AdministradorEstablecimiento
-from typing import Dict
-from flask import request, Response, jsonify
 from schemas.administrador_establecimiento_schema import AdministradorEstablecimientoSchema
 from marshmallow import ValidationError
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import get_jwt_identity, jwt_required
 import requests
 
 blueprint = Blueprint("AdministradorEstablecimiento", "administrador_establecimiento", url_prefix="/administrador_establecimiento")
@@ -57,7 +55,7 @@ def crear_establecimiento():
     administrador = get_jwt_identity()
     id_administrador = administrador.get("_id")
 
-    data['id_administrador'] = str(id_administrador)
+    data["id_administrador"] = str(id_administrador)
 
     try:
         respuesta_json = requests.post("http://127.0.0.1:5000/establecimientos", json=data).json()

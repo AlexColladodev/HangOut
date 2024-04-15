@@ -60,3 +60,11 @@ class Establecimiento:
             {"_id": ObjectId(id_establecimiento)},
             {"$addToSet": {"ofertas": id_oferta}}
         )
+
+    def filtrar_por_ambientes(ambientes_solicitados):
+        establecimientos = mongo.db.establecimientos.find({
+            "ambiente": {"$in": ambientes_solicitados}
+        }, {"_id": 1})
+
+        ids = [str(doc['_id']) for doc in establecimientos]
+        return json_util.dumps(ids)
