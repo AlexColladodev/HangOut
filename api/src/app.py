@@ -56,6 +56,7 @@ def login():
                          "token": create_access_token(identity=preparar_para_jwt(administrador_establecimiento)), 
                          "administrador_establecimiento": administrador_establecimiento, 
                          "rol": "administrador_establecimiento"
+                         
                          }
         else:
             resultado = {"acceso": False}

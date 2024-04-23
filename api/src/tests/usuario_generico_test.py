@@ -35,11 +35,13 @@ def test_nombre_usuario_unico():
     assert existe == True
     assert user_id == "661be4933d2e931ccbd71d65"
 
+
 def test_nombre_usuario_repetido():
     existe, user_id = UsuarioGenerico.existe_nombre_usuario("UsuarioNoExiste")
    
     assert existe == False
     assert user_id == None
+
 
 def test_crear_usuario_generico_exito(client):
     datos_usuario = {
@@ -59,6 +61,7 @@ def test_crear_usuario_generico_exito(client):
     assert respuesta.status_code == 200
     assert respuesta.json == {"message": "Usuario creado con éxito"}
 
+
 def test_crear_usuario_generico_repetido(client):
     datos_usuario = {
         "nombre": "Nuevo Usuario",
@@ -76,6 +79,7 @@ def test_crear_usuario_generico_repetido(client):
 
     assert respuesta.status_code == 400
     assert respuesta.json == {"error": "Validación fallida", "detalles": {"nombre_usuario": ["El nombre de usuario ya está en uso."]}}
+
 
 def test_crear_usuario_generico_error(client):
     datos_usuario = {
@@ -101,6 +105,7 @@ def test_get_usuario_exito(client):
     respuesta = client.get(f"/usuario_generico/{id_usuario}")
 
     assert respuesta is not None
+
 
 def test_get_usuario_error(client):
     id_usuario = "123456488"
@@ -136,6 +141,7 @@ def test_eliminar_usuario_exito(client):
     respuesta = client.delete(f"/usuario_generico/{id_usuario}")
 
     assert respuesta.status_code == 200
+
 
 def test_eliminar_usuario_error(client):
 

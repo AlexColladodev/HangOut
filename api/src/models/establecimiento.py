@@ -17,54 +17,74 @@ class Establecimiento:
 
 
     def insertar_establecimiento(self):
-        data_insertar = self.__dict__
+        try:
+            data_insertar = self.__dict__
+            id = str(mongo.db.establecimientos.insert_one(data_insertar).inserted_id)
+            return jsonify({"message": "Establecimiento con id: " + id + " creado con éxito", "id": id}), 200
+        except Exception as e:
+            return jsonify({"error": f"Error al insertar el establecimiento: {e}"}), 500
 
-        id = str(mongo.db.establecimientos.insert_one(data_insertar).inserted_id)
-        
-        return jsonify({"message": "Establecimiento con id: " + id + "  creado con éxito",
-                       "id": id}), 200
-    
 
     def eliminar_establecimiento(id):
-        establecimiento_eliminar = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
+        try:
+            establecimiento_eliminar = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
+            if not establecimiento_eliminar:
+                return jsonify({"error": "Establecimiento no encontrado"}), 404
+            resultado = mongo.db.establecimientos.delete_one({"_id": ObjectId(id)})
+            if resultado.deleted_count == 0:
+                return jsonify({"error": "No se pudo eliminar el establecimiento"}), 500
+            return jsonify({"message": "Establecimiento " + id + " eliminado con éxito"}), 200
+        except Exception as e:
+            return jsonify({"error": f"Error al eliminar el establecimiento: {e}"}), 500
 
-        if not establecimiento_eliminar:
-            return jsonify({"error": "Establecimiento no encontrado"}), 404   
-        
-        resultado = mongo.db.establecimientos.delete_one({"_id": ObjectId(id)})
-    
-        if resultado.deleted_count == 0:
-            return jsonify({"error": "No se pudo eliminar el establecimimento"}), 500
-    
-        return jsonify({"message": "Establecimiento " + id + " eliminado con éxito"}), 200
-    
-    
+
+    def add_evento_establecimiento(id_establecimiento, id_evento):
+        try:
+            mongo.db.establecimientos.update_one(
+                {"_id": ObjectId(id_establecimiento)},
+                {"$addToSet": {"eventos": id_evento}}
+            )
+            return jsonify({"message": f"Evento {id_evento} agregado al establecimiento {id_establecimiento} con éxito"}), 200
+        except Exception as e:
+            return jsonify({"error": f"Error al agregar evento al establecimiento: {e}"}), 500
+
+
+    def add_ofertas_establecimiento(id_establecimiento, id_oferta):
+        try:
+            mongo.db.establecimientos.update_one(
+                {"_id": ObjectId(id_establecimiento)},
+                {"$addToSet": {"ofertas": id_oferta}}
+            )
+            return jsonify({"message": f"Oferta {id_oferta} agregada al establecimiento {id_establecimiento} con éxito"}), 200
+        except Exception as e:
+            return jsonify({"error": f"Error al agregar oferta al establecimiento: {e}"}), 500
+
+
     def consultar_establecimientos():
-        establecimientos = mongo.db.establecimientos.find()
-        return json_util.dumps(establecimientos)
+        try:
+            establecimientos = mongo.db.establecimientos.find()
+            return json_util.dumps(establecimientos)
+        except Exception as e:
+            return jsonify({"error": f"Error al consultar establecimientos: {e}"}), 500
 
 
     def consultar_establecimiento(id):
-        establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
-        respuesta = json_util.dumps(establecimiento)
-        return respuesta
-    
-    def add_evento_establecimiento(id_establecimiento, id_evento):
-        mongo.db.establecimientos.update_one(
-            {"_id": ObjectId(id_establecimiento)},
-            {"$addToSet": {"eventos": id_evento}}
-        )
+        try:
+            establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
+            if not establecimiento:
+                return jsonify({"error": "Establecimiento no encontrado"}), 404
+            respuesta = json_util.dumps(establecimiento)
+            return respuesta, 200
+        except Exception as e:
+            return jsonify({"error": f"Error al consultar el establecimiento: {e}"}), 500
 
-    def add_ofertas_establecimiento(id_establecimiento, id_oferta):
-        mongo.db.establecimientos.update_one(
-            {"_id": ObjectId(id_establecimiento)},
-            {"$addToSet": {"ofertas": id_oferta}}
-        )
 
     def filtrar_por_ambientes(ambientes_solicitados):
-        establecimientos = mongo.db.establecimientos.find({
-            "ambiente": {"$in": ambientes_solicitados}
-        }, {"_id": 1})
-
-        ids = [str(doc['_id']) for doc in establecimientos]
-        return json_util.dumps(ids)
+        try:
+            establecimientos = mongo.db.establecimientos.find({
+                "ambiente": {"$in": ambientes_solicitados}
+            }, {"_id": 1})
+            ids = [str(doc['_id']) for doc in establecimientos]
+            return json_util.dumps(ids), 200
+        except Exception as e:
+            return jsonify({"error": f"Error en el filtro de ambientes: {e}"}), 500
