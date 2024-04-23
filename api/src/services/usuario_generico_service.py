@@ -3,8 +3,11 @@ from models.usuario_generico import UsuarioGenerico
 from schemas.usuario_generico_schema import UsuarioGenericoSchema
 from flask_jwt_extended import get_jwt_identity, jwt_required
 import requests
+from config import DevelopmentConfig
 
 blueprint = Blueprint("UsuarioGenerico", "usuario_generico", url_prefix="/usuario_generico")
+
+url_actividad = f"{DevelopmentConfig.BASE_URL}/actividades"
 
 @blueprint.route("", methods=["POST"])
 def crear_usuario_generico():
@@ -64,7 +67,7 @@ def add_actividad():
     id_usuario_creador = data.get("id_usuario_creador")
     
     try:
-        respuesta_json = requests.post("http://127.0.0.1:5000/actividades", json=data).json()
+        respuesta_json = requests.post(url_actividad, json=data).json()
         id_actividad = respuesta_json.get("id")
         UsuarioGenerico.add_actividad_usuario(id_usuario_creador, id_actividad)
         return respuesta_json

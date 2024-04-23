@@ -3,8 +3,11 @@ from models.administrador_establecimiento import AdministradorEstablecimiento
 from schemas.administrador_establecimiento_schema import AdministradorEstablecimientoSchema
 from flask_jwt_extended import get_jwt_identity, jwt_required
 import requests
+from config import DevelopmentConfig
 
 blueprint = Blueprint("AdministradorEstablecimiento", "administrador_establecimiento", url_prefix="/administrador_establecimiento")
+
+url = f"{DevelopmentConfig.BASE_URL}/establecimientos"
 
 
 @blueprint.route("", methods=["POST"])
@@ -68,7 +71,7 @@ def crear_establecimiento():
     data["id_administrador"] = str(id_administrador)
 
     try:
-        respuesta_json = requests.post("http://127.0.0.1:5000/establecimientos", json=data).json()
+        respuesta_json = requests.post(url, json=data).json()
         id_establecimiento = respuesta_json.get("id")
         AdministradorEstablecimiento.add_establecimiento_administrador(id_administrador, id_establecimiento)
         return respuesta_json

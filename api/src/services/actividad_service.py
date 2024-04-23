@@ -48,6 +48,7 @@ def consultar_actividad(id):
 @blueprint.route("/<id>", methods=["PUT"])
 def actualizar_actividad(id):
     data = request.json
+    
     try:
         schema = ActividadSchema()
         datos_validados = schema.load(data)

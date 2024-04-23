@@ -2,9 +2,12 @@ from flask import Blueprint, request, Response, jsonify
 from models.establecimiento import Establecimiento
 from schemas.establecimiento_schema import EstablecimientosSchema
 import requests
+from config import DevelopmentConfig
 
 blueprint = Blueprint("Establecimiento", "establecimientos", url_prefix="/establecimientos")
 
+url_oferta = f"{DevelopmentConfig.BASE_URL}/ofertas"
+url_evento = f"{DevelopmentConfig.BASE_URL}/eventos"
 
 @blueprint.route("", methods=["POST"])
 def crear_establecimiento():
@@ -44,7 +47,7 @@ def add_oferta():
     id_establecimiento = data.get("id_establecimiento")
 
     try:
-        respuesta_json = requests.post("http://127.0.0.1:5000/ofertas", json=data).json()
+        respuesta_json = requests.post(url_oferta, json=data).json()
         id_oferta = respuesta_json.get("id")
         Establecimiento.add_ofertas_establecimiento(id_establecimiento, id_oferta)
         return respuesta_json
@@ -60,7 +63,7 @@ def add_evento():
     id_establecimiento = data.get("id_establecimiento")
 
     try:
-        respuesta_json = requests.post("http://127.0.0.1:5000/eventos", json=data).json()
+        respuesta_json = requests.post(url_evento, json=data).json()
         id_evento = respuesta_json.get("id")
         Establecimiento.add_evento_establecimiento(id_establecimiento, id_evento)
         return respuesta_json
