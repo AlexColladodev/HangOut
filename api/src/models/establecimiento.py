@@ -88,3 +88,14 @@ class Establecimiento:
             return json_util.dumps(ids), 200
         except Exception as e:
             return jsonify({"error": f"Error en el filtro de ambientes: {e}"}), 500
+
+    def add_review_establecimiento(id_establecimiento, id_review):
+        try:
+            mongo.db.establecimientos.update_one(
+                {"_id": ObjectId(id_establecimiento)},
+                {"$addToSet": {"reviews": id_review}}
+            )
+            
+            return jsonify({"message": "Review añadida a Establecimiento"}), 200
+        except Exception as e:
+            return jsonify({"error": f"Error al añadir review al establecimiento: {e}"}), 500

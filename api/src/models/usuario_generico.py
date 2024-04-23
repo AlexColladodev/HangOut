@@ -17,6 +17,7 @@ class UsuarioGenerico:
         self.seguidos = data.get("seguidos", [])
         self.preferencias = data.get("preferencias", [])
         self.actividades_creadas = data.get("actividades_creadas", [])
+        self.reviews = data.get("reviews", [])
         
 
     def insertar_usuario_generico(self):
@@ -150,12 +151,23 @@ class UsuarioGenerico:
         try:
             mongo.db.actividades.update_one(
                 {"_id": ObjectId(id_actividad)},
-                {"$pull": {"participantes": id_usuario}}
+                {"$addToSet": {"participantes": id_usuario}}
             )
             
             return jsonify({"message": "Usuario removido de la actividad con éxito."}), 200
         except Exception as e:
             return jsonify({"error": f"Error al remover usuario de la actividad: {e}"}), 500
+        
+    def add_review_usuario(id_usuario, id_review):
+        try:
+            mongo.db.usuarios_genericos.update_one(
+                {"_id": ObjectId(id_usuario)},
+                {"$addToSet": {"reviews": id_review}}
+            )
+            
+            return jsonify({"message": "Review añadida a usuario."}), 200
+        except Exception as e:
+            return jsonify({"error": f"Error al añadir review a usuario: {e}"}), 500
         
 
     @classmethod

@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 #from flask_restful import Api
-from services import usuario_generico_service, administrador_establecimientos_service, establecimiento_service, actividad_service, evento_service, oferta_service
+from services import usuario_generico_service, administrador_establecimientos_service, establecimiento_service, actividad_service, evento_service, oferta_service, review_service
 from db import init_mongo, mongo
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 from werkzeug.security import check_password_hash
@@ -21,6 +21,7 @@ app.register_blueprint(establecimiento_service.blueprint)
 app.register_blueprint(oferta_service.blueprint)
 app.register_blueprint(actividad_service.blueprint)
 app.register_blueprint(evento_service.blueprint)
+app.register_blueprint(review_service.blueprint)
 
 @app.route("/login", methods=["POST"])
 def login():

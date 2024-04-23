@@ -20,10 +20,10 @@ def validar_existencia_id(value):
     try:
         oid = ObjectId(value)
     except Exception:
-        raise ValidationError("Id de Administrador de establecimiento debe ser un ObjectId válido.")
+        raise ValidationError("Id de Usuario debe ser un ObjectId válido.")
 
     if mongo.db.usuarios_genericos.find_one({"_id": oid}) is None:
-        raise ValidationError("Id de Administrador de establecimiento no válido")
+        raise ValidationError("Id de Usuario no válido")
 
 class ActividadSchema(Schema):
         nombre_actividad = fields.Str(required=True, validate=[validate.Length(min=1)])

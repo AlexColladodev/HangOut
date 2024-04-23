@@ -17,4 +17,5 @@ class UsuarioGenericoSchema(Schema):
     seguidos = fields.List(fields.Str(), required=False, missing=[])
     preferencias = fields.List(fields.Str(), required=False, missing=[])
     actividades_creadas = fields.List(fields.Str(), required=False, missing=[])
+    reviews = fields.List(fields.Str(), required=False, missing=[])
 

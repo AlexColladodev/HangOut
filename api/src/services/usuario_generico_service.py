@@ -4,10 +4,12 @@ from schemas.usuario_generico_schema import UsuarioGenericoSchema
 from flask_jwt_extended import get_jwt_identity, jwt_required
 import requests
 from config import DevelopmentConfig
+from models.establecimiento import Establecimiento
 
 blueprint = Blueprint("UsuarioGenerico", "usuario_generico", url_prefix="/usuario_generico")
 
 url_actividad = f"{DevelopmentConfig.BASE_URL}/actividades"
+url_review = f"{DevelopmentConfig.BASE_URL}/reviews"
 
 @blueprint.route("", methods=["POST"])
 def crear_usuario_generico():
@@ -127,3 +129,25 @@ def no_participa():
     except Exception as e:
         return jsonify({"error": "Error al retirar usuario de la actividad", "detalles": str(e)}), 500
 
+
+@blueprint.route("/review", methods=["POST"])
+@jwt_required()
+def crear_review():
+    data = request.json
+    usuario = get_jwt_identity()
+    id_usuario = str(usuario.get("_id"))
+
+    data["id_usuario"] = str(id_usuario)
+
+    id_establecimiento = data.get("id_establecimiento")
+
+    try:
+        respuesta_json = requests.post(url_review, json=data).json()
+        id_review = respuesta_json.get("id")
+        UsuarioGenerico.add_review_usuario(id_usuario, id_review)
+        Establecimiento.add_review_establecimiento(id_establecimiento, id_review)
+        return respuesta_json
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "Error en la solicitud de creación de review", "detalles": str(e)}), 400
+    except Exception as e:
+        return jsonify({"error": "Error general en crear review", "detalles": str(e)}), 500
