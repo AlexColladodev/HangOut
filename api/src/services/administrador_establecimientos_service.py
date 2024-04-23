@@ -1,13 +1,12 @@
 from flask import Blueprint, request, Response, jsonify
 from models.administrador_establecimiento import AdministradorEstablecimiento
 from schemas.administrador_establecimiento_schema import AdministradorEstablecimientoSchema
-from marshmallow import ValidationError
 from flask_jwt_extended import get_jwt_identity, jwt_required
 import requests
 
 blueprint = Blueprint("AdministradorEstablecimiento", "administrador_establecimiento", url_prefix="/administrador_establecimiento")
 
-#Insertar Administrador de Establecimiento
+
 @blueprint.route("", methods=["POST"])
 def crear_administrador_establecimiento():
     data = request.json
@@ -18,35 +17,46 @@ def crear_administrador_establecimiento():
         administrador_establecimiento = AdministradorEstablecimiento(datos_validados)
         resultado = administrador_establecimiento.insertar_administrador_establecimiento()
         return resultado
-    except ValidationError as err:
-        return jsonify({"error": "Validación fallida", "detalles": err.messages}), 400
+    except Exception as e:
+        return jsonify({"error": "Error al insertar administrador de establecimiento", "detalles": str(e)}), 500
 
 
-#Eliminar Administrador de Establecimiento
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_administrador_establecimiento(id):
-    respuesta = AdministradorEstablecimiento.eliminar_administrador_establecimiento(id)
-    return respuesta
+    try:
+        respuesta = AdministradorEstablecimiento.eliminar_administrador_establecimiento(id)
+        return respuesta
+    except Exception as e:
+        return jsonify({"error": "Error al eliminar administrador de establecimiento", "detalles": str(e)}), 500
 
 
-#Consultar Todos los Administradores de Establecimiento
 @blueprint.route("", methods=["GET"])
 def consultar_administradores_establecimiento():
-    respuesta = AdministradorEstablecimiento.consultar_administradores_establecimiento()
-    return Response(respuesta, mimetype="application/json")
+    try:
+        respuesta = AdministradorEstablecimiento.consultar_administradores_establecimiento()
+        return Response(respuesta, mimetype="application/json")
+    except Exception as e:
+        return jsonify({"error": "Error al consultar administradores de establecimiento", "detalles": str(e)}), 500
 
 
-#Consultar a UN solo Administrador de Establecimiento
 @blueprint.route("/<id>", methods=["GET"])
 def consultar_administrador_establecimiento(id):
-    respuesta = AdministradorEstablecimiento.consultar_administrador_establecimiento(id)
-    return Response(respuesta, mimetype="application/json")
+    try:
+        respuesta = AdministradorEstablecimiento.consultar_administrador_establecimiento(id)
+        return Response(respuesta, mimetype="application/json")
+    except Exception as e:
+        return jsonify({"error": "Error al consultar administrador de establecimiento", "detalles": str(e)}), 500
+
 
 @blueprint.route("/<id>", methods=["PUT"])
 def actualizar_administrador_establecimiento(id):
     data = request.json
-    respuesta = AdministradorEstablecimiento.actualizar_administrador_establecimiento(id, data)
-    return respuesta
+    try:
+        respuesta = AdministradorEstablecimiento.actualizar_administrador_establecimiento(id, data)
+        return respuesta
+    except Exception as e:
+        return jsonify({"error": "Error al actualizar administrador de establecimiento", "detalles": str(e)}), 500
+
 
 @blueprint.route("/nuevo_establecimiento", methods=["POST"])
 @jwt_required()
@@ -60,16 +70,9 @@ def crear_establecimiento():
     try:
         respuesta_json = requests.post("http://127.0.0.1:5000/establecimientos", json=data).json()
         id_establecimiento = respuesta_json.get("id")
-
         AdministradorEstablecimiento.add_establecimiento_administrador(id_administrador, id_establecimiento)
-
         return respuesta_json
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "Error en la solicitud de creación de establecimiento", "detalles": str(e)}), 400
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
-
-
-
-
-
-
-
+        return jsonify({"error": "Error general en crear establecimiento", "detalles": str(e)}), 500
