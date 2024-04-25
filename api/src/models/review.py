@@ -29,3 +29,9 @@ class Review:
         
         except Exception as e:
             return jsonify({"error": f"Error al insertar review: {e}"}), 500
+        
+    def eliminar_review(id):
+        try:
+            mongo.db.reviews.delete_one({"_id": id})
+        except Exception as e:
+            return jsonify({"error": f"Error al eliminar la review: {e}"}), 500

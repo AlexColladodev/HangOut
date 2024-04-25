@@ -5,6 +5,7 @@ from db import mongo
 from werkzeug.security import generate_password_hash
 from bson import json_util
 from bson.objectid import ObjectId
+from pymongo.errors import PyMongoError
 
 class AdministradorEstablecimiento:
 
@@ -20,16 +21,16 @@ class AdministradorEstablecimiento:
     def insertar_administrador_establecimiento(self):
         try:
             if not self.correo_es_valido(self.email_empresa):
-                return jsonify({"error_correo": "Formato de correo inválido"}), 400
+                raise ValueError("Formato de correo inválido")
             
             data_insertar = self.__dict__
             data_insertar["password"] = generate_password_hash(data_insertar["password"])
             id = str(mongo.db.administradores_establecimientos.insert_one(data_insertar).inserted_id)
             
-            return jsonify({"message": f"Administrador de Establecimiento con id: {id} creado con éxito"}), 200
+            return {"message": f"Administrador de establecimiento creado con éxito", "id": id}
         
-        except Exception as e:
-            return jsonify({"error": f"Error al insertar administrador: {e}"}), 500
+        except PyMongoError as e:
+            raise ValueError("Error al insertar administrador de establecimiento en la base de datos") from e
 
 
     def eliminar_administrador_establecimiento(id):
@@ -37,25 +38,25 @@ class AdministradorEstablecimiento:
             administrador_eliminar = mongo.db.administradores_establecimientos.find_one({"_id": ObjectId(id)})
 
             if not administrador_eliminar:
-                return jsonify({"error": "Administrador de Establecimiento no encontrado"}), 404
+                raise ValueError("Adminsitrador de establecimiento no encontrado")
             
             resultado = mongo.db.administradores_establecimientos.delete_one({"_id": ObjectId(id)})
 
             if resultado.deleted_count == 0:
-                return jsonify({"error": "No se pudo eliminar el administrador de establecimiento"}), 500
+                raise RuntimeError("No se pudo eliminar el administrador de establecimiento")
             
-            return jsonify({"message": f"Administrador de establecimiento con id: {id} eliminado con éxito"}), 200
+            return {"message": f"Administrador de establecimiento con id: {id} eliminado con éxito"}
         
-        except Exception as e:
-            return jsonify({"error": f"Error al eliminar administrador: {e}"}), 500
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al eliminar actividad: {e}")
 
 
     def consultar_administradores_establecimiento():
         try:
             administradores_establecimientos = mongo.db.administradores_establecimientos.find()
-            return json_util.dumps(administradores_establecimientos), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al consultar administradores: {e}"}), 500
+            return json_util.dumps(administradores_establecimientos)
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al consultar administradores de establecimientos: {e}")
 
 
     def consultar_administrador_establecimiento(id):
@@ -63,25 +64,31 @@ class AdministradorEstablecimiento:
             administrador = mongo.db.administradores_establecimientos.find_one({"_id": ObjectId(id)})
 
             if not administrador:
-                return jsonify({"error": "Administrador de Establecimiento no encontrado"}), 404
+                raise ValueError("Adminsitrador de establecimiento no encontrado")
             
             respuesta = json_util.dumps(administrador)
-            return respuesta, 200
-        except Exception as e:
-            return jsonify({"error": f"Error al consultar administrador: {e}"}), 500
+            return respuesta
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al consultar administrador de establecimiento: {e}")
 
 
     def actualizar_administrador_establecimiento(id, data):
         try:
-            updates = {k: v for k, v in data.items() if k not in ["dni", "establecimientos", "password", "email_empresa"]}
+            updates = data.copy()
+
+            updates.pop("dni")
+            updates.pop("establecimientos")
+            updates.pop("email_empresa")
+            updates.pop("password")
+
             resultado = mongo.db.administradores_establecimientos.update_one({"_id": ObjectId(id)}, {"$set": updates})
 
             if resultado.modified_count == 0:
-                return jsonify({"error": "No se pudo actualizar el administrador de establecimiento"}), 500
+                raise RuntimeError("No ha habido cambios a realizar")
             
-            return jsonify({"message": f"Administrador de establecimiento con id: {id} actualizado con éxito"}), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al actualizar administrador: {e}"}), 500
+            return {"message": f"Administrador de establecimiento con id: {id} actualizado con éxito"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al actualizar administrador de establecimiento: {e}")
 
 
     @classmethod
@@ -97,6 +104,6 @@ class AdministradorEstablecimiento:
                 {"$addToSet": {"establecimientos": id_establecimiento}}
             )
             
-            return jsonify({"message": f"Establecimiento {id_establecimiento} agregado al administrador {id_administrador} con éxito"}), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al agregar establecimiento al administrador: {e}"}), 500
+            return {"message": f"Establecimiento {id_establecimiento} agregado al administrador {id_administrador} con éxito"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al actualizar administrador de establecimiento: {e}")

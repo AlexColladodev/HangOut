@@ -13,46 +13,55 @@ def crear_actividad():
         datos_validados = schema.load(data)
         actividad = Actividad(datos_validados)
         resultado = actividad.insertar_actividad()
-        return resultado
+        return jsonify(resultado), 200
     except Exception as e:
-        return jsonify({"error": "Error al crear la actividad", "detalles": str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_actividad(id):
     try:
-        respuesta = Actividad.eliminar_actividad(id)
-        return respuesta
+        resultado = Actividad.eliminar_actividad(id)
+        return jsonify(resultado), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al eliminar la actividad", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
 @blueprint.route("", methods=["GET"])
 def consultar_actividades():
     try:
         respuesta = Actividad.consultar_actividades()
-        return Response(respuesta, mimetype="application/json")
+        return Response(respuesta, mimetype='application/json'), 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al consultar actividades", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
 
 
 @blueprint.route("/<id>", methods=["GET"])
 def consultar_actividad(id):
     try:
         respuesta = Actividad.consultar_actividad(id)
-        return Response(respuesta, mimetype="application/json")
+        return Response(respuesta, mimetype='application/json'), 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al consultar la actividad", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado al consultar actividad: {e}"}), 500
 
 
 @blueprint.route("/<id>", methods=["PUT"])
 def actualizar_actividad(id):
     data = request.json
-    
     try:
-        schema = ActividadSchema()
-        datos_validados = schema.load(data)
-        respuesta = Actividad.actualizar_actividad(id, datos_validados)
-        return respuesta
+        resultado = Actividad.actualizar_actividad(id, data)
+        return jsonify(resultado), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al actualizar la actividad", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500

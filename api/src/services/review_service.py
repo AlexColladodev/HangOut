@@ -18,3 +18,11 @@ def crear_review():
     except Exception as e:
         return jsonify({"error": "Error al crear review", "detalles": str(e)}), 500
         
+
+@blueprint.route("/<id>", methods=["DELETE"])
+def eliminar_review(id):
+    try:
+        respuesta = Review.eliminar_review(id)
+        return respuesta
+    except Exception as e:
+        return jsonify({"error": "Error al eliminar review", "detalles": str(e)})

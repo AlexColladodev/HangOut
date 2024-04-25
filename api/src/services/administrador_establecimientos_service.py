@@ -19,36 +19,48 @@ def crear_administrador_establecimiento():
         datos_validados = schema.load(data)
         administrador_establecimiento = AdministradorEstablecimiento(datos_validados)
         resultado = administrador_establecimiento.insertar_administrador_establecimiento()
-        return resultado
+        return jsonify(resultado), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
     except Exception as e:
-        return jsonify({"error": "Error al insertar administrador de establecimiento", "detalles": str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_administrador_establecimiento(id):
     try:
         respuesta = AdministradorEstablecimiento.eliminar_administrador_establecimiento(id)
-        return respuesta
+        return jsonify(respuesta), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al eliminar administrador de establecimiento", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
 @blueprint.route("", methods=["GET"])
 def consultar_administradores_establecimiento():
     try:
         respuesta = AdministradorEstablecimiento.consultar_administradores_establecimiento()
-        return Response(respuesta, mimetype="application/json")
+        return Response(respuesta, mimetype="application/json"), 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al consultar administradores de establecimiento", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado al consultar administradores de establecimientos: {e}"}), 500
 
 
 @blueprint.route("/<id>", methods=["GET"])
 def consultar_administrador_establecimiento(id):
     try:
         respuesta = AdministradorEstablecimiento.consultar_administrador_establecimiento(id)
-        return Response(respuesta, mimetype="application/json")
+        return Response(respuesta, mimetype="application/json"), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al consultar administrador de establecimiento", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado al consultar administradores de establecimientos: {e}"}), 500
 
 
 @blueprint.route("/<id>", methods=["PUT"])
@@ -56,9 +68,11 @@ def actualizar_administrador_establecimiento(id):
     data = request.json
     try:
         respuesta = AdministradorEstablecimiento.actualizar_administrador_establecimiento(id, data)
-        return respuesta
+        return jsonify(respuesta), 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al actualizar administrador de establecimiento", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado al consultar administradores de establecimientos: {e}"}), 500
 
 
 @blueprint.route("/nuevo_establecimiento", methods=["POST"])
@@ -73,9 +87,11 @@ def crear_establecimiento():
     try:
         respuesta_json = requests.post(url, json=data).json()
         id_establecimiento = respuesta_json.get("id")
-        AdministradorEstablecimiento.add_establecimiento_administrador(id_administrador, id_establecimiento)
-        return respuesta_json
+        respuesta = AdministradorEstablecimiento.add_establecimiento_administrador(id_administrador, id_establecimiento)
+        return jsonify(respuesta), 200
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Error en la solicitud de creación de establecimiento", "detalles": str(e)}), 400
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": "Error general en crear establecimiento", "detalles": str(e)}), 500

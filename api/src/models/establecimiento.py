@@ -3,6 +3,7 @@ from flask import jsonify
 from db import mongo
 from bson import json_util
 from bson.objectid import ObjectId
+from pymongo.errors import PyMongoError
 
 class Establecimiento:
 
@@ -20,23 +21,48 @@ class Establecimiento:
         try:
             data_insertar = self.__dict__
             id = str(mongo.db.establecimientos.insert_one(data_insertar).inserted_id)
-            return jsonify({"message": "Establecimiento con id: " + id + " creado con éxito", "id": id}), 200
+            return {"message": "Establecimiento con id: " + id + " creado con éxito", "id": id}
         except Exception as e:
-            return jsonify({"error": f"Error al insertar el establecimiento: {e}"}), 500
+            raise  RuntimeError("Error en la base de datos al crear establecimiento")
 
 
     def eliminar_establecimiento(id):
         try:
             establecimiento_eliminar = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
-            if not establecimiento_eliminar:
-                return jsonify({"error": "Establecimiento no encontrado"}), 404
-            resultado = mongo.db.establecimientos.delete_one({"_id": ObjectId(id)})
-            if resultado.deleted_count == 0:
-                return jsonify({"error": "No se pudo eliminar el establecimiento"}), 500
-            return jsonify({"message": "Establecimiento " + id + " eliminado con éxito"}), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al eliminar el establecimiento: {e}"}), 500
 
+            if not establecimiento_eliminar:
+                raise ValueError("Establecimiento no encontrado")
+            
+            resultado = mongo.db.establecimientos.delete_one({"_id": ObjectId(id)})
+
+            if resultado.deleted_count == 0:
+                raise RuntimeError("No se pudo eliminar el establecimiento")
+            
+            return {"message": "Establecimiento " + id + " eliminado con éxito"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al eliminar establecimiento: {e}")
+        
+    def consultar_establecimientos():
+        try:
+            establecimientos = mongo.db.establecimientos.find()
+            return json_util.dumps(establecimientos)
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al consultar los establecimientos: {e}")
+
+
+    def consultar_establecimiento(id):
+        try:
+            establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
+
+            if not establecimiento:
+                raise ValueError("Establecimiento no encontrado")
+            
+            respuesta = json_util.dumps(establecimiento)
+            return respuesta
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al consultar el establecimiento: {e}")
+        
+    #def actualizar_establecimiento(id)
 
     def add_evento_establecimiento(id_establecimiento, id_evento):
         try:
@@ -58,25 +84,6 @@ class Establecimiento:
             return jsonify({"message": f"Oferta {id_oferta} agregada al establecimiento {id_establecimiento} con éxito"}), 200
         except Exception as e:
             return jsonify({"error": f"Error al agregar oferta al establecimiento: {e}"}), 500
-
-
-    def consultar_establecimientos():
-        try:
-            establecimientos = mongo.db.establecimientos.find()
-            return json_util.dumps(establecimientos)
-        except Exception as e:
-            return jsonify({"error": f"Error al consultar establecimientos: {e}"}), 500
-
-
-    def consultar_establecimiento(id):
-        try:
-            establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
-            if not establecimiento:
-                return jsonify({"error": "Establecimiento no encontrado"}), 404
-            respuesta = json_util.dumps(establecimiento)
-            return respuesta, 200
-        except Exception as e:
-            return jsonify({"error": f"Error al consultar el establecimiento: {e}"}), 500
 
 
     def filtrar_por_ambientes(ambientes_solicitados):

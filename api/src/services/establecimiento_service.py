@@ -18,7 +18,9 @@ def crear_establecimiento():
         datos_validados = schema.load(data)
         establecimiento = Establecimiento(datos_validados)
         resultado = establecimiento.insertar_establecimiento()
-        return resultado
+        return resultado, 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": "Error al crear establecimiento", "detalles": str(e)}), 500
 
@@ -27,18 +29,37 @@ def crear_establecimiento():
 def eliminar_establecimiento(id):
     try:
         respuesta = Establecimiento.eliminar_establecimiento(id)
-        return respuesta
+        return respuesta, 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al eliminar establecimiento", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
+
 
 
 @blueprint.route("", methods=["GET"])
 def consultar_establecimientos():
     try:
         respuesta = Establecimiento.consultar_establecimientos()
-        return Response(respuesta, mimetype="application/json")
+        return Response(respuesta, mimetype="application/json"), 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al consultar establecimientos", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
+    
+@blueprint.route("<id>", methods=["GET"])
+def consultar_establecimiento(id):
+    try:
+        respuesta = Establecimiento.consultar_establecimiento(id)
+        return Response(respuesta, mimetype="application/json"), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
 
 
 @blueprint.route("/nueva_oferta", methods=["POST"])
