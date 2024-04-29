@@ -28,14 +28,14 @@ class Actividad:
                 "fecha_actividad": self.fecha_actividad,
                 "hora_actividad": self.hora_actividad.isoformat() if self.hora_actividad else "No especificado",
                 "ubicacion": self.ubicacion,
-                "id_usuario_creador": self.id_usuario_creador,
+                "id_usuario_creador": str(self.id_usuario_creador),
                 "participantes": self.participantes
             }
 
             id = str(mongo.db.actividades.insert_one(data_insertar).inserted_id)
             return {"message": "Actividad creada con éxito", "id": id}
         except PyMongoError as e:
-            raise ValueError("Error al insertar actividad en la base de datos") from e
+            raise RuntimeError("Error al insertar actividad en la base de datos") from e
 
 
     def eliminar_actividad(id):
@@ -76,12 +76,19 @@ class Actividad:
 
 
     def actualizar_actividad(id, data):
-        if 'fecha_actividad' in data:
-            data['fecha_actividad'] = datetime.strptime(data['fecha_actividad'], '%Y-%m-%d').isoformat()
+
+        data.pop("id_usuario_creador")
+        data.pop("participantes")
+
+        if "fecha_actividad" in data:
+            data["fecha_actividad"] = datetime.strptime(data["fecha_actividad"], "%Y-%m-%d").isoformat()
+
         try:
-            resultado = mongo.db.actividades.update_one({'_id': ObjectId(id)}, {'$set': data})
+            resultado = mongo.db.actividades.update_one({"_id": ObjectId(id)}, {"$set": data})
+
             if resultado.matched_count == 0:
-                raise ValueError("Actividad no encontrada")
+                raise RuntimeError("No se puedo actualizar la actividad")
+            
             return {"message": "Actividad actualizada con éxito"}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos: {e}")

@@ -104,6 +104,19 @@ class AdministradorEstablecimiento:
                 {"$addToSet": {"establecimientos": id_establecimiento}}
             )
             
-            return {"message": f"Establecimiento {id_establecimiento} agregado al administrador {id_administrador} con éxito"}
+            return {"message": f"Establecimiento {id_establecimiento} agregado al administrador {id_administrador} con éxito", "id_admin": id_administrador}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al actualizar administrador de establecimiento: {e}")
+
+
+    def del_establecimiento_administrador(id_administrador, id_establecimiento):
+        try:
+            mongo.db.administradores_establecimientos.update_one(
+                {"_id": ObjectId(id_administrador)},
+                {"$pull": {"establecimientos": str(id_establecimiento)}}
+            )
+
+            return {"message": "Eliminado de la lista de establecimiento del administrador"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos de eliminar un establecimiento de la lista de administrador: {e}")
+        

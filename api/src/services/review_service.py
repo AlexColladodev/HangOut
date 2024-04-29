@@ -14,15 +14,45 @@ def crear_review():
         datos_validados = schema.load(data)
         review = Review(datos_validados)
         resultado = review.insertar_review()
-        return resultado
+        return resultado, 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al crear review", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
         
 
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_review(id):
     try:
         respuesta = Review.eliminar_review(id)
-        return respuesta
+        return respuesta, 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al eliminar review", "detalles": str(e)})
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
+    
+@blueprint.route("", methods=["GET"])
+def consultar_reviews():
+    try:
+        respuesta = Review.consultar_reviews()
+        return respuesta, 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
+    
+@blueprint.route("/<id>", methods=["GET"])
+def consultar_review(id):
+    try:
+        respuesta = Review.consultar_review(id)
+        return respuesta, 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
+    
+    

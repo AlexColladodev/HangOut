@@ -39,7 +39,7 @@ def validar_existencia_id(value):
 class EstablecimientosSchema(Schema):
     cif = fields.Str(required=True, validate=[validate.Length(min=9), validar_cif_unico])
     nombre_establecimiento = fields.Str(required=True, validate=[validate.Length(min=1), validar_nombre_establecimiento_unico])
-    id_administrador = ObjectIdField(required=True, validate=[validar_existencia_id])
+    id_administrador = fields.Str(required=True, validate=[validar_existencia_id])
     ambiente = fields.List(fields.Str(), required=True)
     ofertas = fields.List(fields.Str(), required=False, missing=[])
     eventos = fields.List(fields.Str(), required=False, missing=[])

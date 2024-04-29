@@ -33,12 +33,14 @@ class Establecimiento:
             if not establecimiento_eliminar:
                 raise ValueError("Establecimiento no encontrado")
             
+            id_administrador = establecimiento_eliminar.get("id_administrador")
+            
             resultado = mongo.db.establecimientos.delete_one({"_id": ObjectId(id)})
 
             if resultado.deleted_count == 0:
                 raise RuntimeError("No se pudo eliminar el establecimiento")
             
-            return {"message": "Establecimiento " + id + " eliminado con éxito"}
+            return {"message": "Establecimiento " + id + " eliminado con éxito", "id_administrador": id_administrador}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al eliminar establecimiento: {e}")
         
@@ -62,7 +64,15 @@ class Establecimiento:
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar el establecimiento: {e}")
         
-    #def actualizar_establecimiento(id)
+    #No implementada ruta aún
+    def actualizar_ambiente(nuevo_ambiente, id_establecimiento):
+        try:
+            mongo.db.establecimientos.update_one({"_id": ObjectId(id_establecimiento)},
+                {"ambiente": nuevo_ambiente})
+            return {"message": "Ambiente actualizado con éxito"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
+
 
     def add_evento_establecimiento(id_establecimiento, id_evento):
         try:
@@ -70,9 +80,9 @@ class Establecimiento:
                 {"_id": ObjectId(id_establecimiento)},
                 {"$addToSet": {"eventos": id_evento}}
             )
-            return jsonify({"message": f"Evento {id_evento} agregado al establecimiento {id_establecimiento} con éxito"}), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al agregar evento al establecimiento: {e}"}), 500
+            return {"message": f"Evento {id_evento} agregado al establecimiento {id_establecimiento} con éxito"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al añadir evento al establecimiento: {e}")
 
 
     def add_ofertas_establecimiento(id_establecimiento, id_oferta):
@@ -81,9 +91,9 @@ class Establecimiento:
                 {"_id": ObjectId(id_establecimiento)},
                 {"$addToSet": {"ofertas": id_oferta}}
             )
-            return jsonify({"message": f"Oferta {id_oferta} agregada al establecimiento {id_establecimiento} con éxito"}), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al agregar oferta al establecimiento: {e}"}), 500
+            return {"message": f"Oferta {id_oferta} agregada al establecimiento {id_establecimiento} con éxito"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
 
 
     def filtrar_por_ambientes(ambientes_solicitados):
@@ -92,9 +102,9 @@ class Establecimiento:
                 "ambiente": {"$in": ambientes_solicitados}
             }, {"_id": 1})
             ids = [str(doc['_id']) for doc in establecimientos]
-            return json_util.dumps(ids), 200
+            return json_util.dumps(ids)
         except Exception as e:
-            return jsonify({"error": f"Error en el filtro de ambientes: {e}"}), 500
+            raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
 
     def add_review_establecimiento(id_establecimiento, id_review):
         try:
@@ -103,6 +113,6 @@ class Establecimiento:
                 {"$addToSet": {"reviews": id_review}}
             )
             
-            return jsonify({"message": "Review añadida a Establecimiento"}), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al añadir review al establecimiento: {e}"}), 500
+            return {"message": "Review añadida a Establecimiento"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")

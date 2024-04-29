@@ -86,9 +86,7 @@ def crear_establecimiento():
 
     try:
         respuesta_json = requests.post(url, json=data).json()
-        id_establecimiento = respuesta_json.get("id")
-        respuesta = AdministradorEstablecimiento.add_establecimiento_administrador(id_administrador, id_establecimiento)
-        return jsonify(respuesta), 200
+        return jsonify(respuesta_json), 200
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Error en la solicitud de creación de establecimiento", "detalles": str(e)}), 400
     except RuntimeError as e:

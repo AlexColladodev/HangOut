@@ -19,37 +19,49 @@ def crear_usuario_generico():
     try:
         datos_validados = schema.load(datos_usuario)
         nuevo_usuario = UsuarioGenerico(datos_validados)
-        nuevo_usuario.insertar_usuario_generico()
-        return jsonify({"message": "Usuario creado con éxito"}), 200
+        respuesta = nuevo_usuario.insertar_usuario_generico()
+        return respuesta, 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al crear usuario", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_usuario(id):
     try:
         respuesta = UsuarioGenerico.eliminar_usuario_generico(id)
-        return respuesta
+        return respuesta, 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al eliminar usuario", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
 @blueprint.route("", methods=["GET"])
 def consultar_usuarios():
     try:
         respuesta = UsuarioGenerico.consultar_todos_usuarios()
-        return Response(respuesta, mimetype="application/json")
+        return Response(respuesta, mimetype="application/json"), 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al consultar usuarios", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
 @blueprint.route("/<id>", methods=["GET"])
 def consultar_unico_usuario(id):
     try:
         respuesta = UsuarioGenerico.consultar_usuario(id)
-        return Response(respuesta, mimetype="application/json")
+        return Response(respuesta, mimetype="application/json"), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al consultar usuario", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
 @blueprint.route("/<id>", methods=["PUT"])
@@ -58,9 +70,13 @@ def actualizar_usuario(id):
     
     try:
         respuesta = UsuarioGenerico.actualizar_usuario(id, data)
-        return respuesta
+        return respuesta, 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al actualizar usuario", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
 @blueprint.route("/nueva_actividad", methods=["POST"])
@@ -72,7 +88,9 @@ def add_actividad():
         respuesta_json = requests.post(url_actividad, json=data).json()
         id_actividad = respuesta_json.get("id")
         UsuarioGenerico.add_actividad_usuario(id_usuario_creador, id_actividad)
-        return respuesta_json
+        return respuesta_json, 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Error en la solicitud al servicio de actividades", "detalles": str(e)}), 400
     except Exception as e:
@@ -87,11 +105,13 @@ def seguir_usuario():
     usuario = get_jwt_identity()
     id_usuario = usuario.get("_id")
 
-    respuesta_bool, id_seguir_usuario = UsuarioGenerico.existe_nombre_usuario(nombre_usuario)
-    if respuesta_bool:
+    id_seguir_usuario = UsuarioGenerico.existe_nombre_usuario(nombre_usuario)
+    if id_seguir_usuario is not None:
         try:
             respuesta = UsuarioGenerico.add_seguidos_usuario(id_usuario, id_seguir_usuario)
-            return respuesta
+            return respuesta, 200
+        except RuntimeError as e:
+            return jsonify({"error": str(e)}), 500
         except Exception as e:
             return jsonify({"error": str(e)}), 400
     else:
@@ -108,10 +128,12 @@ def participa():
     nombre_usuario = usuario.get("nombre_usuario")
 
     try:
-        UsuarioGenerico.usuario_participa_actividad(id_usuario, id_actividad)
-        return jsonify({"message": "El usuario " + nombre_usuario + " participa en la actividad " + str(id_actividad)}), 200
+        respuesta = UsuarioGenerico.usuario_participa_actividad(id_usuario, id_actividad)
+        return respuesta, 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al añadir usuario a la actividad", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
 @blueprint.route("/no_participa", methods=["POST"])
@@ -121,13 +143,14 @@ def no_participa():
     id_actividad = data.get("id_actividad")
     usuario = get_jwt_identity()
     id_usuario = usuario.get("_id")
-    nombre_usuario = usuario.get("nombre_usuario")
 
     try:
-        UsuarioGenerico.usuario_no_participa_actividad(id_usuario, id_actividad)
-        return jsonify({"message": "El usuario " + nombre_usuario + " no participa en la actividad " + str(id_actividad)}), 200
+        respuesta = UsuarioGenerico.usuario_no_participa_actividad(id_usuario, id_actividad)
+        return respuesta, 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al retirar usuario de la actividad", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
 @blueprint.route("/review", methods=["POST"])
@@ -146,8 +169,10 @@ def crear_review():
         id_review = respuesta_json.get("id")
         UsuarioGenerico.add_review_usuario(id_usuario, id_review)
         Establecimiento.add_review_establecimiento(id_establecimiento, id_review)
-        return respuesta_json
+        return respuesta_json, 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Error en la solicitud de creación de review", "detalles": str(e)}), 400
     except Exception as e:
-        return jsonify({"error": "Error general en crear review", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500

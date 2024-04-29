@@ -14,6 +14,8 @@ def crear_actividad():
         actividad = Actividad(datos_validados)
         resultado = actividad.insertar_actividad()
         return jsonify(resultado), 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}, 500)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

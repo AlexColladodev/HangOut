@@ -32,4 +32,4 @@ class EventoSchema(Schema):
         fecha_evento = fields.Str(required=True, validate=[validate.Length(min=1)])
         precio = fields.Float(required=True, validate=[validate.Range(min=0.0)])
         hora_evento = fields.Str(required=True, validate=[validate.Length(min=1)])
-        id_establecimiento = ObjectIdField(required=True, validate=[validar_existencia_id])
+        id_establecimiento = fields.Str(required=True, validate=[validar_existencia_id])

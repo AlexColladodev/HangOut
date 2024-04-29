@@ -13,19 +13,25 @@ def crear_evento():
     try:
         datos_validados = schema.load(data)
         evento = Evento(datos_validados)
-        resultado = evento.insertar_evento()
-        return resultado
+        respuesta = evento.insertar_evento()
+        return jsonify(respuesta), 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}, 500)
     except Exception as e:
-        return jsonify({"error": "Error al crear evento", "detalles": str(e)}), 500
+        return jsonify({"error": str(e)}), 500
 
 
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_evento(id):
     try:
         respuesta = Evento.eliminar_evento(id)
-        return respuesta
+        return respuesta, 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al eliminar evento", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
 @blueprint.route("", methods=["GET"])
@@ -33,8 +39,10 @@ def consultar_eventos():
     try:
         respuesta = Evento.consultar_eventos()
         return Response(respuesta, mimetype="application/json")
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al consultar eventos", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
 @blueprint.route("/<id>", methods=["GET"])
@@ -42,8 +50,12 @@ def consultar_evento(id):
     try:
         respuesta = Evento.consultar_evento(id)
         return Response(respuesta, mimetype="application/json")
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al consultar evento", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
 @blueprint.route("/<id>", methods=["PUT"])
@@ -55,5 +67,7 @@ def actualizar_evento(id):
         datos_validados = schema.load(data, partial=True)
         respuesta = Evento.actualizar_evento(id, datos_validados)
         return respuesta
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al actualizar evento", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado: {e}"}), 500

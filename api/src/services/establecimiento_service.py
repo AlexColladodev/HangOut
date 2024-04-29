@@ -3,6 +3,10 @@ from models.establecimiento import Establecimiento
 from schemas.establecimiento_schema import EstablecimientosSchema
 import requests
 from config import DevelopmentConfig
+from models.administrador_establecimiento import AdministradorEstablecimiento
+from models.oferta import Oferta
+from models.evento import Evento
+from models.review import Review
 
 blueprint = Blueprint("Establecimiento", "establecimientos", url_prefix="/establecimientos")
 
@@ -13,11 +17,14 @@ url_evento = f"{DevelopmentConfig.BASE_URL}/eventos"
 def crear_establecimiento():
     data = request.json
     schema = EstablecimientosSchema()
+    id_administrador = data.get("id_administrador")
 
     try:
         datos_validados = schema.load(data)
         establecimiento = Establecimiento(datos_validados)
         resultado = establecimiento.insertar_establecimiento()
+        id_establecimiento = str(resultado.get("id"))
+        AdministradorEstablecimiento.add_establecimiento_administrador(id_administrador, id_establecimiento)
         return resultado, 200
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500
@@ -29,6 +36,20 @@ def crear_establecimiento():
 def eliminar_establecimiento(id):
     try:
         respuesta = Establecimiento.eliminar_establecimiento(id)
+        id_administrador = respuesta.get("id_administrador")
+
+        #Al eliminar un establecimiento se debe:
+
+        id_establecimiento = str(id)
+
+        #Eliminar el id de la lista "establecimientos" del administrador
+        AdministradorEstablecimiento.del_establecimiento_administrador(id_administrador, id_establecimiento)
+
+        #Eliminar Ofertas-Eventos-Reviews asociadas a ese establecimiento
+        Oferta.del_oferta_establecimiento(id)
+        Evento.del_evento_establecimiento(id)
+        Review.del_review_establecimiento(id)
+
         return respuesta, 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 404
@@ -71,11 +92,11 @@ def add_oferta():
         respuesta_json = requests.post(url_oferta, json=data).json()
         id_oferta = respuesta_json.get("id")
         Establecimiento.add_ofertas_establecimiento(id_establecimiento, id_oferta)
-        return respuesta_json
-    except requests.exceptions.RequestException as e:
-        return jsonify({"error": "Error en la solicitud al servicio de ofertas", "detalles": str(e)}), 400
+        return respuesta_json, 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al agregar oferta al establecimiento", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
 
 
 @blueprint.route("/nuevo_evento", methods=["POST"])
@@ -87,11 +108,11 @@ def add_evento():
         respuesta_json = requests.post(url_evento, json=data).json()
         id_evento = respuesta_json.get("id")
         Establecimiento.add_evento_establecimiento(id_establecimiento, id_evento)
-        return respuesta_json
-    except requests.exceptions.RequestException as e:
-        return jsonify({"error": "Error en la solicitud al servicio de eventos", "detalles": str(e)}), 400
+        return respuesta_json, 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al agregar evento al establecimiento", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
 
 
 @blueprint.route("/filtrar", methods=["GET"])
@@ -101,5 +122,7 @@ def filtrar():
     try:
         respuesta = Establecimiento.filtrar_por_ambientes(ambientes_solicitados)
         return jsonify(respuesta), 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": "Error al filtrar establecimientos", "detalles": str(e)}), 500
+        return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500

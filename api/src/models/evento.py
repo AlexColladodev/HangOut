@@ -4,6 +4,7 @@ from db import mongo
 from bson import json_util
 from bson.objectid import ObjectId
 from datetime import date, datetime
+from pymongo.errors import PyMongoError
 
 class Evento:
 
@@ -27,13 +28,13 @@ class Evento:
                 "fecha_evento": self.fecha_evento,
                 "precio": self.precio,
                 "hora_evento": self.hora_evento.isoformat() if self.hora_evento else "No especificado",
-                "id_establecimiento": self.id_establecimiento
+                "id_establecimiento": str(self.id_establecimiento)
             }
 
             id = str(mongo.db.eventos.insert_one(data_insertar).inserted_id)
-            return jsonify({"message": "Evento con id: " + id + " creado con éxito", "id": id}), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al insertar evento: {e}"}), 500
+            return {"message": "Evento con id: " + id + " creado con éxito", "id": id}
+        except PyMongoError as e:
+            raise RuntimeError("Error al insertar evento en la base de datos") from e
 
 
     def eliminar_evento(id):
@@ -41,24 +42,24 @@ class Evento:
             evento_eliminar = mongo.db.eventos.find_one({"_id": ObjectId(id)})
             
             if not evento_eliminar:
-                return jsonify({"error": "Evento no encontrado"}), 404
+                raise ValueError("Evento no encontrado")
             
             resultado = mongo.db.eventos.delete_one({"_id": ObjectId(id)})
             
             if resultado.deleted_count == 0:
-                return jsonify({"error": "No se pudo eliminar el evento"}), 500
+                raise RuntimeError("No se pudo eliminar la actividad")
             
-            return jsonify({"message": "Evento " + id + " eliminado con éxito"}), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al eliminar evento: {e}"}), 500
+            return {"message": "Evento eliminado con éxito"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al eliminar evento: {e}")
 
 
     def consultar_eventos():
         try:
             eventos = mongo.db.eventos.find()
-            return json_util.dumps(eventos), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al consultar eventos: {e}"}), 500
+            return json_util.dumps(eventos)
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al consultar evento: {e}")
 
 
     def consultar_evento(id):
@@ -66,29 +67,37 @@ class Evento:
             evento = mongo.db.eventos.find_one({"_id": ObjectId(id)})
             
             if not evento:
-                return jsonify({"error": "Evento no encontrado"}), 404
+                raise ValueError("Evento no encontrado")
             
-            respuesta = json_util.dumps(evento)
-            return respuesta, 200
-        except Exception as e:
-            return jsonify({"error": f"Error al consultar evento: {e}"}), 500
+            return json_util.dumps(evento)
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al consultar evento: {e}")
 
 
     def actualizar_evento(id, data):
         try:
-            updates = {k: v for k, v in data.items() if k not in ["id_establecimiento"]}
+            data.pop("id_establecimiento")
+           
+            if 'fecha_evento' in data:
+                data['fecha_evento'] = datetime.strptime(data['fecha_evento'], '%Y-%m-%d').isoformat()
             
-            if "fecha_evento" in updates:
-                updates["fecha_evento"] = date.fromisoformat(updates["fecha_evento"])
-            
-            if "hora_evento" in updates:
-                updates["hora_evento"] = datetime.strptime(updates["hora_evento"], '%H:%M:%S').time().isoformat()
-            
-            resultado = mongo.db.eventos.update_one({"_id": ObjectId(id)}, {"$set": updates})
+            resultado = mongo.db.eventos.update_one({"_id": ObjectId(id)}, {"$set": data})
             
             if resultado.modified_count == 0:
-                return jsonify({"error": "No se pudo actualizar el evento"}), 500
+                raise RuntimeError("No se pudo actualizar el evento")
             
-            return jsonify({"message": "Evento con id: " + id + " actualizado con éxito"}), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al actualizar evento: {e}"}), 500
+            return {"message": "Evento actualizado con éxito"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al consultar evento: {e}")
+
+
+
+
+    def del_evento_establecimiento(id_establecimiento):
+
+        resultado = mongo.db.eventos.delete_many({"id_establecimiento": id_establecimiento})
+
+        if resultado.deleted_count > 0:
+            return {"mensaje": f"Se eliminaron {resultado.deleted_count} eventos."}
+        else:
+            return {"message": "No hay eventos que eliminar"}

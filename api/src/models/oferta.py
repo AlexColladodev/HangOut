@@ -3,6 +3,7 @@ from flask import jsonify
 from db import mongo
 from bson import json_util
 from bson.objectid import ObjectId
+from pymongo.errors import PyMongoError
 
 class Oferta:
 
@@ -17,9 +18,9 @@ class Oferta:
         try:
             data_insertar = self.__dict__
             id = str(mongo.db.ofertas.insert_one(data_insertar).inserted_id)
-            return jsonify({"message": "Oferta con id: " + id + " creado con éxito", "id": id}), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al insertar oferta: {e}"}), 500
+            return {"message": "Oferta creada con éxito"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error en la base de datos al crear una oferta: {e}")
 
 
     def eliminar_oferta(id):
@@ -28,44 +29,55 @@ class Oferta:
             oferta_eliminar = mongo.db.ofertas.find_one({"_id": ObjectId(id)})
             
             if not oferta_eliminar:
-                return jsonify({"error": "Oferta no encontrada"}), 404
+                raise ValueError("Oferta no encontrada")
             
             resultado = mongo.db.ofertas.delete_one({"_id": ObjectId(id)})
             
             if resultado.deleted_count == 0:
-                return jsonify({"error": "No se pudo eliminar la oferta"}), 500
+                raise RuntimeError("No se pudo eliminar la oferta")
             
-            return jsonify({"message": "Oferta " + id + " eliminada con éxito"}), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al eliminar oferta: {e}"}), 500
+            return {"message": "Oferta eliminada con éxito"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error en la base de datos al eliminar la oferta: {e}")
 
     def consultar_ofertas():
         try:
             ofertas = mongo.db.ofertas.find()
-            return json_util.dumps(ofertas), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al consultar ofertas: {e}"}), 500
+            return json_util.dumps(ofertas)
+        except PyMongoError as e:
+            raise RuntimeError(f"Error en la base de datos al consultar las ofertas: {e}")
 
     def consultar_oferta(id):
         try:
             oferta = mongo.db.ofertas.find_one({"_id": ObjectId(id)})
             
             if not oferta:
-                return jsonify({"error": "Oferta no encontrada"}), 404
+                raise ValueError("Oferta no encontrada")
             
             respuesta = json_util.dumps(oferta)
-            return respuesta, 200
-        except Exception as e:
-            return jsonify({"error": f"Error al consultar oferta: {e}"}), 500
+            return respuesta
+        except PyMongoError as e:
+            raise RuntimeError(f"Error en la base de datos al consultar la oferta: {e}")
     
     def actualizar_oferta(id, data):
         try:
-            updates = {k: v for k, v in data.items() if k not in ["id_establecimiento"]}
-            resultado = mongo.db.ofertas.update_one({"_id": ObjectId(id)}, {"$set": updates})
+            data.pop("id_establecimiento")
+
+            resultado = mongo.db.ofertas.update_one({"_id": ObjectId(id)}, {"$set": data})
             
             if resultado.modified_count == 0:
-                return jsonify({"error": "No se pudo actualizar la oferta"}), 500
+                raise ValueError("No se pudo actualizar la oferta")
            
-            return jsonify({"message": "Oferta con id: " + id + " actualizada con éxito"}), 200
-        except Exception as e:
-            return jsonify({"error": f"Error al actualizar oferta: {e}"}), 500
+            return {"message": "Oferta actualizada con éxito"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error en la base de datos al actualizar la oferta: {e}")
+        
+
+    def del_oferta_establecimiento(id_establecimiento):
+
+        resultado = mongo.db.ofertas.delete_many({"id_establecimiento": id_establecimiento})
+
+        if resultado.deleted_count > 0:
+            return {"mensaje": f"Se eliminaron {resultado.deleted_count} ofertas."}
+        else:
+            return {"message": "No hay ofertas que eliminar"}
