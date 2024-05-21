@@ -1,0 +1,28 @@
+Común:
+-Iniciar Sesión
+-Registrarse
+Administrador de Establecimiento:
+-Inicio Administrador Establecimiento
+-Ajustes Administrador Establecimiento
+-Modificar Administrador de Establecimiento
+-Crear Establecimiento
+-Modificar Establecimiento
+-Establecimiento Detallado
+-Crear Oferta
+-Crear Evento
+-Mostrar Eventos
+-Mostrar Ofertas
+-Evento Detallado
+-Oferta Detallada
+-Modificar Oferta
+-Modificar Evento
+Usuario Genérico:
+-Inicio Usuario Genérico
+-Ajustes Usuario Genérico
+-Crear Actividad
+-Actividades Creadas
+-Actividad Detallada
+-Establecimiento Detallado
+-Modificar Actividad
+-Crear Review
+-Seguir Usuario
