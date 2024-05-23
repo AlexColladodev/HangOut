@@ -33,6 +33,7 @@ const RegistrarseComun = () => {
     <View style={{ flex: 1 }}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <FondoComun />
+        <Text style={styles.title}>Registro</Text> 
         <View style={styles.inputContainer}>
           <TextInput placeholder="Nombre" style={styles.input} />
           <TextInput placeholder="Nombre Usuario" style={styles.input} />
@@ -104,10 +105,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginVertical: 20, // Margen vertical para separar el título del logo y del formulario
+    alignSelf: 'center',
+  },
   inputContainer: {
     width: '100%',
     marginBottom: 20,
-    marginTop: 100,
   },
   input: {
     backgroundColor: '#F0F0F0',

@@ -5,11 +5,14 @@ from db import init_mongo, mongo
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 from werkzeug.security import check_password_hash
 from flask_restx import Api
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/HangOut"
 app.config["JWT_SECRET_KEY"] = "Ap?&/u]rk0b5=:+E"
 jwt = JWTManager(app)
+CORS(app)
+
 
 init_mongo(app)
 
@@ -82,4 +85,4 @@ def preparar_para_jwt(objeto):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
