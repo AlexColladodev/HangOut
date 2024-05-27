@@ -72,7 +72,7 @@ def actualizar_administrador_establecimiento(id):
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": f"Error inesperado al consultar administradores de establecimientos: {e}"}), 500
+        return jsonify({"error": f"Error inesperado al modificar administradores de establecimientos: {e}"}), 500
 
 
 @blueprint.route("/nuevo_establecimiento", methods=["POST"])
