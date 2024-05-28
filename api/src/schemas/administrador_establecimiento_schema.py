@@ -23,3 +23,5 @@ class AdministradorEstablecimientoSchema(Schema):
     email_empresa = fields.Email(required=True)
     establecimientos = fields.List(fields.Str(), required=False, missing=[])
     dni = fields.Str(required=True, validate=[validate.Length(min=8), validar_dni_unico])
+    telefono = fields.Str(required=True, validate=[validate.Length(min=1), validate.Regexp(regex=r"^\d{8,12}$")])
+    fecha_nac = fields.Str(required=True, validate=[validate.Length(min=1)])

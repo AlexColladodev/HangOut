@@ -14,11 +14,11 @@ class UsuarioGenerico:
         self.password = data.get("password")
         self.email = data.get("email")
         self.telefono = data.get("telefono")
-        self.edad = data.get("edad")
         self.seguidos = data.get("seguidos", [])
         self.preferencias = data.get("preferencias", [])
         self.actividades_creadas = data.get("actividades_creadas", [])
         self.reviews = data.get("reviews", [])
+        self.fecha_nac = data.get("fecha_nac")
         
 
     def insertar_usuario_generico(self):

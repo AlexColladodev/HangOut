@@ -1,14 +1,33 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, ScrollView, Text, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, TextInput, ScrollView, Text, TouchableOpacity, Alert } from 'react-native';
 import FondoComun from '../../components/FondoComun';
 import { Rating } from 'react-native-ratings';
+import axios from 'axios';
 
 const CrearReview = () => {
   const [mensaje, setMensaje] = useState('');
   const [calificacion, setCalificacion] = useState(0);
 
   const handleSave = () => {
-    // Manejar la lógica para guardar la review
+    const fecha_creacion = new Date().toISOString().split('T')[0]; // Obtiene la fecha actual en formato YYYY-MM-DD
+    const reviewData = {
+      mensaje,
+      calificacion,
+      fecha_creacion,
+      id_usuario: "6655fb6c0de733860fff23dd",
+      id_establecimiento: "664f72d5497c42eeec76db0b"
+    };
+
+    axios.post('http://10.133.133.241:5000/reviews', reviewData)
+      .then(response => {
+        Alert.alert('Éxito', 'Review Creada con Éxito');
+        // Manejar la lógica para el éxito
+      })
+      .catch(error => {
+        console.error('Error al crear la review:', error);
+        Alert.alert('Error', 'Hubo un problema al crear la review');
+        // Manejar la lógica para el error
+      });
   };
 
   return (

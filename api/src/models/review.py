@@ -12,7 +12,7 @@ class Review:
         self.mensaje = data.get("mensaje")
         self.id_usuario = data.get("id_usuario")
         self.id_establecimiento = data.get("id_establecimiento")
-        #self.fecha = datetime.fromisoformat(data.get("fecha")) if data.get("fecha") else None
+        self.fecha = data.get("fecha_creacion")
 
     
     def insertar_review(self):

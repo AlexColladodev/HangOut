@@ -10,7 +10,7 @@ const DatosUsuario = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/usuario_generico/6654bd38bc5a235b9f0d3412');
+      const response = await axios.get('http://10.133.133.241:5000/usuario_generico/6655fb6c0de733860fff23dd');
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -67,7 +67,7 @@ const DatosUsuario = () => {
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Fecha de Nacimiento:</Text>
-            <Text style={styles.fieldValue}>01/01/1970</Text>
+            <Text style={styles.fieldValue}>{data.fecha_nac}</Text>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Seguidos:</Text>

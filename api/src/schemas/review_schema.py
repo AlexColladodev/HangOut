@@ -41,3 +41,4 @@ class ReviewSchema(Schema):
         #fecha = fields.DateTime(required=True)
         id_usuario = ObjectIdField(required=True, validate=[validar_existencia_id])
         id_establecimiento = ObjectIdField(required=True, validate=[validar_existencia_id_establecimiento])
+        fecha_creacion = fields.Str(required=True, validate=[validate.Length(min=1)])

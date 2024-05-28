@@ -16,6 +16,8 @@ class AdministradorEstablecimiento:
         self.dni = data.get("dni")
         self.email_empresa = data.get("email_empresa")
         self.establecimientos = data.get("establecimientos", [])
+        self.telefono = data.get("telefono")
+        self.fecha_nac = data.get("fecha_nac")
 
 
     def insertar_administrador_establecimiento(self):

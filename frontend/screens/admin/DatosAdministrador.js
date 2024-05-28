@@ -10,7 +10,7 @@ const DatosAdministrador = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/administrador_establecimiento/662a8d2ab394fce76c37fc3d');
+      const response = await axios.get('http://10.133.133.241:5000/administrador_establecimiento/6655fac33dfd222aa43c3e20');
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -63,11 +63,11 @@ const DatosAdministrador = () => {
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Teléfono:</Text>
-            <Text style={styles.fieldValue}>+34 123 456 789</Text>
+            <Text style={styles.fieldValue}>{data.telefono}</Text>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Fecha de Nacimiento:</Text>
-            <Text style={styles.fieldValue}>01/01/1970</Text>
+            <Text style={styles.fieldValue}>{data.fecha_nac}</Text>
           </View>
           <Button title="Modificar" color="#BB6BD9" onPress={handleSave} />
         </View>
