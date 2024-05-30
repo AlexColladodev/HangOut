@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import * as ImagePicker from 'expo-image-picker';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,8 +9,9 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image,
-  Alert
+  Alert,
+  Button,
+  Image
 } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import FondoComun from '../../components/FondoComun';
@@ -17,6 +19,7 @@ import FondoComun from '../../components/FondoComun';
 const CrearEstablecimiento = () => {
   const [nombre, setNombre] = useState('');
   const [cif, setCIF] = useState('');
+  const [imageUri, setImageUri] = useState(null);
   const [checkBoxState, setCheckBoxState] = useState({
     box1: false,
     box2: false,
@@ -33,31 +36,63 @@ const CrearEstablecimiento = () => {
     }));
   };
 
-  const handleSubmit = async () => {
-    const selectedCheckBoxes = Object.keys(checkBoxState).filter(key => checkBoxState[key]);
-    const data = {
-      nombre_establecimiento: nombre,
-      cif: cif,
-      ambiente: selectedCheckBoxes,
-      id_administrador: '6627c9be1d5548a0cff17158'
-    };
+  const selectImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-    try {
-      const response = await axios.post('http://192.168.1.107:5000/establecimientos', data);
-      Alert.alert('Success', 'Establecimiento guardado exitosamente');
-    } catch (error) {
-      Alert.alert('Error', 'Hubo un error al guardar el establecimiento');
-      console.error(error);
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
     }
   };
 
+  const handleSubmit = async () => {
+    const selectedCheckBoxes = Object.keys(checkBoxState).filter(key => checkBoxState[key]);
+    const data = new FormData();
+    data.append('nombre_establecimiento', nombre);
+    data.append('cif', cif);
+  
+    // Crear un array de strings para 'ambiente' y añadirlo como tal a FormData
+    const ambienteArray = selectedCheckBoxes; // Esta es la variable intermedia que es un array de strings
+    data.append('ambiente', ambienteArray); // Añadir el array de strings como un string JSON
+  
+    data.append('id_administrador', '6627c9be1d5548a0cff17158');
+    if (imageUri) {
+      const uriParts = imageUri.split('.');
+      const fileType = uriParts[uriParts.length - 1];
+  
+      data.append('imagen', {
+        uri: imageUri,
+        name: `photo.${fileType}`,
+        type: `image/${fileType}`,
+      });
+    } else {
+      data.append('imagen', null);
+    }
+  
+    console.log(data);
+    try {
+      const response = await axios.post('http://10.133.133.241:5000/establecimientos', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Response: ', response.data);
+      Alert.alert('Success', 'Establecimiento guardado exitosamente');
+    } catch (error) {
+      console.error('Error: ', error.response.data.error);
+      Alert.alert('Error', error.response.data.error);
+    }
+  };
+  
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <FondoComun />
-        <View style={styles.header}>
-          <Text style={styles.title}>Crear Establecimiento</Text>
-        </View>
+        <Text style={styles.title}>Crear Establecimiento</Text> 
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Nombre Establecimiento"
@@ -74,23 +109,24 @@ const CrearEstablecimiento = () => {
           <Text style={styles.label}>Ambiente:</Text>
           <View style={styles.checkboxContainer}>
             {Object.keys(checkBoxState).map((key) => (
-              <View key={key} style={styles.checkboxWrapper}>
-                <CheckBoxElement
-                  title={`${key}`}
-                  checked={checkBoxState[key]}
-                  onPress={() => handleCheckBoxChange(key)}
-                  containerStyle={styles.checkbox}
-                  textStyle={styles.checkboxText}
-                />
-              </View>
+              <CheckBoxElement
+                key={key}
+                title={key}
+                checked={checkBoxState[key]}
+                onPress={() => handleCheckBoxChange(key)}
+                containerStyle={styles.checkbox}
+                textStyle={styles.checkboxText}
+              />
             ))}
           </View>
+          <Button title="Seleccionar Imagen Establecimiento" onPress={selectImage} />
+          {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
           <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
             <Text style={styles.saveButtonText}>Guardar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -119,20 +155,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   contentContainer: {
+    padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 100,
-  },
-  header: {
-    alignItems: 'center',
-    marginVertical: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginVertical: 20,
+    alignSelf: 'center',
   },
   inputContainer: {
-    paddingHorizontal: 20,
     width: '100%',
     marginBottom: 20,
   },
@@ -165,6 +198,11 @@ const styles = StyleSheet.create({
   checkboxText: {
     fontSize: 16,
   },
+  image: {
+    width: 200,
+    height: 150,
+    marginVertical: 10,
+  },
   saveButton: {
     backgroundColor: 'purple',
     padding: 10,
@@ -174,20 +212,6 @@ const styles = StyleSheet.create({
   saveButtonText: {
     color: 'white',
     fontSize: 18,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 20,
-    backgroundColor: '#E0F7FA',
-    position: 'absolute', // Mantiene el footer fijo
-    bottom: 0, // Asegura que el footer se mantenga en la parte inferior
-    left: 0,
-    right: 0,
-  },
-  icon: {
-    width: 50,
-    height: 50,
   },
 });
 

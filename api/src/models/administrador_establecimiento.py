@@ -18,6 +18,7 @@ class AdministradorEstablecimiento:
         self.establecimientos = data.get("establecimientos", [])
         self.telefono = data.get("telefono")
         self.fecha_nac = data.get("fecha_nac")
+        self.imagen_url = data.get("imagen_url")
 
 
     def insertar_administrador_establecimiento(self):

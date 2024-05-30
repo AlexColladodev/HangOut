@@ -21,7 +21,6 @@ def validar_nombre_establecimiento_unico(value):
     
 def validar_cif_unico(value):
     cif_sin_espacios = value.strip()
-
     if len(cif_sin_espacios) < 9:
         raise ValidationError("El CIF debe tener al menos 9 caracteres, sin contar espacios en blanco.")
     if mongo.db.establecimientos.find_one({"cif": cif_sin_espacios}):
@@ -44,4 +43,5 @@ class EstablecimientosSchema(Schema):
     ofertas = fields.List(fields.Str(), required=False, missing=[])
     eventos = fields.List(fields.Str(), required=False, missing=[])
     reviews = fields.List(fields.Str(), required=False, missing=[])
+    imagen_url = fields.Str(required=False)
 

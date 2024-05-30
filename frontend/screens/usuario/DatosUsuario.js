@@ -10,7 +10,7 @@ const DatosUsuario = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/usuario_generico/6655fb6c0de733860fff23dd');
+      const response = await axios.get('http://10.133.133.241:5000/usuario_generico/6658ad58c3940827ec7706e1');
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -48,7 +48,7 @@ const DatosUsuario = () => {
         <FondoComun />
         <View style={styles.dataContainer}>
           <Text style={styles.label}>Datos Usuario</Text>
-          <Image source={require('../../assets/default.png')} style={styles.profileImage} />
+          <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre:</Text>
             <Text style={styles.fieldValue}>{data.nombre}</Text>

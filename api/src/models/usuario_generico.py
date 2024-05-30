@@ -19,6 +19,7 @@ class UsuarioGenerico:
         self.actividades_creadas = data.get("actividades_creadas", [])
         self.reviews = data.get("reviews", [])
         self.fecha_nac = data.get("fecha_nac")
+        self.imagen_url = data.get("imagen_url")
         
 
     def insertar_usuario_generico(self):

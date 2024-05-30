@@ -10,7 +10,7 @@ const DatosAdministrador = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/administrador_establecimiento/6655fac33dfd222aa43c3e20');
+      const response = await axios.get('http://10.133.133.241:5000/administrador_establecimiento/6658abcada98a09759b40b79');
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -22,7 +22,7 @@ const DatosAdministrador = () => {
   };
 
   const handleSave = () => {
-
+    // Implement save functionality if needed
   };
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const DatosAdministrador = () => {
         <FondoComun />
         <View style={styles.dataContainer}>
           <Text style={styles.label}>Datos Administrador Establecimiento</Text>
-          <Image source={require('../../assets/default.png')} style={styles.profileImage} />
+          <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre:</Text>
             <Text style={styles.fieldValue}>{data.nombre}</Text>

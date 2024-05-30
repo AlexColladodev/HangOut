@@ -5,6 +5,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 import requests
 from config import DevelopmentConfig
 from models.establecimiento import Establecimiento
+from uploads_config import photos
 
 blueprint = Blueprint("UsuarioGenerico", "usuario_generico", url_prefix="/usuario_generico")
 
@@ -13,11 +14,20 @@ url_review = f"{DevelopmentConfig.BASE_URL}/reviews"
 
 @blueprint.route("", methods=["POST"])
 def crear_usuario_generico():
-    datos_usuario = request.json
+    if 'imagen' in request.files and request.files['imagen'].filename != '':
+        filename = photos.save(request.files['imagen'])
+        imagen_url = photos.url(filename)
+        data = request.form.to_dict()
+        data['imagen_url'] = str(imagen_url)
+    else:
+        data = request.form.to_dict()
+        data['imagen_url'] = 'http://10.133.133.241:5000/_uploads/photos/default.png'
+        data.pop('imagen')
+        
     schema = UsuarioGenericoSchema()
     
     try:
-        datos_validados = schema.load(datos_usuario)
+        datos_validados = schema.load(data)
         nuevo_usuario = UsuarioGenerico(datos_validados)
         respuesta = nuevo_usuario.insertar_usuario_generico()
         return respuesta, 200
@@ -166,7 +176,7 @@ def crear_review():
 
     try:
         respuesta_json = requests.post(url_review, json=data).json()
-        id_review = respuesta_json.get("id")
+        id_review = respuesta_json.get("id_review")
         UsuarioGenerico.add_review_usuario(id_usuario, id_review)
         Establecimiento.add_review_establecimiento(id_establecimiento, id_review)
         return respuesta_json, 200

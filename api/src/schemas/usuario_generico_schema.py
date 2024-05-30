@@ -18,4 +18,5 @@ class UsuarioGenericoSchema(Schema):
     actividades_creadas = fields.List(fields.Str(), required=False, missing=[])
     reviews = fields.List(fields.Str(), required=False, missing=[])
     fecha_nac = fields.Str(required=True, validate=[validate.Length(min=1)])
+    imagen_url = fields.Str(required=False)
 

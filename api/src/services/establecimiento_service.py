@@ -7,6 +7,7 @@ from models.administrador_establecimiento import AdministradorEstablecimiento
 from models.oferta import Oferta
 from models.evento import Evento
 from models.review import Review
+from uploads_config import photos
 
 blueprint = Blueprint("Establecimiento", "establecimientos", url_prefix="/establecimientos")
 
@@ -15,17 +16,27 @@ url_evento = f"{DevelopmentConfig.BASE_URL}/eventos"
 
 @blueprint.route("", methods=["POST"])
 def crear_establecimiento():
-    data = request.json
-    schema = EstablecimientosSchema()
-    id_administrador = data.get("id_administrador")
+    if 'imagen' in request.files and request.files['imagen'].filename != '':
+        filename = photos.save(request.files['imagen'])
+        imagen_url = photos.url(filename)
+        data = request.form.to_dict()
+        data['imagen_url'] = str(imagen_url)
+    else:
+        data = request.form.to_dict()
+        data['imagen_url'] = 'http://10.133.133.241:5000/_uploads/photos/default_establecimiento.png'
+        data.pop('imagen')
 
+    data['ambiente'] = data['ambiente'].split(',')
+
+    schema = EstablecimientosSchema()
+    
     try:
         datos_validados = schema.load(data)
         establecimiento = Establecimiento(datos_validados)
         resultado = establecimiento.insertar_establecimiento()
         id_establecimiento = str(resultado.get("id"))
-        AdministradorEstablecimiento.add_establecimiento_administrador(id_administrador, id_establecimiento)
-        return resultado, 200
+        AdministradorEstablecimiento.add_establecimiento_administrador(data.get("id_administrador"), id_establecimiento)
+        return jsonify(resultado), 200
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500
     except Exception as e:
@@ -126,3 +137,16 @@ def filtrar():
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
+    
+
+@blueprint.route("/rating/<id>", methods=["GET"])
+def obtener_calificacion(id):
+    try:
+        respuesta = Establecimiento.media_reviews(id)
+        return respuesta, 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error inesperado al consultar la media: {e}"}), 500

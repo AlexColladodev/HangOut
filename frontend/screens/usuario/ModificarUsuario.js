@@ -23,7 +23,7 @@ const ModificarUsuario = () => {
   const [selectedTags, setSelectedTags] = useState([]);
 
   useEffect(() => {
-    axios.get('http://10.133.133.241:5000/usuario_generico/6654bd38bc5a235b9f0d3412')
+    axios.get('http://10.133.133.241:5000/usuario_generico/6658ad58c3940827ec7706e1')
       .then(response => {
         const fetchedData = response.data;
         setData({
@@ -76,7 +76,7 @@ const ModificarUsuario = () => {
       reviews,
     };
 
-    axios.put('http://10.133.133.241:5000/usuario_generico/6654bd38bc5a235b9f0d3412', updatedData)
+    axios.put('http://10.133.133.241:5000/usuario_generico/6658ad58c3940827ec7706e1', updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
@@ -104,6 +104,7 @@ const ModificarUsuario = () => {
         <FondoComun />
         <View style={styles.dataContainer}>
           <Text style={styles.label}>Modificar Datos Usuario</Text>
+          <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre:</Text>
             <TextInput
@@ -187,37 +188,11 @@ const ModificarUsuario = () => {
               </View>
             ))}
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Seguidos:</Text>
-            <TextInput
-              style={styles.input}
-              value={data.seguidos.join(', ')}
-              onChangeText={(value) => handleInputChange('seguidos', value.split(', '))}
-            />
-          </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Actividades Creadas:</Text>
-            <TextInput
-              style={styles.input}
-              value={data.actividades_creadas.join(', ')}
-              onChangeText={(value) => handleInputChange('actividades_creadas', value.split(', '))}
-            />
-          </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Reviews:</Text>
-            <TextInput
-              style={styles.input}
-              value={data.reviews.join(', ')}
-              onChangeText={(value) => handleInputChange('reviews', value.split(', '))}
-            />
-          </View>
           <TouchableOpacity style={styles.modifyButton} onPress={handleSubmit}>
             <Text style={styles.modifyButtonText}>Guardar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <View style={styles.footer}>
-      </View>
     </SafeAreaView>
   );
 };
@@ -236,6 +211,7 @@ const styles = StyleSheet.create({
   dataContainer: {
     marginTop: 50,
     width: '100%',
+    alignItems: 'center',
   },
   label: {
     fontSize: 20,
@@ -332,6 +308,12 @@ const styles = StyleSheet.create({
   icon: {
     width: 50,
     height: 50,
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 20,
   },
 });
 

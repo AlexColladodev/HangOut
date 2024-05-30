@@ -25,3 +25,4 @@ class AdministradorEstablecimientoSchema(Schema):
     dni = fields.Str(required=True, validate=[validate.Length(min=8), validar_dni_unico])
     telefono = fields.Str(required=True, validate=[validate.Length(min=1), validate.Regexp(regex=r"^\d{8,12}$")])
     fecha_nac = fields.Str(required=True, validate=[validate.Length(min=1)])
+    imagen_url = fields.Str(required=False)

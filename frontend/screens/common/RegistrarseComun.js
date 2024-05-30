@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, Button, ScrollView, Text, Platform } from 'react-native';
+import { StyleSheet, View, TextInput, Button, ScrollView, Text, Platform, Image, Alert, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
+import * as ImagePicker from 'expo-image-picker';
 import FondoComun from '../../components/FondoComun';
 
 const RegistrarseComun = () => {
@@ -9,6 +10,7 @@ const RegistrarseComun = () => {
   const [show, setShow] = useState(false);
   const [accountType, setAccountType] = useState("");
   const [isAccountTypeValid, setIsAccountTypeValid] = useState(true);
+  const [imageUri, setImageUri] = useState(null);
 
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -18,6 +20,19 @@ const RegistrarseComun = () => {
 
   const showDatepicker = () => {
     setShow(true);
+  };
+
+  const selectImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
   };
 
   const handleSubmit = () => {
@@ -88,6 +103,9 @@ const RegistrarseComun = () => {
             </Picker>
             {!isAccountTypeValid && <Text style={styles.errorText}>Seleccione un tipo de cuenta válido.</Text>}
           </View>
+
+          <Button title="Seleccionar Imagen" onPress={selectImage} />
+          {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
         </View>
         <Button title="Siguiente" color="#FF5252" onPress={handleSubmit} />
       </ScrollView>
@@ -152,6 +170,11 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     paddingLeft: 10,
+  },
+  image: {
+    width: 200,
+    height: 150,
+    marginVertical: 10,
   },
 });
 

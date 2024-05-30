@@ -4,6 +4,7 @@ from schemas.administrador_establecimiento_schema import AdministradorEstablecim
 from flask_jwt_extended import get_jwt_identity, jwt_required
 import requests
 from config import DevelopmentConfig
+from uploads_config import photos
 
 blueprint = Blueprint("AdministradorEstablecimiento", "administrador_establecimiento", url_prefix="/administrador_establecimiento")
 
@@ -12,7 +13,16 @@ url = f"{DevelopmentConfig.BASE_URL}/establecimientos"
 
 @blueprint.route("", methods=["POST"])
 def crear_administrador_establecimiento():
-    data = request.json
+    if 'imagen' in request.files and request.files['imagen'].filename != '':
+        filename = photos.save(request.files['imagen'])
+        imagen_url = photos.url(filename)
+        data = request.form.to_dict()
+        data['imagen_url'] = str(imagen_url)
+    else:
+        data = request.form.to_dict()
+        data['imagen_url'] = 'http://10.133.133.241:5000/_uploads/photos/default.png'
+        data.pop('imagen')
+        
     schema = AdministradorEstablecimientoSchema()
 
     try:

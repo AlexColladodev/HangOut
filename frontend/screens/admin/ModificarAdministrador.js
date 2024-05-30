@@ -16,7 +16,7 @@ const ModificarAdministrador = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   useEffect(() => {
-    axios.get('http://10.133.133.241:5000/administrador_establecimiento/662a8d2ab394fce76c37fc3d')
+    axios.get('http://10.133.133.241:5000/administrador_establecimiento/6658abcada98a09759b40b79')
       .then(response => {
         const fetchedData = response.data;
         setData({
@@ -54,7 +54,7 @@ const ModificarAdministrador = () => {
       fecha_nacimiento: data.fecha_nacimiento.toISOString().split('T')[0], // Formato YYYY-MM-DD
     };
 
-    axios.put('http://192.168.1.107:5000/administrador_establecimiento/662a8d2ab394fce76c37fc3d', updatedData)
+    axios.put('http://192.168.1.107:5000/administrador_establecimiento/6658abcada98a09759b40b79', updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
@@ -82,6 +82,7 @@ const ModificarAdministrador = () => {
         <FondoComun />
         <View style={styles.dataContainer}>
           <Text style={styles.label}>Modificar Datos Administrador Establecimiento</Text>
+          <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre:</Text>
             <TextInput
@@ -150,14 +151,6 @@ const ModificarAdministrador = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <View style={styles.footer}>
-        <TouchableOpacity>
-          <Image source={require('../../assets/etiqueta.png')} style={styles.icon} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image source={require('../../assets/etiqueta.png')} style={styles.icon} />
-        </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 };
@@ -176,6 +169,7 @@ const styles = StyleSheet.create({
   dataContainer: {
     marginTop: 50,
     width: '100%',
+    alignItems: 'center',
   },
   label: {
     fontSize: 20,
@@ -234,6 +228,12 @@ const styles = StyleSheet.create({
   icon: {
     width: 50,
     height: 50,
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 20,
   },
 });
 
