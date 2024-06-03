@@ -1,17 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, Dimensions, FlatList } from 'react-native';
 import axios from 'axios';
 import FondoComun from '../../components/FondoComun';
+import Evento from '../../components/Evento'; // Importa el componente Evento
+import Review from '../../components/Review'; // Importa el componente Review
+import Oferta from '../../components/Oferta'; // Importa el componente Oferta
 
 const DatosEstablecimiento = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [ofertas, setOfertas] = useState([]);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/establecimientos/6658a62cc51f1596f5e940b7');
-      setData(response.data);
+      const response = await axios.get('http://10.133.133.241:5000/establecimientos/665b5df730fb9962d8d08eea');
+      const establecimientoData = response.data;
+
+      const ofertaPromises = establecimientoData.ofertas.map(async (ofertaId) => {
+        const ofertaResponse = await axios.get(`http://10.133.133.241:5000/ofertas/${ofertaId}`);
+        return ofertaResponse.data;
+      });
+
+      const ofertaData = await Promise.all(ofertaPromises);
+
+      setData(establecimientoData);
+      setOfertas(ofertaData);
       setLoading(false);
       setError(false);
     } catch (error) {
@@ -43,10 +57,9 @@ const DatosEstablecimiento = () => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+    <View style={{ flex: 1 }}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <FondoComun />
-        <View style={styles.dataContainer}>
           <Text style={styles.label}>Datos del Establecimiento</Text>
           <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
           <View style={styles.fieldContainer}>
@@ -74,56 +87,56 @@ const DatosEstablecimiento = () => {
 
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionLabel}>Ofertas:</Text>
-            {data.ofertas.length > 0 ? (
-              data.ofertas.map((oferta, index) => (
-                <Text key={index} style={styles.listItem}>{oferta}</Text>
-              ))
-            ) : (
-              <Text style={styles.fieldValue}>No hay ofertas disponibles</Text>
-            )}
+            <FlatList
+              data={data.ofertas}
+              keyExtractor={(item) => item.toString()}
+              renderItem={({ item }) => <Oferta id={item} />}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.eventList}
+            />
           </View>
 
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionLabel}>Eventos:</Text>
-            {data.eventos.length > 0 ? (
-              data.eventos.map((evento, index) => (
-                <Text key={index} style={styles.listItem}>{evento}</Text>
-              ))
-            ) : (
-              <Text style={styles.fieldValue}>No hay eventos disponibles</Text>
-            )}
+            <FlatList
+              data={data.eventos}
+              keyExtractor={(item) => item.toString()}
+              renderItem={({ item }) => <Evento id={item} />}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.eventList}
+            />
           </View>
 
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionLabel}>Reviews:</Text>
-            {data.reviews.length > 0 ? (
-              data.reviews.map((review, index) => (
-                <Text key={index} style={styles.listItem}>{review}</Text>
-              ))
-            ) : (
-              <Text style={styles.fieldValue}>No hay reviews disponibles</Text>
-            )}
+            <FlatList
+              data={data.reviews}
+              keyExtractor={(item) => item.toString()}
+              renderItem={({ item }) => <Review reviewId={item} />}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.reviewList}
+            />
           </View>
 
           <Button title="Modificar" color="#BB6BD9" onPress={handleSave} />
-        </View>
+
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
+  container: {
     flex: 1,
+    backgroundColor: '#fff',
   },
-  scrollViewContent: {
-    flexGrow: 1,
-    backgroundColor: '#f9f9f9',
+  contentContainer: {
     padding: 20,
-  },
-  dataContainer: {
     alignItems: 'center',
-    marginTop: 20,
+    justifyContent: 'center',
   },
   profileImage: {
     width: Dimensions.get('window').width - 40, // Adjust width according to screen width and padding
@@ -172,7 +185,16 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 18,
     marginBottom: 10,
-  }
+  },
+  ofertaList: {
+    paddingVertical: 10,
+  },
+  eventList: {
+    paddingVertical: 10,
+  },
+  reviewList: {
+    paddingVertical: 10,
+  },
 });
 
 export default DatosEstablecimiento;

@@ -1,52 +1,192 @@
 [
-{
-    "nombre": "Alexander Collado",
-    "nombre_usuario": "AlexCollado00",
-    "password": "AlexColladoRojas",
-    "email": "colladoalex@correo.ugr",
-    "telefono": "643604419",
-    "edad": "23",
-    "seguidos": "",
-    "preferencias": ["reggaeton"]
-},
-{
-    "nombre": "Ines Ruiz",
-    "nombre_usuario": "InesRuiz00",
-    "password": "InesRuizSan",
-    "email": "inerusa@correo.ugr",
-    "telefono": "65224143",
-    "edad": "23",
-    "seguidos": "",
-    "preferencias": ["pop"]
-},
-{
-    "nombre": "Benito Martinez",
-    "nombre_usuario": "BenitoMar00",
-    "password": "BenitoMar",
-    "email": "benito@correo.ugr",
-    "telefono": "7875213",
-    "edad": "29",
-    "seguidos": "",
-    "preferencias": ["reggaeton"]
-},
-{
-    "nombre": "Alberto Collado",
-    "nombre_usuario": "AlbertCollado00",
-    "password": "AlbertZsaq",
-    "email": "alberto@correo.ugr",
-    "telefono": "111222333",
-    "edad": "33",
-    "seguidos": "",
-    "preferencias": ["pop"]
-},
-{
-    "nombre": "Wii Sports",
-    "nombre_usuario": "WiiSports",
-    "password": "1245688",
-    "email": "wii@correo.ugr",
-    "telefono": "852136947",
-    "edad": "37",
-    "seguidos": "",
-    "preferencias": []
-}
+    {
+        "nombre": "Ana",
+        "nombre_usuario": "ana123",
+        "password": "pass1",
+        "email": "ana@example.com",
+        "telefono": "600123456",
+        "seguidos": [],
+        "preferencias": [
+            "Indie",
+            "Reggaeton",
+            "Cine",
+            "Monólogos",
+            "Teatro"
+        ],
+        "actividades_creadas": [],
+        "reviews": [],
+        "fecha_nac": "1990-01-01",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
+    },
+    {
+        "nombre": "Luis",
+        "nombre_usuario": "luis456",
+        "password": "pass2",
+        "email": "luis@example.com",
+        "telefono": "600234567",
+        "seguidos": [],
+        "preferencias": [
+            "Pop",
+            "Reggaeton",
+            "Monólogos",
+            "Bar",
+            "Rock"
+        ],
+        "actividades_creadas": [],
+        "reviews": [],
+        "fecha_nac": "1992-02-02",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
+    },
+    {
+        "nombre": "Carlos",
+        "nombre_usuario": "carlos789",
+        "password": "pass3",
+        "email": "carlos@example.com",
+        "telefono": "600345678",
+        "seguidos": [],
+        "preferencias": [
+            "Rock",
+            "Karaoke",
+            "Pop",
+            "Monólogos",
+            "Cervezas"
+        ],
+        "actividades_creadas": [],
+        "reviews": [],
+        "fecha_nac": "1994-03-03",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
+    },
+    {
+        "nombre": "Maria",
+        "nombre_usuario": "maria321",
+        "password": "pass4",
+        "email": "maria@example.com",
+        "telefono": "600456789",
+        "seguidos": [],
+        "preferencias": [
+            "Discotecas",
+            "Monólogos",
+            "Reggaeton",
+            "Cine",
+            "Karaoke"
+        ],
+        "actividades_creadas": [],
+        "reviews": [],
+        "fecha_nac": "1996-04-04",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
+    },
+    {
+        "nombre": "Jose",
+        "nombre_usuario": "jose654",
+        "password": "pass5",
+        "email": "jose@example.com",
+        "telefono": "600567890",
+        "seguidos": [],
+        "preferencias": [
+            "Teatro",
+            "Cine",
+            "Cervezas",
+            "Indie",
+            "Monólogos"
+        ],
+        "actividades_creadas": [],
+        "reviews": [],
+        "fecha_nac": "1998-05-05",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
+    },
+    {
+        "nombre": "Marta",
+        "nombre_usuario": "marta987",
+        "password": "pass6",
+        "email": "marta@example.com",
+        "telefono": "600678901",
+        "seguidos": [],
+        "preferencias": [
+            "Cine",
+            "Cervezas",
+            "Teatro",
+            "Karaoke",
+            "Bar"
+        ],
+        "actividades_creadas": [],
+        "reviews": [],
+        "fecha_nac": "2000-06-06",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
+    },
+    {
+        "nombre": "Lucia",
+        "nombre_usuario": "lucia159",
+        "password": "pass7",
+        "email": "lucia@example.com",
+        "telefono": "600789012",
+        "seguidos": [],
+        "preferencias": [
+            "Pop",
+            "Reggaeton",
+            "Cine",
+            "Bar",
+            "Rock"
+        ],
+        "actividades_creadas": [],
+        "reviews": [],
+        "fecha_nac": "2002-07-07",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
+    },
+    {
+        "nombre": "Pedro",
+        "nombre_usuario": "pedro753",
+        "password": "pass8",
+        "email": "pedro@example.com",
+        "telefono": "600890123",
+        "seguidos": [],
+        "preferencias": [
+            "Rock",
+            "Reggaeton",
+            "Karaoke",
+            "Teatro",
+            "Indie"
+        ],
+        "actividades_creadas": [],
+        "reviews": [],
+        "fecha_nac": "2004-08-08",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
+    },
+    {
+        "nombre": "Elena",
+        "nombre_usuario": "elena852",
+        "password": "pass9",
+        "email": "elena@example.com",
+        "telefono": "600901234",
+        "seguidos": [],
+        "preferencias": [
+            "Cervezas",
+            "Cine",
+            "Reggaeton",
+            "Monólogos",
+            "Indie"
+        ],
+        "actividades_creadas": [],
+        "reviews": [],
+        "fecha_nac": "2006-09-09",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
+    },
+    {
+        "nombre": "Diego",
+        "nombre_usuario": "diego951",
+        "password": "pass10",
+        "email": "diego@example.com",
+        "telefono": "600012345",
+        "seguidos": [],
+        "preferencias": [
+            "Monólogos",
+            "Rock",
+            "Indie",
+            "Bar",
+            "Pop"
+        ],
+        "actividades_creadas": [],
+        "reviews": [],
+        "fecha_nac": "2008-10-10",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
+    }
 ]

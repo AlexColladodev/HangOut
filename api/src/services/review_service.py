@@ -55,4 +55,5 @@ def consultar_review(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
     
+
     

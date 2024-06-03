@@ -23,7 +23,7 @@ def crear_establecimiento():
         data['imagen_url'] = str(imagen_url)
     else:
         data = request.form.to_dict()
-        data['imagen_url'] = 'http://10.133.133.241:5000/_uploads/photos/default_establecimiento.png'
+        data['imagen_url'] = f'{DevelopmentConfig.IP_URL}/_uploads/photos/default_establecimiento.png'
         data.pop('imagen')
 
     data['ambiente'] = data['ambiente'].split(',')
@@ -81,6 +81,16 @@ def consultar_establecimientos():
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
     
+@blueprint.route("/ordenados", methods=["GET"])
+def consultar_establecimientos_ordenados():
+    try:
+        respuesta = Establecimiento.consultar_establecimientos_ordenados()
+        return Response(respuesta, mimetype="application/json"), 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
+    
 @blueprint.route("<id>", methods=["GET"])
 def consultar_establecimiento(id):
     try:
@@ -96,12 +106,21 @@ def consultar_establecimiento(id):
 
 @blueprint.route("/nueva_oferta", methods=["POST"])
 def add_oferta():
-    data = request.json
+    if 'imagen' in request.files and request.files['imagen'].filename != '':
+        filename = photos.save(request.files['imagen'])
+        imagen_url = photos.url(filename)
+        data = request.form.to_dict()
+        data['imagen_url'] = str(imagen_url)
+    else:
+        data = request.form.to_dict()
+        data['imagen_url'] = f'{DevelopmentConfig.IP_URL}/_uploads/photos/default_no_image.png'
+        data.pop('imagen')
+
     id_establecimiento = data.get("id_establecimiento")
 
     try:
         respuesta_json = requests.post(url_oferta, json=data).json()
-        id_oferta = respuesta_json.get("id")
+        id_oferta = respuesta_json.get("id_oferta")
         Establecimiento.add_ofertas_establecimiento(id_establecimiento, id_oferta)
         return respuesta_json, 200
     except RuntimeError as e:
@@ -112,12 +131,21 @@ def add_oferta():
 
 @blueprint.route("/nuevo_evento", methods=["POST"])
 def add_evento():
-    data = request.json
+    if 'imagen' in request.files and request.files['imagen'].filename != '':
+        filename = photos.save(request.files['imagen'])
+        imagen_url = photos.url(filename)
+        data = request.form.to_dict()
+        data['imagen_url'] = str(imagen_url)
+    else:
+        data = request.form.to_dict()
+        data['imagen_url'] = f'{DevelopmentConfig.IP_URL}/_uploads/photos/default_no_image.png'
+        data.pop('imagen')
+
     id_establecimiento = data.get("id_establecimiento")
 
     try:
         respuesta_json = requests.post(url_evento, json=data).json()
-        id_evento = respuesta_json.get("id")
+        id_evento = respuesta_json.get("id_evento")
         Establecimiento.add_evento_establecimiento(id_establecimiento, id_evento)
         return respuesta_json, 200
     except RuntimeError as e:

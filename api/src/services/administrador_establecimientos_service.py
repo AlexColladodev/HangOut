@@ -20,7 +20,7 @@ def crear_administrador_establecimiento():
         data['imagen_url'] = str(imagen_url)
     else:
         data = request.form.to_dict()
-        data['imagen_url'] = 'http://10.133.133.241:5000/_uploads/photos/default.png'
+        data['imagen_url'] = f'{DevelopmentConfig.IP_URL}/_uploads/photos/default.png'
         data.pop('imagen')
         
     schema = AdministradorEstablecimientoSchema()

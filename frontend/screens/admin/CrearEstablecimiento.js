@@ -21,12 +21,12 @@ const CrearEstablecimiento = () => {
   const [cif, setCIF] = useState('');
   const [imageUri, setImageUri] = useState(null);
   const [checkBoxState, setCheckBoxState] = useState({
-    box1: false,
-    box2: false,
-    box3: false,
-    box4: false,
-    box5: false,
-    box6: false,
+    Bar: false,
+    Indie: false,
+    Reggaeton: false,
+    Monólogos: false,
+    Cine: false,
+    Cervezas: false,
   });
 
   const handleCheckBoxChange = (boxName) => {
@@ -59,7 +59,7 @@ const CrearEstablecimiento = () => {
     const ambienteArray = selectedCheckBoxes; // Esta es la variable intermedia que es un array de strings
     data.append('ambiente', ambienteArray); // Añadir el array de strings como un string JSON
   
-    data.append('id_administrador', '6627c9be1d5548a0cff17158');
+    data.append('id_administrador', '665b57a06bd71b0279ca3925');
     if (imageUri) {
       const uriParts = imageUri.split('.');
       const fileType = uriParts[uriParts.length - 1];
@@ -73,9 +73,8 @@ const CrearEstablecimiento = () => {
       data.append('imagen', null);
     }
   
-    console.log(data);
     try {
-      const response = await axios.post('http://10.133.133.241:5000/establecimientos', data, {
+      const response = await axios.post('http://192.168.1.107:5000/establecimientos', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

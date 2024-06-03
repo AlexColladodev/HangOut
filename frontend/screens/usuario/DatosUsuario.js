@@ -10,7 +10,7 @@ const DatosUsuario = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/usuario_generico/6658ad58c3940827ec7706e1');
+      const response = await axios.get('http://192.168.1.107:5000/usuario_generico/665b4db9f57ca863dfedffc1');
       setData(response.data);
       setLoading(false);
       setError(false);

@@ -16,3 +16,4 @@ class OfertaSchema(Schema):
         descripcion_oferta = fields.Str(required=True, validate=[validate.Length(min=1)])
         precio_oferta = fields.Float(required=True, validate=[validate.Range(min=0)])
         id_establecimiento = fields.Str(required=True, validate=[validar_existencia_id])
+        imagen_url = fields.Str(required=True)

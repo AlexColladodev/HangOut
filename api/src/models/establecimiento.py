@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from flask import jsonify
 from db import mongo
 from bson import json_util
@@ -41,10 +41,30 @@ class Establecimiento:
 
     def consultar_establecimientos():
         try:
-            establecimientos = mongo.db.establecimientos.find()
-            return json_util.dumps(establecimientos)
+            establecimientos = mongo.db.establecimientos.find({}, {"_id": 1})
+            ids_establecimientos = [str(establecimiento["_id"]) for establecimiento in establecimientos]
+            return json_util.dumps(ids_establecimientos)
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar los establecimientos: {e}")
+        
+    def consultar_establecimientos_ordenados() -> List[str]:
+        try:
+            establecimientos = mongo.db.establecimientos.find({}, {"_id": 1})
+            medias = []
+
+            for establecimiento in establecimientos:
+                id_establecimiento = str(establecimiento["_id"])
+                media_result = Establecimiento.media_reviews(id_establecimiento)
+                media = media_result.get("media", 0.0)
+                medias.append((id_establecimiento, media))
+
+            # Ordenar por media de reviews de mayor a menor
+            medias.sort(key=lambda x: x[1], reverse=True)
+            ids_ordenados = [id_media[0] for id_media in medias]
+            return json_util.dumps(ids_ordenados)
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al consultar los establecimientos ordenados: {e}")
+        
 
     def consultar_establecimiento(id):
         try:
@@ -70,7 +90,7 @@ class Establecimiento:
         try:
             mongo.db.establecimientos.update_one(
                 {"_id": ObjectId(id_establecimiento)},
-                {"$addToSet": {"eventos": id_evento}}
+                {"$addToSet": {"eventos": str(id_evento)}}
             )
             return {"message": f"Evento {id_evento} agregado al establecimiento {id_establecimiento} con éxito"}
         except PyMongoError as e:
@@ -81,7 +101,7 @@ class Establecimiento:
         try:
             mongo.db.establecimientos.update_one(
                 {"_id": ObjectId(id_establecimiento)},
-                {"$addToSet": {"ofertas": id_oferta}}
+                {"$addToSet": {"ofertas": str(id_oferta)}}
             )
             return {"message": f"Oferta {id_oferta} agregada al establecimiento {id_establecimiento} con éxito"}
         except PyMongoError as e:

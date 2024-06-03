@@ -15,10 +15,13 @@ import CrearOferta from './screens/admin/CrearOferta'
 import ModificarAdministrador from './screens/admin/ModificarAdministrador';
 import ModificarUsuario from './screens/usuario/ModificarUsuario';
 import Establecimiento from './components/Establecimiento';
+import CrearActividad from './screens/usuario/CrearActividad'
+import InicioUsuario from './screens/usuario/InicioUsuario';
+import CrearEvento from './screens/admin/CrearEvento';
 
 const App = () => {
   return (
-    <Establecimiento/>
+    <DatosEstablecimiento/>
   );
 };
 

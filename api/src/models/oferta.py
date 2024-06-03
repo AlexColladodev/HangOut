@@ -12,13 +12,14 @@ class Oferta:
         self.descripcion_oferta = data.get("descripcion_oferta")
         self.precio_oferta = data.get("precio_oferta")
         self.id_establecimiento = data.get("id_establecimiento")
+        self.imagen_url = data.get("imagen_url")
 
 
     def insertar_oferta(self):
         try:
             data_insertar = self.__dict__
             id = str(mongo.db.ofertas.insert_one(data_insertar).inserted_id)
-            return {"message": "Oferta creada con éxito"}
+            return {"message": "Oferta creada con éxito", "id_oferta": str(id)}
         except PyMongoError as e:
             raise RuntimeError(f"Error en la base de datos al crear una oferta: {e}")
 
@@ -81,3 +82,17 @@ class Oferta:
             return {"mensaje": f"Se eliminaron {resultado.deleted_count} ofertas."}
         else:
             return {"message": "No hay ofertas que eliminar"}
+
+
+    def obtener_nombre(id):
+        try:
+            oferta = mongo.db.ofertas.find_one({"_id": ObjectId(id)})
+
+            if oferta is not None:
+                nombre = oferta["nombre_oferta"]
+            else:
+                raise ValueError("ID oferta no encontrado")
+            
+            return {"message": "Oferta encontrada", "nombre": nombre}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error en la base de datos al consultar la oferta: {e}")

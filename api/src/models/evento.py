@@ -15,6 +15,7 @@ class Evento:
         self.precio = data.get("precio")
         self.hora_evento = datetime.strptime(data.get("hora_evento"), '%H:%M:%S').time() if data.get("hora_evento") else None
         self.id_establecimiento = data.get("id_establecimiento")
+        self.imagen_url = data.get("imagen_url")
 
     def insertar_evento(self):
         try:
@@ -28,11 +29,12 @@ class Evento:
                 "fecha_evento": self.fecha_evento,
                 "precio": self.precio,
                 "hora_evento": self.hora_evento.isoformat() if self.hora_evento else "No especificado",
-                "id_establecimiento": str(self.id_establecimiento)
+                "id_establecimiento": str(self.id_establecimiento),
+                "imagen_url": self.imagen_url
             }
 
             id = str(mongo.db.eventos.insert_one(data_insertar).inserted_id)
-            return {"message": "Evento con id: " + id + " creado con éxito", "id": id}
+            return {"message": "Evento con id: " + id + " creado con éxito", "id_evento": id}
         except PyMongoError as e:
             raise RuntimeError("Error al insertar evento en la base de datos") from e
 
@@ -101,3 +103,17 @@ class Evento:
             return {"mensaje": f"Se eliminaron {resultado.deleted_count} eventos."}
         else:
             return {"message": "No hay eventos que eliminar"}
+
+    def obtener_nombre(id):
+        try:
+            evento = mongo.db.eventos.find_one({"_id": ObjectId(id)})
+
+            if evento is not None:
+                nombre = evento["nombre_evento"]
+                fecha = evento["fecha_evento"]
+            else:
+                raise ValueError("ID evento no encontrado")
+            
+            return {"respuesta": f"{nombre} {fecha}"}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error en la base de datos al consultar el evento: {e}")

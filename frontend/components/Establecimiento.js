@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 
-const Establecimiento = () => {
+const Establecimiento = ({ id }) => {
   const [data, setData] = useState(null);
   const [rating, setRating] = useState(null);
 
   useEffect(() => {
-    axios.get('http://10.133.133.241:5000/establecimientos/6658a62cc51f1596f5e940b7')
+    axios.get(`http://10.133.133.241:5000/establecimientos/${id}`)
       .then(response => {
         setData(response.data);
       })
@@ -15,20 +15,19 @@ const Establecimiento = () => {
         console.error("Error fetching data: ", error);
       });
 
-    axios.get('http://10.133.133.241:5000/establecimientos/rating/6658a5f3c51f1596f5e940b6')
+    axios.get(`http://10.133.133.241:5000/establecimientos/rating/${id}`)
       .then(response => {
         setRating(response.data.media);
       })
       .catch(error => {
         console.error("Error fetching rating: ", error);
       });
-  }, []);
+  }, [id]);
 
   if (!data || rating === null) {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
-  // Separar los ambientes por comas
   const ambientes = data.ambiente.join(', ');
 
   return (

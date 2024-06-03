@@ -1,82 +1,112 @@
 [
     {
-        "nombre": "Justin Durham",
-        "nombre_usuario": "romansuzanne",
-        "password": "%CDE)rQe&7",
-        "email_empresa": "mullenbenjamin@jacobs-carpenter.com",
-        "dni": "26741423",
-        "establecimientos": []
+        "nombre": "Valentina",
+        "nombre_usuario": "ivila",
+        "password": "@8PZwCm7xg",
+        "email_empresa": "baroborja@chaparro.com",
+        "telefono": "+34 832 04 39 26",
+        "dni": "89692928K",
+        "establecimientos": [],
+        "fecha_nac": "1991-05-29",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
     },
     {
-        "nombre": "Karen Smith",
-        "nombre_usuario": "terrysandra",
-        "password": "$Y^7uVttfd",
-        "email_empresa": "lauramcguire@kidd.info",
-        "dni": "78472541",
-        "establecimientos": []
+        "nombre": "Armando",
+        "nombre_usuario": "bpenalver",
+        "password": "E45oSmr%*9",
+        "email_empresa": "hcaceres@ibanez.es",
+        "telefono": "+34 732 59 94 17",
+        "dni": "95398449S",
+        "establecimientos": [],
+        "fecha_nac": "1954-11-10",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
     },
     {
-        "nombre": "Amy King",
-        "nombre_usuario": "ashleylambert",
-        "password": "d$4XV^gf)K",
-        "email_empresa": "crystalrhodes@thomas.com",
-        "dni": "33591751",
-        "establecimientos": []
+        "nombre": "Heriberto",
+        "nombre_usuario": "ydieguez",
+        "password": "1&6vJN*u$^",
+        "email_empresa": "bertaaguirre@jodar.com",
+        "telefono": "+34 719540310",
+        "dni": "41797773V",
+        "establecimientos": [],
+        "fecha_nac": "1946-05-10",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
     },
     {
-        "nombre": "Charles Brown",
-        "nombre_usuario": "mwagner",
-        "password": "126fK*xII_",
-        "email_empresa": "joshuaweber@murphy.com",
-        "dni": "32945845",
-        "establecimientos": []
+        "nombre": "Samanta",
+        "nombre_usuario": "maria44",
+        "password": "fVL52wRi#)",
+        "email_empresa": "rarrieta@galan.es",
+        "telefono": "+34 902 293 726",
+        "dni": "78014739H",
+        "establecimientos": [],
+        "fecha_nac": "1985-07-19",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
     },
     {
-        "nombre": "David Franklin",
-        "nombre_usuario": "taylorgerald",
-        "password": "+48$HATt80",
-        "email_empresa": "nriley@valentine-jones.com",
-        "dni": "44154857",
-        "establecimientos": []
+        "nombre": "Vinicio",
+        "nombre_usuario": "yesica98",
+        "password": "8ut%yXiR&4",
+        "email_empresa": "isaias03@rivera-paniagua.org",
+        "telefono": "+34 668209486",
+        "dni": "27939213X",
+        "establecimientos": [],
+        "fecha_nac": "1946-05-30",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
     },
     {
-        "nombre": "Dominique Gregory",
-        "nombre_usuario": "johnsonmary",
-        "password": "z%47Td@zbi",
-        "email_empresa": "amandataylor@luna.com",
-        "dni": "59528737",
-        "establecimientos": []
+        "nombre": "José Antonio",
+        "nombre_usuario": "joseluna",
+        "password": "))7XIPYxEd",
+        "email_empresa": "morena30@oller.com",
+        "telefono": "+34 734 850 929",
+        "dni": "93719077V",
+        "establecimientos": [],
+        "fecha_nac": "1999-11-17",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
     },
     {
-        "nombre": "Laura Mitchell",
-        "nombre_usuario": "shawjason",
-        "password": "prDIHsSE(4",
-        "email_empresa": "hawkinsvirginia@briggs.biz",
-        "dni": "15255270",
-        "establecimientos": []
+        "nombre": "Griselda",
+        "nombre_usuario": "gonzalobanos",
+        "password": "gm2jIGML%4",
+        "email_empresa": "sacristanaurora@perales.net",
+        "telefono": "+34 909055658",
+        "dni": "96948082K",
+        "establecimientos": [],
+        "fecha_nac": "1956-09-15",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
     },
     {
-        "nombre": "Robert Wall",
-        "nombre_usuario": "pwilson",
-        "password": "LAEb4PTvM!",
-        "email_empresa": "mbrown@ferguson.com",
-        "dni": "08273263",
-        "establecimientos": []
+        "nombre": "Manu",
+        "nombre_usuario": "cerverabernardo",
+        "password": "pfo!6yWq+a",
+        "email_empresa": "manjonadolfo@sevillano.net",
+        "telefono": "+34 715 125 471",
+        "dni": "43180937H",
+        "establecimientos": [],
+        "fecha_nac": "1984-01-01",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
     },
     {
-        "nombre": "Margaret Ross",
-        "nombre_usuario": "rdunn",
-        "password": "jXWktZf_@1",
-        "email_empresa": "rasmussenmichael@pratt.net",
-        "dni": "10439194",
-        "establecimientos": []
+        "nombre": "María Fernanda",
+        "nombre_usuario": "carolinafigueroa",
+        "password": "8G0H7eNb#5",
+        "email_empresa": "rosalva07@barrio-campillo.com",
+        "telefono": "+34 621 05 47 36",
+        "dni": "40030469W",
+        "establecimientos": [],
+        "fecha_nac": "1947-02-16",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
     },
     {
-        "nombre": "Samuel Oconnor",
-        "nombre_usuario": "xmitchell",
-        "password": "_1XprInXlN",
-        "email_empresa": "breweramber@hall.com",
-        "dni": "23451243",
-        "establecimientos": []
+        "nombre": "Jordán",
+        "nombre_usuario": "gonzalezalmudena",
+        "password": "&12VIq7hZt",
+        "email_empresa": "eyanez@diaz-amigo.es",
+        "telefono": "+34 747975739",
+        "dni": "68177797W",
+        "establecimientos": [],
+        "fecha_nac": "2004-08-01",
+        "imagen_url": "http://192.168.1.107:5000/_uploads/photos/photo.png"
     }
 ]

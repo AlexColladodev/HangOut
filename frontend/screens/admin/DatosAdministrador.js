@@ -10,7 +10,7 @@ const DatosAdministrador = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/administrador_establecimiento/6658abcada98a09759b40b79');
+      const response = await axios.get('http://192.168.1.107:5000/administrador_establecimiento/665b4f62f57ca863dfedffd1');
       setData(response.data);
       setLoading(false);
       setError(false);

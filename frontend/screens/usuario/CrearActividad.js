@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, Button, ScrollView, Text, Platform, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, TextInput, Button, ScrollView, Text, Platform, TouchableOpacity, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FondoComun from '../../components/FondoComun';
+import axios from 'axios';
 
 const CrearActividad = () => {
   const [nombreActividad, setNombreActividad] = useState('');
@@ -32,8 +33,23 @@ const CrearActividad = () => {
     setShowHora(true);
   };
 
-  const handleSave = () => {
-    // Manejar la lógica para guardar la actividad
+  const handleSave = async () => {
+    try {
+      const fechaFormat = fechaActividad.toISOString().split('T')[0];
+      const horaFormat = horaActividad.toTimeString().split(' ')[0];
+      const actividad = {
+        nombre_actividad: nombreActividad,
+        descripcion_actividad: descripcionActividad,
+        ubicacion: ubicacionActividad,
+        fecha_actividad: fechaFormat,
+        hora_actividad: horaFormat,
+        id_usuario_creador: "665b4db9f57ca863dfedffc2",
+      };
+      await axios.post("http://192.168.1.107:5000/actividades", actividad);
+      Alert.alert("Éxito", "Actividad creada correctamente");
+    } catch (error) {
+      Alert.alert("Error", "Hubo un problema al crear la actividad");
+    }
   };
 
   return (

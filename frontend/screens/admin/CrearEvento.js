@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, Button, ScrollView, Text, Platform } from 'react-native';
+import { StyleSheet, View, TextInput, Button, ScrollView, Text, Platform, Alert, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import * as ImagePicker from 'expo-image-picker';
 import FondoComun from '../../components/FondoComun';
 
 const CrearEvento = () => {
@@ -11,6 +12,8 @@ const CrearEvento = () => {
   const [precioEvento, setPrecioEvento] = useState('');
   const [showFecha, setShowFecha] = useState(false);
   const [showHora, setShowHora] = useState(false);
+  const [imageUri, setImageUri] = useState(null);
+  const idEstablecimiento = '665b5df730fb9962d8d08eea';
 
   const onChangeFecha = (event, selectedDate) => {
     const currentDate = selectedDate || fechaEvento;
@@ -32,8 +35,65 @@ const CrearEvento = () => {
     setShowHora(true);
   };
 
-  const handleSave = () => {
-    // Manejar la lógica para guardar el evento
+  const selectImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
+
+  const handleSave = async () => {
+    const data = new FormData();
+    data.append('nombre_evento', nombreEvento);
+    data.append('descripcion_evento', descripcionEvento);
+    data.append('fecha_evento', fechaEvento.toISOString().split('T')[0]); // formato YYYY-MM-DD
+    data.append('hora_evento', horaEvento.toTimeString().split(' ')[0]); // formato HH:MM:SS
+    data.append('precio', precioEvento);
+    data.append('id_establecimiento', idEstablecimiento);
+
+    if (imageUri) {
+      const uriParts = imageUri.split('.');
+      const fileType = uriParts[uriParts.length - 1];
+
+      data.append('imagen', {
+        uri: imageUri,
+        name: `photo.${fileType}`,
+        type: `image/${fileType}`,
+      });
+    } else {
+      data.append('imagen', null);
+    }
+
+    try {
+      const response = await fetch('http://10.133.133.241:5000/establecimientos/nuevo_evento', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: data,
+      });
+
+      if (response.ok) {
+        Alert.alert('Éxito', 'Evento creado con éxito');
+        // Resetear los campos después de guardar
+        setNombreEvento('');
+        setDescripcionEvento('');
+        setFechaEvento(new Date());
+        setHoraEvento(new Date());
+        setPrecioEvento('');
+        setImageUri(null);
+      } else {
+        Alert.alert('Error', 'Hubo un problema al crear el evento');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'No se pudo conectar con el servidor');
+    }
   };
 
   return (
@@ -116,6 +176,8 @@ const CrearEvento = () => {
             style={styles.input}
             keyboardType="numeric"
           />
+          <Button title="Seleccionar Imagen Evento" onPress={selectImage} />
+          {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
         </View>
         <Button title="Guardar" color="#BB6BD9" onPress={handleSave} />
       </ScrollView>
@@ -170,6 +232,11 @@ const styles = StyleSheet.create({
   pickerLabel: {
     padding: 10,
     color: '#000'
+  },
+  image: {
+    width: 200,
+    height: 150,
+    marginVertical: 10,
   },
 });
 

@@ -33,3 +33,4 @@ class EventoSchema(Schema):
         precio = fields.Float(required=True, validate=[validate.Range(min=0.0)])
         hora_evento = fields.Str(required=True, validate=[validate.Length(min=1)])
         id_establecimiento = fields.Str(required=True, validate=[validar_existencia_id])
+        imagen_url = fields.Str(required=True)
