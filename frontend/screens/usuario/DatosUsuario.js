@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, Image } from 'react-native';
+import { View, Text, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, TouchableOpacity, FlatList } from 'react-native';
 import axios from 'axios';
 import FondoComun from '../../components/FondoComun';
+import styles from '../../styles/styles_users';
+import Usuario from '../../components/Usuario';
+import Preferencia from '../../components/Preferencia';
+import ReviewUsuario from '../../components/ReviewUsuario';
+import Actividad from '../../components/Actividad';
 
 const DatosUsuario = () => {
   const [data, setData] = useState(null);
@@ -10,7 +15,7 @@ const DatosUsuario = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.1.107:5000/usuario_generico/665b4db9f57ca863dfedffc1');
+      const response = await axios.get('http://10.133.133.241:5000/usuario_generico/665b56eb6bd71b0279ca391b');
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -21,8 +26,8 @@ const DatosUsuario = () => {
     }
   };
 
-  const handleSave = () => {
-    // Handle save functionality
+  const Modificar = () => {
+
   };
 
   useEffect(() => {
@@ -43,110 +48,100 @@ const DatosUsuario = () => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+    <View style={{ flex: 1 }}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <FondoComun />
         <View style={styles.dataContainer}>
           <Text style={styles.label}>Datos Usuario</Text>
-          <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
+          <View style={styles.profileImageContainer}>
+            <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
+          </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre:</Text>
+            <View style={styles.box}>
             <Text style={styles.fieldValue}>{data.nombre}</Text>
+            </View>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre Usuario:</Text>
+            <View style={styles.box}>
             <Text style={styles.fieldValue}>{data.nombre_usuario}</Text>
+            </View>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Correo Electrónico:</Text>
+            <View style={styles.box}>
             <Text style={styles.fieldValue}>{data.email}</Text>
+            </View>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Teléfono:</Text>
+            <View style={styles.box}>
             <Text style={styles.fieldValue}>{data.telefono}</Text>
+            </View>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Fecha de Nacimiento:</Text>
+            <View style={styles.box}>
             <Text style={styles.fieldValue}>{data.fecha_nac}</Text>
+            </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Seguidos:</Text>
-            <Text style={styles.fieldValue}>{data.seguidos.length > 0 ? data.seguidos.join(', ') : 'N/A'}</Text>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionLabel}>Seguidos:</Text>
+            <FlatList
+              data={data.seguidos}
+              keyExtractor={(item) => item.toString()}
+              renderItem={({ item }) => <Usuario id={item} />}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.lista}
+            />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Preferencias:</Text>
-            <Text style={styles.fieldValue}>{data.preferencias.length > 0 ? data.preferencias.join(', ') : 'N/A'}</Text>
+            {data.preferencias.length > 0 ? (
+              <FlatList
+                data={data.preferencias}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => <Preferencia name={item} />}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.lista}
+              />
+            ) : (
+              <Text style={styles.fieldValue}>N/A</Text>
+            )}
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Actividades Creadas:</Text>
-            <Text style={styles.fieldValue}>{data.actividades_creadas.length > 0 ? data.actividades_creadas.join(', ') : 'N/A'}</Text>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionLabel}>Actividades Creadas:</Text>
+            <FlatList
+              data={data.actividades_creadas}
+              keyExtractor={(item) => item.toString()}
+              renderItem={({ item }) => <Actividad actividadId={item} />}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.lista}
+            />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Reviews:</Text>
-            <Text style={styles.fieldValue}>{data.reviews.length > 0 ? data.reviews.join(', ') : 'N/A'}</Text>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionLabel}>Reviews:</Text>
+            <FlatList
+              data={data.reviews}
+              keyExtractor={(item) => item.toString()}
+              renderItem={({ item }) => <ReviewUsuario reviewId={item} />}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.lista}
+            />
           </View>
-          <View style={styles.buttonContainer}>
-            <Button title="Modificar" color="#BB6BD9" onPress={handleSave} />
-          </View>
+          <TouchableOpacity style={styles.botonModificar} onPress={Modificar}>
+            <Text style={styles.botonModificarTexto}>Modificar</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
+  
 };
-
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  scrollViewContent: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    padding: 20,
-  },
-  dataContainer: {
-    alignItems: 'center',
-    marginTop: 50,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  fieldContainer: {
-    marginBottom: 10,
-    alignItems: 'flex-start',
-    width: '100%',
-  },
-  fieldLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  fieldValue: {
-    fontSize: 18,
-    marginLeft: 10,
-  },
-  buttonContainer: {
-    marginTop: 20,
-    marginBottom: 40,
-    width: '100%',
-    alignItems: 'center',
-  },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  errorText: {
-    fontSize: 18,
-    marginBottom: 10,
-  }
-});
 
 export default DatosUsuario;

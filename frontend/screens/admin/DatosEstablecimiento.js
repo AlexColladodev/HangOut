@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, Dimensions, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import FondoComun from '../../components/FondoComun';
-import Evento from '../../components/Evento'; // Importa el componente Evento
-import Review from '../../components/Review'; // Importa el componente Review
-import Oferta from '../../components/Oferta'; // Importa el componente Oferta
+import Evento from '../../components/Evento'; 
+import Review from '../../components/Review'; 
+import Oferta from '../../components/Oferta'; 
+import styles from '../../styles/styles_data';
+import Preferencia from '../../components/Preferencia';
 
 const DatosEstablecimiento = () => {
   const [data, setData] = useState(null);
@@ -35,8 +37,7 @@ const DatosEstablecimiento = () => {
     }
   };
 
-  const handleSave = () => {
-    // Implement save functionality if needed
+  const Modificar = () => {
   };
 
   useEffect(() => {
@@ -60,28 +61,36 @@ const DatosEstablecimiento = () => {
     <View style={{ flex: 1 }}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <FondoComun />
+          <View style={styles.dataContainer}>
           <Text style={styles.label}>Datos del Establecimiento</Text>
-          <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
+          <View style={styles.imagenContainer}>
+            <Image source={{ uri: data.imagen_url }} style={styles.imagen} />
+          </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>CIF:</Text>
+            <View style={styles.box}>
             <Text style={styles.fieldValue}>{data.cif}</Text>
+            </View>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre del Establecimiento:</Text>
+            <View style={styles.box}>
             <Text style={styles.fieldValue}>{data.nombre_establecimiento}</Text>
-          </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>ID Administrador:</Text>
-            <Text style={styles.fieldValue}>{data.id_administrador}</Text>
+            </View>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Ambiente:</Text>
             {data.ambiente.length > 0 ? (
-              data.ambiente.map((item, index) => (
-                <Text key={index} style={styles.listItem}>{item}</Text>
-              ))
+              <FlatList
+                data={data.ambiente}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => <Preferencia name={item} />}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.lista}
+              />
             ) : (
-              <Text style={styles.fieldValue}>No hay ambientes disponibles</Text>
+              <Text style={styles.fieldValue}>N/A</Text>
             )}
           </View>
 
@@ -93,7 +102,7 @@ const DatosEstablecimiento = () => {
               renderItem={({ item }) => <Oferta id={item} />}
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.eventList}
+              contentContainerStyle={styles.lista}
             />
           </View>
 
@@ -105,7 +114,7 @@ const DatosEstablecimiento = () => {
               renderItem={({ item }) => <Evento id={item} />}
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.eventList}
+              contentContainerStyle={styles.lista}
             />
           </View>
 
@@ -117,84 +126,17 @@ const DatosEstablecimiento = () => {
               renderItem={({ item }) => <Review reviewId={item} />}
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.reviewList}
+              contentContainerStyle={styles.lista}
             />
           </View>
 
-          <Button title="Modificar" color="#BB6BD9" onPress={handleSave} />
-
+          <TouchableOpacity style={styles.boton} onPress={Modificar}>
+            <Text style={styles.botonTexto}>Modificar</Text>
+          </TouchableOpacity>
+          </View>
       </ScrollView>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  profileImage: {
-    width: Dimensions.get('window').width - 40, // Adjust width according to screen width and padding
-    height: 200,
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  fieldContainer: {
-    marginBottom: 10,
-    alignItems: 'flex-start',
-    width: '100%',
-  },
-  fieldLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  fieldValue: {
-    fontSize: 18,
-    marginLeft: 10,
-  },
-  sectionContainer: {
-    marginBottom: 20,
-    width: '100%',
-  },
-  sectionLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  listItem: {
-    fontSize: 18,
-    marginLeft: 10,
-    marginBottom: 5,
-  },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  errorText: {
-    fontSize: 18,
-    marginBottom: 10,
-  },
-  ofertaList: {
-    paddingVertical: 10,
-  },
-  eventList: {
-    paddingVertical: 10,
-  },
-  reviewList: {
-    paddingVertical: 10,
-  },
-});
 
 export default DatosEstablecimiento;

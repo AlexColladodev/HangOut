@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, Image } from 'react-native';
-import Fondo from '../../components/Fondo'; // Actualizar la ruta de importación
+import Fondo from '../../components/Fondo';
 
 const InicioSesion = () => {
   return (
@@ -56,19 +56,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     zIndex: 1,
     alignItems: 'center',
-    width: '100%', // Ocupa todo el ancho del contenedor
+    width: '100%',
   },
   buttonBox: {
-    backgroundColor: '#E1C3FF',
     paddingVertical: 20,
     paddingHorizontal: 50,
     borderRadius: 30,
-    shadowColor: '#000',
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
     marginTop: 125,
-    alignItems: 'center', // Centra los elementos dentro de la caja
+    alignItems: 'center', 
   },
   input: {
     height: 50,

@@ -83,16 +83,3 @@ class Oferta:
         else:
             return {"message": "No hay ofertas que eliminar"}
 
-
-    def obtener_nombre(id):
-        try:
-            oferta = mongo.db.ofertas.find_one({"_id": ObjectId(id)})
-
-            if oferta is not None:
-                nombre = oferta["nombre_oferta"]
-            else:
-                raise ValueError("ID oferta no encontrado")
-            
-            return {"message": "Oferta encontrada", "nombre": nombre}
-        except PyMongoError as e:
-            raise RuntimeError(f"Error en la base de datos al consultar la oferta: {e}")

@@ -40,7 +40,6 @@ const RegistrarseComun = () => {
       setIsAccountTypeValid(false);
     } else {
       setIsAccountTypeValid(true);
-      // Handle form submission
     }
   };
 
@@ -104,10 +103,12 @@ const RegistrarseComun = () => {
             {!isAccountTypeValid && <Text style={styles.errorText}>Seleccione un tipo de cuenta válido.</Text>}
           </View>
 
-          <Button title="Seleccionar Imagen" onPress={selectImage} />
+          <Button title="Seleccionar Foto de Perfil" onPress={selectImage} />
           {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
         </View>
-        <Button title="Siguiente" color="#FF5252" onPress={handleSubmit} />
+        <TouchableOpacity style={styles.botonSiguiente} onPress={handleSubmit}>
+            <Text style={styles.botonSiguienteTexto}>Siguiente</Text>
+          </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginVertical: 20, // Margen vertical para separar el título del logo y del formulario
+    marginVertical: 20, 
     alignSelf: 'center',
   },
   inputContainer: {
@@ -175,6 +176,17 @@ const styles = StyleSheet.create({
     width: 200,
     height: 150,
     marginVertical: 10,
+  },
+  botonSiguiente: {
+    backgroundColor: 'purple',
+    padding: 10,
+    alignItems: 'center',
+    marginVertical: 20,
+    width: '100%',
+  },
+  botonSiguienteTexto: {
+    color: 'white',
+    fontSize: 18,
   },
 });
 

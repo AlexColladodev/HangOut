@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Text, ScrollView, TouchableOpacity } from 'react-native';
-
-// Asegúrate de importar tu componente FondoComun
 import FondoComun from '../../components/FondoComun';
 
 const TipoAdministrador = () => {
   const [dni, setDni] = useState('');
 
-  const handleCreateAccount = () => {
-    // Lógica para manejar la creación de cuenta
+  const CrearCuenta = () => {
   };
 
   return (
@@ -29,12 +26,10 @@ const TipoAdministrador = () => {
             />
           </View>
         </View>
-      </ScrollView>
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.button} onPress={handleCreateAccount}>
-          <Text style={styles.buttonText}>Crear Cuenta</Text>
+        <TouchableOpacity style={styles.botonGuardar} onPress={CrearCuenta}>
+            <Text style={styles.botonGuardarTexto}>Crear Cuenta</Text>
         </TouchableOpacity>
-      </View>
+        </ScrollView>
     </View>
   );
 };
@@ -42,7 +37,7 @@ const TipoAdministrador = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#fff',
   },
   contentContainer: {
     padding: 20,
@@ -52,8 +47,8 @@ const styles = StyleSheet.create({
   content: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%', // Asegura que el contenedor ocupe todo el ancho
-    paddingHorizontal: 20, // Añade un padding horizontal si es necesario
+    width: '100%', 
+    paddingHorizontal: 20,
   },
   header: {
     alignItems: 'center',
@@ -85,18 +80,18 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     position: 'absolute',
-    bottom: 20, // Posiciona el botón en la parte inferior con margen
+    bottom: 20,
   },
-  button: {
-    backgroundColor: '#6200ee',
-    padding: 15, // Aumenta el padding del botón
-    borderRadius: 20,
-    alignItems: 'center', // Centra el texto del botón
-    width: '35%', // Ajusta el ancho del botón
+  botonGuardar: {
+    backgroundColor: 'purple',
+    padding: 10,
+    alignItems: 'center',
+    marginVertical: 20,
+    width: '100%',
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
+  botonGuardarTexto: {
+    color: 'white',
+    fontSize: 18,
   },
 });
 

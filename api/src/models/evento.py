@@ -74,6 +74,20 @@ class Evento:
             return json_util.dumps(evento)
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar evento: {e}")
+        
+    def consultar_eventos_ordenados():
+        try:
+            # Consultar todos los eventos y ordenarlos por fecha_evento ascendente
+            eventos = mongo.db.eventos.find().sort("fecha_evento", 1)
+            
+            # Extraer solo los IDs de los eventos ordenados
+            eventos_ids = [str(evento["_id"]) for evento in eventos]
+            
+            return {"eventos_ordenados": eventos_ids}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al consultar y ordenar eventos: {e}")
+
+
 
 
     def actualizar_evento(id, data):
@@ -93,8 +107,6 @@ class Evento:
             raise RuntimeError(f"Error de base de datos al consultar evento: {e}")
 
 
-
-
     def del_evento_establecimiento(id_establecimiento):
 
         resultado = mongo.db.eventos.delete_many({"id_establecimiento": id_establecimiento})
@@ -103,17 +115,3 @@ class Evento:
             return {"mensaje": f"Se eliminaron {resultado.deleted_count} eventos."}
         else:
             return {"message": "No hay eventos que eliminar"}
-
-    def obtener_nombre(id):
-        try:
-            evento = mongo.db.eventos.find_one({"_id": ObjectId(id)})
-
-            if evento is not None:
-                nombre = evento["nombre_evento"]
-                fecha = evento["fecha_evento"]
-            else:
-                raise ValueError("ID evento no encontrado")
-            
-            return {"respuesta": f"{nombre} {fecha}"}
-        except PyMongoError as e:
-            raise RuntimeError(f"Error en la base de datos al consultar el evento: {e}")

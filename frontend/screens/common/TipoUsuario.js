@@ -3,15 +3,29 @@ import { StyleSheet, View, Image, TouchableOpacity, Text, ScrollView } from 'rea
 import FondoComun from '../../components/FondoComun';
 
 const TipoUsuario = () => {
-  const tags = Array.from({ length: 12 }, (_, index) => `Etiqueta ${index + 1}`);
+  const ambientes = [
+    { name: "Chill", image: require("../../assets/ambiente/chill.png") },
+    { name: "Monologos", image: require("../../assets/ambiente/monologos.png") },
+    { name: "Cine", image: require("../../assets/ambiente/cine.png") },
+    { name: "Discoteca", image: require("../../assets/ambiente/discoteca.png") },
+    { name: "Bar", image: require("../../assets/ambiente/bar.png") },
+    { name: "Cervezas", image: require("../../assets/ambiente/cervezas.png") },
+    { name: "Rock", image: require("../../assets/ambiente/rock.png") },
+    { name: "En Vivo", image: require("../../assets/ambiente/en_vivo.png") },
+    { name: "Reggaeton", image: require("../../assets/ambiente/reggaeton.png") },
+    { name: "Latino", image: require("../../assets/ambiente/latino.png") },
+    { name: "Deportes", image: require("../../assets/ambiente/deportes.png") },
+    { name: "Karaoke", image: require("../../assets/ambiente/karaoke.png") },
+  ];
+  
 
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [ambientesSeleccionados, setAmbientesSeleccionados] = useState([]);
 
-  const handleSelectTag = index => {
-    if (selectedTags.includes(index)) {
-      setSelectedTags(selectedTags.filter(tag => tag !== index)); // Deselecciona
+  const seleccionAmbiente = index => {
+    if (ambientesSeleccionados.includes(index)) {
+      setAmbientesSeleccionados(ambientesSeleccionados.filter(ambiente => ambiente !== index));
     } else {
-      setSelectedTags([...selectedTags, index]); // Selecciona
+      setAmbientesSeleccionados([...ambientesSeleccionados, index]);
     }
   };
 
@@ -25,31 +39,17 @@ const TipoUsuario = () => {
           </View>
           <Text style={styles.preferencesTitle}>Preferencias:</Text>
           <View style={styles.tagContainer}>
-            {tags.map((tag, index) => (
+            {ambientes.map((ambiente, index) => (
               <View key={index} style={styles.tagWrapper}>
-                <TouchableOpacity
-                  style={[
-                    styles.tag,
-                    selectedTags.includes(index) ? styles.tagSelected : null,
-                  ]}
-                  onPress={() => handleSelectTag(index)}
-                >
-                  <Image
-                    source={require('../../assets/etiqueta.png')}
-                    style={styles.tagImage}
-                  />
+                <TouchableOpacity style={[styles.tag, ambientesSeleccionados.includes(index) ? styles.tagSelected : null,]} onPress={() => seleccionAmbiente(index)}>
+                <Image source={ambiente.image} style={styles.tagImage}/>
                 </TouchableOpacity>
-                <Text style={styles.tagText}>{tag}</Text>
+                <Text style={styles.tagText}>{ambiente.name}</Text>
               </View>
             ))}
           </View>
         </View>
       </ScrollView>
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.button} onPress={() => { /* Lógica para crear cuenta */ }}>
-          <Text style={styles.buttonText}>Crear Cuenta</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
   content: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%', // Asegura que el contenedor ocupe todo el ancho
-    paddingHorizontal: 20, // Añade un padding horizontal si es necesario
+    width: '100%',
+    paddingHorizontal: 20,
   },
   header: {
     alignItems: 'center',
@@ -77,25 +77,26 @@ const styles = StyleSheet.create({
   logo: {
     fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center', // Centra el texto del logo
+    textAlign: 'center',
   },
   preferencesTitle: {
     fontSize: 18,
     marginTop: 20,
     marginBottom: 10,
     fontWeight: 'bold',
-    alignSelf: 'flex-start', // Alinea el texto a la izquierda
+    alignSelf: 'flex-start',
   },
   tagContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    justifyContent: 'space-between', 
     alignItems: 'center',
     marginTop: 20,
   },
   tagWrapper: {
     alignItems: 'center',
-    margin: 10,
+    marginVertical: 10, 
+    width: '30%', 
   },
   tag: {
     width: 50,
@@ -121,14 +122,14 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     position: 'absolute',
-    bottom: 20, // Posiciona el botón en la parte inferior con margen
+    bottom: 20,
   },
   button: {
     backgroundColor: '#6200ee',
-    padding: 15, // Aumenta el padding del botón
+    padding: 15,
     borderRadius: 20,
-    alignItems: 'center', // Centra el texto del botón
-    width: '35%', // Ajusta el ancho del botón
+    alignItems: 'center',
+    width: '35%',
   },
   buttonText: {
     color: '#fff',

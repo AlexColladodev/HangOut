@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, SafeAreaView, TextInput, Alert, Button, Platform, Image } from 'react-native';
 import axios from 'axios';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
+import 'moment/locale/es'; // Importar el locale español
 import FondoComun from '../../components/FondoComun';
+import styles from '../../styles/styles_mod'
 
 const ModificarUsuario = () => {
   const [data, setData] = useState({
@@ -10,7 +13,7 @@ const ModificarUsuario = () => {
     nombre_usuario: '',
     email: '',
     telefono: '',
-    fecha_nacimiento: new Date('1970-01-01'),
+    fecha_nacimiento: new Date(),
     seguidos: [],
     preferencias: [],
     actividades_creadas: [],
@@ -19,18 +22,32 @@ const ModificarUsuario = () => {
   const [loading, setLoading] = useState(true);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const tags = ['pop', 'bar', 'rock', 'jazz', 'hip-hop', 'clásica', 'electrónica', 'folk', 'country', 'reggae', 'blues', 'metal'];
+  const ambientes = [
+    { name: "Chill", image: require("../../assets/ambiente/chill.png") },
+    { name: "Monologos", image: require("../../assets/ambiente/monologos.png") },
+    { name: "Cine", image: require("../../assets/ambiente/cine.png") },
+    { name: "Discoteca", image: require("../../assets/ambiente/discoteca.png") },
+    { name: "Bar", image: require("../../assets/ambiente/bar.png") },
+    { name: "Cervezas", image: require("../../assets/ambiente/cervezas.png") },
+    { name: "Rock", image: require("../../assets/ambiente/rock.png") },
+    { name: "En Vivo", image: require("../../assets/ambiente/en_vivo.png") },
+    { name: "Reggaeton", image: require("../../assets/ambiente/reggaeton.png") },
+    { name: "Latino", image: require("../../assets/ambiente/latino.png") },
+    { name: "Deportes", image: require("../../assets/ambiente/deportes.png") },
+    { name: "Karaoke", image: require("../../assets/ambiente/karaoke.png") },
+  ];
+
   const [selectedTags, setSelectedTags] = useState([]);
 
   useEffect(() => {
-    axios.get('http://10.133.133.241:5000/usuario_generico/6658ad58c3940827ec7706e1')
+    axios.get('http://10.133.133.241:5000/usuario_generico/665b56eb6bd71b0279ca391b')
       .then(response => {
         const fetchedData = response.data;
         setData({
           ...fetchedData,
-          fecha_nacimiento: new Date('1970-01-01'), // Fecha de nacimiento estática
+          fecha_nacimiento: new Date(fetchedData.fecha_nac),
         });
-        setSelectedTags(fetchedData.preferencias.map(pref => tags.indexOf(pref)));
+        setSelectedTags(fetchedData.preferencias.map(pref => ambientes.findIndex(amb => amb.name === pref)));
         setLoading(false);
       })
       .catch(error => {
@@ -58,7 +75,7 @@ const ModificarUsuario = () => {
       ? selectedTags.filter(tag => tag !== index)
       : [...selectedTags, index];
     setSelectedTags(newSelectedTags);
-    const newPreferencias = newSelectedTags.map(tagIndex => tags[tagIndex]);
+    const newPreferencias = newSelectedTags.map(tagIndex => ambientes[tagIndex].name);
     setData(prevState => ({ ...prevState, preferencias: newPreferencias }));
   };
 
@@ -76,7 +93,7 @@ const ModificarUsuario = () => {
       reviews,
     };
 
-    axios.put('http://10.133.133.241:5000/usuario_generico/6658ad58c3940827ec7706e1', updatedData)
+    axios.put('http://10.133.133.241:5000/usuario_generico/665b56eb6bd71b0279ca391b', updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
@@ -141,17 +158,17 @@ const ModificarUsuario = () => {
             <Text style={styles.fieldLabel}>Fecha de Nacimiento:</Text>
             <View style={styles.dateRow}>
               <TextInput
-                value={data.fecha_nacimiento.getDate().toString()}
+                value={moment(data.fecha_nacimiento).format('DD')}
                 style={[styles.dateInput, styles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={data.fecha_nacimiento.toLocaleString('default', { month: 'short' })}
+                value={moment(data.fecha_nacimiento).format('MMMM')}
                 style={[styles.dateInput, styles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={data.fecha_nacimiento.getFullYear().toString()}
+                value={moment(data.fecha_nacimiento).format('YYYY')}
                 style={[styles.dateInput, styles.datePart]}
                 editable={false}
               />
@@ -170,7 +187,7 @@ const ModificarUsuario = () => {
           </View>
           <Text style={styles.preferencesTitle}>Preferencias:</Text>
           <View style={styles.tagContainer}>
-            {tags.map((tag, index) => (
+            {ambientes.map((ambiente, index) => (
               <View key={index} style={styles.tagWrapper}>
                 <TouchableOpacity
                   style={[
@@ -180,11 +197,11 @@ const ModificarUsuario = () => {
                   onPress={() => handleSelectTag(index)}
                 >
                   <Image
-                    source={require('../../assets/etiqueta.png')}
+                    source={ambiente.image}
                     style={styles.tagImage}
                   />
                 </TouchableOpacity>
-                <Text style={styles.tagText}>{tag}</Text>
+                <Text style={styles.tagText}>{ambiente.name}</Text>
               </View>
             ))}
           </View>
@@ -196,125 +213,5 @@ const ModificarUsuario = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9f9f9',
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 100,
-  },
-  dataContainer: {
-    marginTop: 50,
-    width: '100%',
-    alignItems: 'center',
-  },
-  label: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  fieldContainer: {
-    alignItems: 'flex-start',
-    marginBottom: 10,
-    width: '100%',
-  },
-  fieldLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  input: {
-    fontSize: 18,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginVertical: 10,
-    width: '100%',
-  },
-  dateRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  dateInput: {
-    backgroundColor: '#F0F0F0',
-    padding: 10,
-    marginRight: 5,
-    borderRadius: 5,
-    textAlign: 'center',
-  },
-  datePart: {
-    flex: 1,
-  },
-  preferencesTitle: {
-    fontSize: 18,
-    marginTop: 20,
-    marginBottom: 10,
-    fontWeight: 'bold',
-    alignSelf: 'flex-start', // Alinea el texto a la izquierda
-  },
-  tagContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  tagWrapper: {
-    alignItems: 'center',
-    margin: 10,
-  },
-  tag: {
-    width: 50,
-    height: 50,
-    opacity: 0.5,
-  },
-  tagSelected: {
-    opacity: 1,
-    borderColor: 'red',
-    borderWidth: 2,
-    borderRadius: 10,
-  },
-  tagImage: {
-    width: '100%',
-    height: '100%',
-  },
-  tagText: {
-    marginTop: 5,
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  modifyButton: {
-    backgroundColor: 'purple',
-    padding: 10,
-    alignItems: 'center',
-    marginVertical: 20,
-    width: '100%',
-  },
-  modifyButtonText: {
-    color: 'white',
-    fontSize: 18,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 20,
-    backgroundColor: '#E0F7FA',
-  },
-  icon: {
-    width: 50,
-    height: 50,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 20,
-  },
-});
 
 export default ModificarUsuario;

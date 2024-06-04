@@ -78,15 +78,12 @@ def actualizar_evento(id):
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 
-@blueprint.route("/obtener_nombre/<id>", methods=["GET"])
-def obtener_nombre(id):
-
+@blueprint.route("/ordenado", methods=["GET"])
+def consultar_eventos_ordenados():
     try:
-        respuesta = Evento.obtener_nombre(id)
-        return respuesta, 200
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 404
+        respuesta = Evento.consultar_eventos_ordenados()
+        return Response(respuesta, mimetype="application/json"), 200
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": f"Error inesperado: {e}"}), 500
+        return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500

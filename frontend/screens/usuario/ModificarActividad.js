@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, TextInput, Button, Alert, Platform, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
+import moment from 'moment';
+import 'moment/locale/es'; // Importar el locale español
 import FondoComun from '../../components/FondoComun';
+import styles from '../../styles/styles_mod';
 
 const ModificarActividad = () => {
   const [data, setData] = useState({
@@ -11,23 +14,21 @@ const ModificarActividad = () => {
     fecha_actividad: new Date(),
     hora_actividad: new Date(),
     ubicacion: '',
-    // Eliminar el estado de participantes
   });
   const [loading, setLoading] = useState(true);
   const [showFecha, setShowFecha] = useState(false);
   const [showHora, setShowHora] = useState(false);
 
   useEffect(() => {
-    axios.get('http://10.133.133.241:5000/actividades/662f4ac4102ab5737049a6a7')
+    axios.get('http://10.133.133.241:5000/actividades/665b5af16bd71b0279ca3939')
       .then(response => {
         const fetchedData = response.data;
         setData({
           nombre_actividad: fetchedData.nombre_actividad,
           descripcion_actividad: fetchedData.descripcion_actividad,
-          fecha_actividad: new Date(fetchedData.fecha_actividad),
+          fecha_actividad: new Date(fetchedData.fecha_actividad.$date),
           hora_actividad: new Date(`1970-01-01T${fetchedData.hora_actividad}Z`),
           ubicacion: fetchedData.ubicacion,
-          // No incluir los participantes en el estado
         });
         setLoading(false);
       })
@@ -69,12 +70,10 @@ const ModificarActividad = () => {
       fecha_actividad: fecha_actividad.toISOString().split('T')[0], // Formato YYYY-MM-DD
       hora_actividad: hora_actividad.toTimeString().split(' ')[0], // Formato HH:mm:ss
       ubicacion,
-      id_usuario_creador: '6627d03e4e75f4cf8d29bf51', // Añadir el id_usuario_creador por defecto
+      id_usuario_creador: '665b56ff6bd71b0279ca391c', // Añadir el id_usuario_creador por defecto
     };
 
-    console.log('Updated data being sent:', updatedData); // Para depuración
-
-    axios.put('http://10.133.133.241:5000/actividades/662f4ac4102ab5737049a6a7', updatedData)
+    axios.put('http://10.133.133.241:5000/actividades/665b5af16bd71b0279ca3939', updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
@@ -125,17 +124,17 @@ const ModificarActividad = () => {
             <Text style={styles.fieldLabel}>Fecha Actividad:</Text>
             <View style={styles.dateRow}>
               <TextInput
-                value={data.fecha_actividad.getDate().toString()}
+                value={moment(data.fecha_actividad).format('DD')}
                 style={[styles.dateInput, styles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={data.fecha_actividad.toLocaleString('default', { month: 'short' })}
+                value={moment(data.fecha_actividad).format('MMMM')}
                 style={[styles.dateInput, styles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={data.fecha_actividad.getFullYear().toString()}
+                value={moment(data.fecha_actividad).format('YYYY')}
                 style={[styles.dateInput, styles.datePart]}
                 editable={false}
               />
@@ -192,84 +191,5 @@ const ModificarActividad = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9f9f9',
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 100,
-  },
-  dataContainer: {
-    marginTop: 50,
-    width: '100%',
-  },
-  label: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  fieldContainer: {
-    alignItems: 'flex-start',
-    marginBottom: 10,
-    width: '100%',
-  },
-  fieldLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  input: {
-    fontSize: 18,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginVertical: 10,
-    width: '100%',
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
-  },
-  dateRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  dateInput: {
-    backgroundColor: '#F0F0F0',
-    padding: 10,
-    marginRight: 5,
-    borderRadius: 5,
-    textAlign: 'center',
-  },
-  datePart: {
-    flex: 1,
-  },
-  modifyButton: {
-    backgroundColor: 'purple',
-    padding: 10,
-    alignItems: 'center',
-    marginVertical: 20,
-    width: '100%',
-  },
-  modifyButtonText: {
-    color: 'white',
-    fontSize: 18,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 20,
-    backgroundColor: '#E0F7FA',
-  },
-  icon: {
-    width: 50,
-    height: 50,
-  },
-});
 
 export default ModificarActividad;

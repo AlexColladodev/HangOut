@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, Image, SafeAreaView, TextInput, Alert, Button, Platform } from 'react-native';
 import axios from 'axios';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
+import 'moment/locale/es'; 
 import FondoComun from '../../components/FondoComun';
+import styles from '../../styles/styles_mod';
 
 const ModificarAdministrador = () => {
   const [data, setData] = useState({
@@ -16,12 +19,12 @@ const ModificarAdministrador = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   useEffect(() => {
-    axios.get('http://10.133.133.241:5000/administrador_establecimiento/6658abcada98a09759b40b79')
+    axios.get('http://10.133.133.241:5000/administrador_establecimiento/665b583e6bd71b0279ca392d')
       .then(response => {
         const fetchedData = response.data;
         setData({
           ...fetchedData,
-          fecha_nacimiento: new Date(fetchedData.fecha_nacimiento),
+          fecha_nacimiento: new Date(fetchedData.fecha_nac),
         });
         setLoading(false);
       })
@@ -54,7 +57,7 @@ const ModificarAdministrador = () => {
       fecha_nacimiento: data.fecha_nacimiento.toISOString().split('T')[0], // Formato YYYY-MM-DD
     };
 
-    axios.put('http://192.168.1.107:5000/administrador_establecimiento/6658abcada98a09759b40b79', updatedData)
+    axios.put('http://10.133.133.241:5000/administrador_establecimiento/665b583e6bd71b0279ca392d', updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
@@ -77,7 +80,7 @@ const ModificarAdministrador = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <FondoComun />
         <View style={styles.dataContainer}>
@@ -119,17 +122,17 @@ const ModificarAdministrador = () => {
             <Text style={styles.fieldLabel}>Fecha de Nacimiento:</Text>
             <View style={styles.dateRow}>
               <TextInput
-                value={data.fecha_nacimiento.getDate().toString()}
+                value={moment(data.fecha_nacimiento).format('DD')}
                 style={[styles.dateInput, styles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={data.fecha_nacimiento.toLocaleString('default', { month: 'short' })}
+                value={moment(data.fecha_nacimiento).format('MMMM')}
                 style={[styles.dateInput, styles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={data.fecha_nacimiento.getFullYear().toString()}
+                value={moment(data.fecha_nacimiento).format('YYYY')}
                 style={[styles.dateInput, styles.datePart]}
                 editable={false}
               />
@@ -151,90 +154,8 @@ const ModificarAdministrador = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9f9f9',
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 100,
-  },
-  dataContainer: {
-    marginTop: 50,
-    width: '100%',
-    alignItems: 'center',
-  },
-  label: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  fieldContainer: {
-    alignItems: 'flex-start',
-    marginBottom: 10,
-    width: '100%',
-  },
-  fieldLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  input: {
-    fontSize: 18,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginVertical: 10,
-    width: '100%',
-  },
-  dateRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  dateInput: {
-    backgroundColor: '#F0F0F0',
-    padding: 10,
-    marginRight: 5,
-    borderRadius: 5,
-    textAlign: 'center',
-  },
-  datePart: {
-    flex: 1,
-  },
-  modifyButton: {
-    backgroundColor: 'purple',
-    padding: 10,
-    alignItems: 'center',
-    marginVertical: 20,
-    width: '100%',
-  },
-  modifyButtonText: {
-    color: 'white',
-    fontSize: 18,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 20,
-    backgroundColor: '#E0F7FA',
-  },
-  icon: {
-    width: 50,
-    height: 50,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 20,
-  },
-});
 
 export default ModificarAdministrador;

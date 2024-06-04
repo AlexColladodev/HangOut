@@ -18,10 +18,16 @@ import Establecimiento from './components/Establecimiento';
 import CrearActividad from './screens/usuario/CrearActividad'
 import InicioUsuario from './screens/usuario/InicioUsuario';
 import CrearEvento from './screens/admin/CrearEvento';
+import TipoUsuario from './screens/common/TipoUsuario';
+import Inicio from './screens/common/Inicio'
+import InicioSesion from './screens/common/InicioSesion'
+import TipoAdministrador from './screens/common/TipoAdministrador';
+import DatosEvento from './screens/admin/DatosEvento';
+import DatosOferta from './screens/admin/DatosOferta'
 
 const App = () => {
   return (
-    <DatosEstablecimiento/>
+    <ModificarUsuario/>
   );
 };
 

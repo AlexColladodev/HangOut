@@ -1,7 +1,14 @@
-// Inicio.js
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import Fondo from '../../components/Fondo'; // Actualizar la ruta de importación
+import Fondo from '../../components/Fondo'; 
+
+const Registrarse = () => {
+
+};
+
+const Inicio_Sesion = () => {
+
+};
 
 const Inicio = () => {
   return (
@@ -12,10 +19,10 @@ const Inicio = () => {
       </View>
       <View style={styles.buttonContainer}>
         <View style={styles.buttonBox}>
-          <TouchableOpacity style={styles.button1}>
+          <TouchableOpacity style={styles.button1} onPress={Registrarse}>
             <Text style={styles.buttonText}>Registrarse</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button2}>
+          <TouchableOpacity style={styles.button2} onPress={Inicio_Sesion}>
             <Text style={styles.buttonText}>Iniciar Sesión</Text>
           </TouchableOpacity>
         </View>
@@ -50,19 +57,14 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   buttonBox: {
-    backgroundColor: '#E1C3FF',
     paddingVertical: 20,
     paddingHorizontal: 50,
     borderRadius: 30,
-    shadowColor: '#000',
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
     marginTop: 125,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    flexGrow: 1, // Permite que el componente crezca para ocupar el espacio disponible
-    alignSelf: 'stretch', // Estira el componente para ocupar el ancho disponible
+    flexGrow: 1,
+    alignSelf: 'stretch',
   },
   button2: {
     backgroundColor: '#8F99FF',

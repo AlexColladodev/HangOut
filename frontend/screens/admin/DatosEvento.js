@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
 import FondoComun from '../../components/FondoComun';
+import styles from '../../styles/styles_data';
 
 const DatosEvento = () => {
   const [data, setData] = useState(null);
@@ -10,7 +11,7 @@ const DatosEvento = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/eventos/6654c3a8bc5a235b9f0d3413');
+      const response = await axios.get('http://10.133.133.241:5000/eventos/665e0db67d438e985b7b77b1');
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -21,8 +22,8 @@ const DatosEvento = () => {
     }
   };
 
-  const handleSave = () => {
-    // Handle save functionality
+  const Modificar = () => {
+
   };
 
   useEffect(() => {
@@ -46,92 +47,51 @@ const DatosEvento = () => {
   const formattedTime = data.hora_evento;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.scrollView}>
+    <View style={{ flex: 1 }}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <FondoComun />
         <View style={styles.dataContainer}>
           <Text style={styles.label}>Datos Evento</Text>
+          <View style={styles.imagenContainer}>
+            <Image source={{ uri: data.imagen_url }} style={styles.imagen} />
+          </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre Evento:</Text>
+            <View style={styles.box}>
             <Text style={styles.fieldValue}>{data.nombre_evento}</Text>
+            </View>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Descripción Evento:</Text>
+            <View style={styles.box}>
             <Text style={styles.fieldValue}>{data.descripcion_evento}</Text>
+            </View>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Fecha Evento:</Text>
+            <View style={styles.box}>
             <Text style={styles.fieldValue}>{formattedDate}</Text>
+            </View>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Hora Evento:</Text>
+            <View style={styles.box}>
             <Text style={styles.fieldValue}>{formattedTime}</Text>
+            </View>
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Precio Evento:</Text>
+            <View style={styles.box}>
             <Text style={styles.fieldValue}>{data.precio} €</Text>
+            </View>
           </View>
-          <View style={styles.buttonContainer}>
-            <Button title="Modificar" color="#BB6BD9" onPress={handleSave} />
-          </View>
+          <TouchableOpacity style={styles.boton} onPress={Modificar}>
+            <Text style={styles.botonTexto}>Modificar</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-    safeArea: {
-        flex: 1,
-    },
-    scrollView: {
-        flex: 1,
-        backgroundColor: '#f9f9f9',
-        padding: 20,
-    },
-    dataContainer: {
-        alignItems: 'center',
-        marginTop: 50,
-    },
-    profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        marginBottom: 20,
-    },
-    label: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
-    },
-    fieldContainer: {
-        marginBottom: 10,
-        alignItems: 'flex-start',
-        width: '100%',
-    },
-    fieldLabel: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    fieldValue: {
-        fontSize: 18,
-        marginLeft: 10,
-    },
-    buttonContainer: {
-        marginTop: 20,
-        width: '100%',
-        alignItems: 'center',
-    },
-    centered: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    errorText: {
-        fontSize: 18,
-        marginBottom: 10,
-    }
-});
 
 export default DatosEvento;

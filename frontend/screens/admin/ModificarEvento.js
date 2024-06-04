@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Te
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import FondoComun from '../../components/FondoComun';
+import styles from '../../styles/styles_mod';
 
 const ModificarEvento = () => {
   const [data, setData] = useState({
@@ -17,12 +18,11 @@ const ModificarEvento = () => {
   const [showHora, setShowHora] = useState(false);
 
   useEffect(() => {
-    axios.get('http://10.133.133.241:5000/eventos/6654c3a8bc5a235b9f0d3413')
+    axios.get('http://10.133.133.241:5000/eventos/665e0db67d438e985b7b77b1')
       .then(response => {
         const fetchedData = response.data;
         setData({
-          nombre_evento: fetchedData.nombre_evento,
-          descripcion_evento: fetchedData.descripcion_evento,
+          ...fetchedData,
           fecha_evento: new Date(fetchedData.fecha_evento.$date),
           hora_evento: new Date(`1970-01-01T${fetchedData.hora_evento}Z`),
           precio: fetchedData.precio.toString(),
@@ -59,7 +59,7 @@ const ModificarEvento = () => {
     setShowHora(true);
   };
 
-  const handleSubmit = () => {
+  const Modificar = () => {
     const { nombre_evento, descripcion_evento, fecha_evento, hora_evento, precio } = data;
     const updatedData = {
       nombre_evento,
@@ -69,7 +69,7 @@ const ModificarEvento = () => {
       precio: parseFloat(precio), // Convert to number
     };
 
-    axios.put('http://10.133.133.241:5000/eventos/6654c3a8bc5a235b9f0d3413', updatedData)
+    axios.put('http://10.133.133.241:5000/eventos/665e0db67d438e985b7b77b1', updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
@@ -92,11 +92,14 @@ const ModificarEvento = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <FondoComun />
         <View style={styles.dataContainer}>
           <Text style={styles.label}>Modificar Datos Evento</Text>
+          <View style={styles.imagenContainer}>
+            <Image source={{ uri: data.imagen_url }} style={styles.imagen} />
+          </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre Evento:</Text>
             <TextInput
@@ -177,88 +180,14 @@ const ModificarEvento = () => {
               onChangeText={(value) => handleInputChange('precio', value)}
             />
           </View>
-          <TouchableOpacity style={styles.modifyButton} onPress={handleSubmit}>
+          <TouchableOpacity style={styles.modifyButton} onPress={Modificar}>
             <Text style={styles.modifyButtonText}>Modificar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9f9f9',
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 100,
-  },
-  dataContainer: {
-    marginTop: 50,
-    width: '100%',
-  },
-  label: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  fieldContainer: {
-    alignItems: 'flex-start',
-    marginBottom: 10,
-    width: '100%',
-  },
-  fieldLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  input: {
-    fontSize: 18,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginVertical: 10,
-    width: '100%',
-  },
-  dateRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  dateInput: {
-    backgroundColor: '#F0F0F0',
-    padding: 10,
-    marginRight: 5,
-    borderRadius: 5,
-    textAlign: 'center',
-  },
-  datePart: {
-    flex: 1,
-  },
-  modifyButton: {
-    backgroundColor: 'purple',
-    padding: 10,
-    alignItems: 'center',
-    marginVertical: 20,
-    width: '100%',
-  },
-  modifyButtonText: {
-    color: 'white',
-    fontSize: 18,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 20,
-    backgroundColor: '#E0F7FA',
-  },
-  icon: {
-    width: 50,
-    height: 50,
-  },
-});
 
 export default ModificarEvento;

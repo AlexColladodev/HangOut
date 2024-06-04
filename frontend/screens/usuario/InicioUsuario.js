@@ -55,6 +55,11 @@ const InicioUsuario = () => {
                     showsHorizontalScrollIndicator={false}
                 />
             </View>
+
+            <View style={styles.dataContainer}>
+            <Text style={styles.title}>Eventos</Text>
+            </View>
+
         </View>
       </ScrollView>
     </SafeAreaView>
