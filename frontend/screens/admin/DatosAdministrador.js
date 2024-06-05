@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import FondoComun from '../../components/FondoComun';
-import styles from '../../styles/styles_users';
+import styles from '../../styles/stylesUsers';
+import commonStyles from '../../styles/stylesCommon'
+import BASE_URL from '../../config_ip';
 
 const DatosAdministrador = () => {
   const [data, setData] = useState(null);
@@ -11,7 +13,7 @@ const DatosAdministrador = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/administrador_establecimiento/665b57a06bd71b0279ca3925');
+      const response = await axios.get(`${BASE_URL}/administrador_establecimiento/665b57a06bd71b0279ca3925`);
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -45,10 +47,10 @@ const DatosAdministrador = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
-        <View style={styles.dataContainer}>
-          <Text style={styles.label}>Datos Administrador Establecimiento</Text>
+        <View style={commonStyles.dataContainer}>
+          <Text style={commonStyles.label}>Datos Administrador Establecimiento</Text>
           <View style={styles.profileImageContainer}>
             <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
           </View>

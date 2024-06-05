@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
+import BASE_URL from '../config_ip';
 
 const Usuario = ({ id }) => {
   const [data, setData] = useState(null);
@@ -10,7 +11,7 @@ const Usuario = ({ id }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://10.133.133.241:5000/usuario_generico/${id}`);
+        const response = await axios.get(`${BASE_URL}/usuario_generico/${id}`);
         setData(response.data);
         setLoading(false);
         setError(false);

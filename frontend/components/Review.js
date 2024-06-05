@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import axios from 'axios';
+import BASE_URL from '../config_ip';
 
 const Review = ({ reviewId }) => {
   const [review, setReview] = useState(null);
@@ -8,11 +9,11 @@ const Review = ({ reviewId }) => {
 
   useEffect(() => {
     // Fetch review data
-    axios.get(`http://10.133.133.241:5000/reviews/${reviewId}`)
+    axios.get(`${BASE_URL}/reviews/${reviewId}`)
       .then(response => {
         setReview(response.data);
         // Fetch user data
-        return axios.get(`http://10.133.133.241:5000/usuario_generico/${response.data.id_usuario}`);
+        return axios.get(`${BASE_URL}/usuario_generico/${response.data.id_usuario}`);
       })
       .then(response => {
         setUserName(response.data.nombre_usuario);

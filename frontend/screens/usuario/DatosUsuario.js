@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, TouchableOpacity, FlatList } from 'react-native';
 import axios from 'axios';
 import FondoComun from '../../components/FondoComun';
-import styles from '../../styles/styles_users';
+import styles from '../../styles/stylesUsers';
 import Usuario from '../../components/Usuario';
 import Preferencia from '../../components/Preferencia';
 import ReviewUsuario from '../../components/ReviewUsuario';
 import Actividad from '../../components/Actividad';
+import commonStyles from '../../styles/stylesCommon';
+import BASE_URL from '../../config_ip';
 
 const DatosUsuario = () => {
   const [data, setData] = useState(null);
@@ -15,7 +17,7 @@ const DatosUsuario = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/usuario_generico/665b56eb6bd71b0279ca391b');
+      const response = await axios.get(`${BASE_URL}/usuario_generico/665b56ff6bd71b0279ca391c`);
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -41,7 +43,7 @@ const DatosUsuario = () => {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text style={styles.errorText}>Error al cargar los datos</Text>
+        <Text style={commonStyles.errorText}>Error al cargar los datos</Text>
         <Button title="Reintentar" onPress={fetchData} />
       </View>
     );
@@ -49,10 +51,10 @@ const DatosUsuario = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
-        <View style={styles.dataContainer}>
-          <Text style={styles.label}>Datos Usuario</Text>
+        <View style={commonStyles.dataContainer}>
+          <Text style={commonStyles.label}>Datos Usuario</Text>
           <View style={styles.profileImageContainer}>
             <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
           </View>

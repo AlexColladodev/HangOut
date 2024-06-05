@@ -5,6 +5,7 @@ from bson import json_util
 from bson.objectid import ObjectId
 from datetime import date, datetime
 from pymongo.errors import PyMongoError
+from pymongo import ASCENDING
 
 class Actividad:
 
@@ -92,3 +93,29 @@ class Actividad:
             return {"message": "Actividad actualizada con éxito"}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos: {e}")
+        
+
+
+    def usuario_participa(id):
+        try:
+            actividades = mongo.db.actividades.find({"participantes": str(id)})
+
+            actividades_lista = list(actividades)
+
+            fecha_actual = datetime.now()
+
+            actividades_filtradas = [
+                actividad for actividad in actividades_lista
+                if actividad.get('fecha_actividad') and actividad['fecha_actividad'] >= fecha_actual
+            ]
+
+            actividades_ordenadas = sorted(actividades_filtradas, key=lambda x: x['fecha_actividad'])
+
+            resultado = [str(actividad['_id']) for actividad in actividades_ordenadas]
+
+            return {"actividades": resultado}
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos: {e}")
+
+
+

@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, SafeAreaView, TextInput, Alert, Button, Image } from 'react-native';
 import axios from 'axios';
 import FondoComun from '../../components/FondoComun';
-import styles from '../../styles/styles_mod';
+import styles from '../../styles/stylesModify';
+import commonStyles from '../../styles/stylesCommon'
+import BASE_URL from '../../config_ip';
 
 const ModificarOferta = () => {
   const [data, setData] = useState({
@@ -13,7 +15,7 @@ const ModificarOferta = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('http://10.133.133.241:5000/ofertas/665e0cf7e7479afa974873c0')
+    axios.get(`${BASE_URL}/ofertas/665e0cf7e7479afa974873c0`)
       .then(response => {
         const fetchedData = response.data;
         setData({
@@ -40,7 +42,7 @@ const ModificarOferta = () => {
       precio_oferta: parseFloat(precio_oferta), // Convert to number
     };
 
-    axios.put('http://10.133.133.241:5000/ofertas/665e0cf7e7479afa974873c0', updatedData)
+    axios.put(`${BASE_URL}/ofertas/665e0cf7e7479afa974873c0`, updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
@@ -56,18 +58,18 @@ const ModificarOferta = () => {
 
   if (!data) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.label}>Error al cargar los datos</Text>
+      <View style={commonStyles.container}>
+        <Text style={commonStyles.label}>Error al cargar los datos</Text>
       </View>
     );
   }
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
-        <View style={styles.dataContainer}>
-          <Text style={styles.label}>Modificar Datos Oferta</Text>
+        <View style={commonStyles.dataContainer}>
+          <Text style={commonStyles.label}>Modificar Datos Oferta</Text>
           <View style={styles.imagenContainer}>
             <Image source={{ uri: data.imagen_url }} style={styles.imagen} />
           </View>

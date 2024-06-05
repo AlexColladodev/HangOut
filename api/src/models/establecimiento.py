@@ -47,6 +47,7 @@ class Establecimiento:
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar los establecimientos: {e}")
         
+    #Intentar modificarlo Puntaje Bayesiano
     def consultar_establecimientos_ordenados() -> List[str]:
         try:
             establecimientos = mongo.db.establecimientos.find({}, {"_id": 1})
@@ -58,7 +59,7 @@ class Establecimiento:
                 media = media_result.get("media", 0.0)
                 medias.append((id_establecimiento, media))
 
-            # Ordenar por media de reviews de mayor a menor
+            
             medias.sort(key=lambda x: x[1], reverse=True)
             ids_ordenados = [id_media[0] for id_media in medias]
             return json_util.dumps(ids_ordenados)
@@ -114,9 +115,10 @@ class Establecimiento:
                 "ambiente": {"$in": ambientes_solicitados}
             }, {"_id": 1})
             ids = [str(doc['_id']) for doc in establecimientos]
-            return json_util.dumps(ids)
+            return {"establecimientos": ids}
         except Exception as e:
             raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
+
 
     def add_review_establecimiento(id_establecimiento, id_review):
         try:
@@ -128,6 +130,7 @@ class Establecimiento:
             return {"message": "Review añadida a Establecimiento"}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
+        
         
     def media_reviews(id):
         try:

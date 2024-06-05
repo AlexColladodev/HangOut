@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import axios from 'axios';
 import moment from 'moment';
-import 'moment/locale/es'; // Importar el locale español
+import 'moment/locale/es';
+import BASE_URL from '../config_ip';
 
 const Actividad = ({ actividadId }) => {
   const [actividad, setActividad] = useState(null);
@@ -10,7 +11,7 @@ const Actividad = ({ actividadId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://10.133.133.241:5000/actividades/${actividadId}`);
+        const response = await axios.get(`${BASE_URL}/actividades/${actividadId}`);
         setActividad(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -43,6 +44,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 20,
     backgroundColor: '#fff',
+    margin: 10,
   },
   nombreActividad: {
     fontSize: 24,

@@ -5,7 +5,9 @@ import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/es'; // Importar el locale español
 import FondoComun from '../../components/FondoComun';
-import styles from '../../styles/styles_mod';
+import styles from '../../styles/stylesModify';
+import commonStyles from '../../styles/stylesCommon';
+import BASE_URL from '../../config_ip';
 
 const ModificarActividad = () => {
   const [data, setData] = useState({
@@ -20,7 +22,7 @@ const ModificarActividad = () => {
   const [showHora, setShowHora] = useState(false);
 
   useEffect(() => {
-    axios.get('http://10.133.133.241:5000/actividades/665b5af16bd71b0279ca3939')
+    axios.get(`${BASE_URL}/actividades/665b5af16bd71b0279ca3939`)
       .then(response => {
         const fetchedData = response.data;
         setData({
@@ -73,7 +75,7 @@ const ModificarActividad = () => {
       id_usuario_creador: '665b56ff6bd71b0279ca391c', // Añadir el id_usuario_creador por defecto
     };
 
-    axios.put('http://10.133.133.241:5000/actividades/665b5af16bd71b0279ca3939', updatedData)
+    axios.put(`${BASE_URL}/actividades/665b5af16bd71b0279ca3939`, updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
@@ -90,17 +92,17 @@ const ModificarActividad = () => {
   if (!data) {
     return (
       <View style={styles.container}>
-        <Text style={styles.label}>Error al cargar los datos</Text>
+        <Text style={commonStyles.label}>Error al cargar los datos</Text>
       </View>
     );
   }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
-        <View style={styles.dataContainer}>
-          <Text style={styles.label}>Modificar Datos Actividad</Text>
+        <View style={commonStyles.dataContainer}>
+          <Text style={commonStyles.label}>Modificar Datos Actividad</Text>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre Actividad:</Text>
             <TextInput

@@ -5,7 +5,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import 'moment/locale/es'; 
 import FondoComun from '../../components/FondoComun';
-import styles from '../../styles/styles_mod';
+import styles from '../../styles/stylesModify';
+import commonStyles from '../../styles/stylesCommon'
+import BASE_URL from '../../config_ip';
 
 const ModificarAdministrador = () => {
   const [data, setData] = useState({
@@ -19,7 +21,7 @@ const ModificarAdministrador = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   useEffect(() => {
-    axios.get('http://10.133.133.241:5000/administrador_establecimiento/665b583e6bd71b0279ca392d')
+    axios.get(`${BASE_URL}/administrador_establecimiento/665b583e6bd71b0279ca392d`)
       .then(response => {
         const fetchedData = response.data;
         setData({
@@ -57,7 +59,7 @@ const ModificarAdministrador = () => {
       fecha_nacimiento: data.fecha_nacimiento.toISOString().split('T')[0], // Formato YYYY-MM-DD
     };
 
-    axios.put('http://10.133.133.241:5000/administrador_establecimiento/665b583e6bd71b0279ca392d', updatedData)
+    axios.put(`${BASE_URL}/administrador_establecimiento/665b583e6bd71b0279ca392d`, updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
@@ -73,19 +75,21 @@ const ModificarAdministrador = () => {
 
   if (!data) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.label}>Error al cargar los datos</Text>
+      <View style={commonStyles.container}>
+        <Text style={commonStyles.label}>Error al cargar los datos</Text>
       </View>
     );
   }
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
-        <View style={styles.dataContainer}>
-          <Text style={styles.label}>Modificar Datos Administrador Establecimiento</Text>
-          <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
+        <View style={commonStyles.dataContainer}>
+          <Text style={commonStyles.label}>Modificar Datos Administrador Establecimiento</Text>
+          <View style={styles.profileImageContainer}>
+            <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
+          </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre:</Text>
             <TextInput

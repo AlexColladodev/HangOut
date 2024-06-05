@@ -5,8 +5,10 @@ import FondoComun from '../../components/FondoComun';
 import Evento from '../../components/Evento'; 
 import Review from '../../components/Review'; 
 import Oferta from '../../components/Oferta'; 
-import styles from '../../styles/styles_data';
+import styles from '../../styles/stylesData';
 import Preferencia from '../../components/Preferencia';
+import commonStyles from '../../styles/stylesCommon'
+import BASE_URL from '../../config_ip';
 
 const DatosEstablecimiento = () => {
   const [data, setData] = useState(null);
@@ -16,11 +18,11 @@ const DatosEstablecimiento = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/establecimientos/665b5df730fb9962d8d08eea');
+      const response = await axios.get(`${BASE_URL}/establecimientos/665b5df730fb9962d8d08eea`);
       const establecimientoData = response.data;
 
       const ofertaPromises = establecimientoData.ofertas.map(async (ofertaId) => {
-        const ofertaResponse = await axios.get(`http://10.133.133.241:5000/ofertas/${ofertaId}`);
+        const ofertaResponse = await axios.get(`${BASE_URL}/ofertas/${ofertaId}`);
         return ofertaResponse.data;
       });
 
@@ -51,7 +53,7 @@ const DatosEstablecimiento = () => {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text style={styles.errorText}>Error al cargar los datos</Text>
+        <Text style={commonStyles.errorText}>Error al cargar los datos</Text>
         <Button title="Reintentar" onPress={fetchData} />
       </View>
     );
@@ -59,10 +61,10 @@ const DatosEstablecimiento = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
-          <View style={styles.dataContainer}>
-          <Text style={styles.label}>Datos del Establecimiento</Text>
+          <View style={commonStyles.dataContainer}>
+          <Text style={commonStyles.label}>Datos del Establecimiento</Text>
           <View style={styles.imagenContainer}>
             <Image source={{ uri: data.imagen_url }} style={styles.imagen} />
           </View>

@@ -1,27 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9f9f9',
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 100,
-  },
-  dataContainer: {
-    marginTop: 50,
-    width: '100%',
-    alignItems: 'center',
-  },
-  label: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
   fieldContainer: {
     alignItems: 'flex-start',
     marginBottom: 10,
@@ -127,6 +106,16 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 14,
     textAlign: 'center',
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 20,
+  },
+  profileImageContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
   },
 });
 

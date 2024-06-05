@@ -3,7 +3,9 @@ import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Te
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import FondoComun from '../../components/FondoComun';
-import styles from '../../styles/styles_mod';
+import styles from '../../styles/stylesModify';
+import commonStyles from '../../styles/stylesCommon'
+import BASE_URL from '../../config_ip';
 
 const ModificarEvento = () => {
   const [data, setData] = useState({
@@ -18,7 +20,7 @@ const ModificarEvento = () => {
   const [showHora, setShowHora] = useState(false);
 
   useEffect(() => {
-    axios.get('http://10.133.133.241:5000/eventos/665e0db67d438e985b7b77b1')
+    axios.get(`${BASE_URL}/eventos/665e0db67d438e985b7b77b1`)
       .then(response => {
         const fetchedData = response.data;
         setData({
@@ -69,7 +71,7 @@ const ModificarEvento = () => {
       precio: parseFloat(precio), // Convert to number
     };
 
-    axios.put('http://10.133.133.241:5000/eventos/665e0db67d438e985b7b77b1', updatedData)
+    axios.put(`${BASE_URL}/eventos/665e0db67d438e985b7b77b1`, updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
@@ -85,17 +87,17 @@ const ModificarEvento = () => {
 
   if (!data) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.label}>Error al cargar los datos</Text>
+      <View style={commonStyles.container}>
+        <Text style={commonStyles.label}>Error al cargar los datos</Text>
       </View>
     );
   }
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
-        <View style={styles.dataContainer}>
+        <View style={commonStyles.dataContainer}>
           <Text style={styles.label}>Modificar Datos Evento</Text>
           <View style={styles.imagenContainer}>
             <Image source={{ uri: data.imagen_url }} style={styles.imagen} />

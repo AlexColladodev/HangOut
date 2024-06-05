@@ -1,30 +1,15 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 100,
-  },
-  dataContainer: {
-    marginTop: 50,
-    width: '100%',
-  },
   profileImage: {
     width: 100,
     height: 100,
     borderRadius: 50,
     marginBottom: 20,
   },
-  label: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  profileImageContainer: {
+    alignItems: 'center',
     marginBottom: 20,
-    textAlign: 'center',
   },
   fieldContainer: {
     marginBottom: 10,
@@ -49,10 +34,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  errorText: {
-    fontSize: 18,
-    marginBottom: 10,
   },
   botonModificar: {
     backgroundColor: 'purple',
@@ -90,15 +71,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 1,
     elevation: 2,
-  },
-  profileImageContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
   },
 });
 

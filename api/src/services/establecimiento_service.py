@@ -160,6 +160,7 @@ def filtrar():
     
     try:
         respuesta = Establecimiento.filtrar_por_ambientes(ambientes_solicitados)
+        print(respuesta)
         return jsonify(respuesta), 200
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500

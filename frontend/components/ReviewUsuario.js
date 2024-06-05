@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import axios from 'axios';
+import BASE_URL from '../config_ip';
 
 const ReviewUsuario = ({ reviewId }) => {
   const [review, setReview] = useState(null);
@@ -11,16 +12,16 @@ const ReviewUsuario = ({ reviewId }) => {
     const fetchData = async () => {
       try {
         // Fetch review data
-        const reviewResponse = await axios.get(`http://10.133.133.241:5000/reviews/${reviewId}`);
+        const reviewResponse = await axios.get(`${BASE_URL}/reviews/${reviewId}`);
         const reviewData = reviewResponse.data;
         setReview(reviewData);
 
         // Fetch user data
-        const userResponse = await axios.get(`http://10.133.133.241:5000/usuario_generico/${reviewData.id_usuario}`);
+        const userResponse = await axios.get(`${BASE_URL}/usuario_generico/${reviewData.id_usuario}`);
         setUserName(userResponse.data.nombre_usuario);
 
         // Fetch establecimiento data
-        const establecimientoResponse = await axios.get(`http://10.133.133.241:5000/establecimientos/${reviewData.id_establecimiento}`);
+        const establecimientoResponse = await axios.get(`${BASE_URL}/establecimientos/${reviewData.id_establecimiento}`);
         setNombreEstablecimiento(establecimientoResponse.data.nombre_establecimiento);
       } catch (error) {
         console.error('Error fetching data:', error);

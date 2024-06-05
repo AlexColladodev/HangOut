@@ -4,6 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import FondoComun from '../../components/FondoComun';
+import styles from '../../styles/stylesTipoAdmin';
 
 const RegistrarseComun = () => {
   const [date, setDate] = useState(new Date());
@@ -47,6 +48,7 @@ const RegistrarseComun = () => {
     <View style={{ flex: 1 }}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <FondoComun />
+        <View style={styles.dataContainer}>
         <Text style={styles.title}>Registro</Text> 
         <View style={styles.inputContainer}>
           <TextInput placeholder="Nombre" style={styles.input} />
@@ -106,88 +108,15 @@ const RegistrarseComun = () => {
           <Button title="Seleccionar Foto de Perfil" onPress={selectImage} />
           {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
         </View>
-        <TouchableOpacity style={styles.botonSiguiente} onPress={handleSubmit}>
-            <Text style={styles.botonSiguienteTexto}>Siguiente</Text>
+        <TouchableOpacity style={styles.boton} onPress={handleSubmit}>
+            <Text style={styles.botonTexto}>Siguiente</Text>
           </TouchableOpacity>
+          </View>
       </ScrollView>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginVertical: 20, 
-    alignSelf: 'center',
-  },
-  inputContainer: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  input: {
-    backgroundColor: '#F0F0F0',
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 5,
-    width: '100%',
-  },
-  datePickerContainer: {
-    marginBottom: 20,
-  },
-  dateRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  dateInput: {
-    backgroundColor: '#F0F0F0',
-    padding: 10,
-    marginRight: 5,
-    borderRadius: 5,
-    textAlign: 'center',
-  },
-  datePart: {
-    flex: 1,
-  },
-  pickerContainer: {
-    backgroundColor: '#F0F0F0',
-    borderRadius: 5,
-    marginBottom: 10,
-    width: '100%',
-  },
-  pickerLabel: {
-    padding: 10,
-    color: '#000'
-  },
-  errorText: {
-    color: 'red',
-    paddingLeft: 10,
-  },
-  image: {
-    width: 200,
-    height: 150,
-    marginVertical: 10,
-  },
-  botonSiguiente: {
-    backgroundColor: 'purple',
-    padding: 10,
-    alignItems: 'center',
-    marginVertical: 20,
-    width: '100%',
-  },
-  botonSiguienteTexto: {
-    color: 'white',
-    fontSize: 18,
-  },
-});
+
 
 export default RegistrarseComun;

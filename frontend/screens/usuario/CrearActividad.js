@@ -3,6 +3,9 @@ import { StyleSheet, View, TextInput, Button, ScrollView, Text, Platform, Toucha
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FondoComun from '../../components/FondoComun';
 import axios from 'axios';
+import styles from '../../styles/stylesCreate';
+import commonStyles from '../../styles/stylesCommon';
+import BASE_URL from '../../config_ip';
 
 const CrearActividad = () => {
   const [nombreActividad, setNombreActividad] = useState('');
@@ -45,7 +48,7 @@ const CrearActividad = () => {
         hora_actividad: horaFormat,
         id_usuario_creador: "665b4db9f57ca863dfedffc2",
       };
-      await axios.post("http://192.168.1.107:5000/actividades", actividad);
+      await axios.post(`${BASE_URL}/actividades`, actividad);
       Alert.alert("Éxito", "Actividad creada correctamente");
     } catch (error) {
       Alert.alert("Error", "Hubo un problema al crear la actividad");
@@ -54,9 +57,10 @@ const CrearActividad = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
-        <Text style={styles.title}>Crear Actividad</Text>
+        <View style={commonStyles.dataContainer}>
+        <Text style={commonStyles.label}>Crear Actividad</Text>
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Nombre Actividad:"
@@ -132,6 +136,7 @@ const CrearActividad = () => {
             )}
           </View>
         </View>
+        </View>
       </ScrollView>
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.saveButtonText}>Guardar</Text>
@@ -140,77 +145,5 @@ const CrearActividad = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 100,
-  },
-  logo: {
-    width: 100,
-    height: 50,
-    resizeMode: 'contain',
-    marginBottom: 20,
-    alignSelf: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginVertical: 20,
-    alignSelf: 'center',
-  },
-  inputContainer: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  input: {
-    backgroundColor: '#F0F0F0',
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 5,
-    width: '100%',
-  },
-  datePickerContainer: {
-    marginBottom: 20,
-  },
-  dateRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  dateInput: {
-    backgroundColor: '#F0F0F0',
-    padding: 10,
-    marginRight: 5,
-    borderRadius: 5,
-    textAlign: 'center',
-  },
-  datePart: {
-    flex: 1,
-  },
-  pickerLabel: {
-    padding: 10,
-    color: '#000',
-  },
-  saveButton: {
-    backgroundColor: 'purple',
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    bottom: 20,
-    left: '5%',
-    right: '5%',
-    borderRadius: 5,
-  },
-  saveButtonText: {
-    color: 'white',
-    fontSize: 18,
-  },
-});
 
 export default CrearActividad;

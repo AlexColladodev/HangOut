@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
 import FondoComun from '../../components/FondoComun';
-import styles from '../../styles/styles_data';
+import styles from '../../styles/stylesData';
+import commonStyles from '../../styles/stylesCommon'
+import BASE_URL from '../../config_ip';
 
 const DatosEvento = () => {
   const [data, setData] = useState(null);
@@ -11,7 +13,7 @@ const DatosEvento = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/eventos/665e0db67d438e985b7b77b1');
+      const response = await axios.get(`${BASE_URL}/eventos/665e0db67d438e985b7b77b1`);
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -37,7 +39,7 @@ const DatosEvento = () => {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text style={styles.errorText}>Error al cargar los datos</Text>
+        <Text style={commonStyles.errorText}>Error al cargar los datos</Text>
         <Button title="Reintentar" onPress={fetchData} />
       </View>
     );
@@ -48,10 +50,10 @@ const DatosEvento = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
-        <View style={styles.dataContainer}>
-          <Text style={styles.label}>Datos Evento</Text>
+        <View style={commonStyles.dataContainer}>
+          <Text style={commonStyles.label}>Datos Evento</Text>
           <View style={styles.imagenContainer}>
             <Image source={{ uri: data.imagen_url }} style={styles.imagen} />
           </View>

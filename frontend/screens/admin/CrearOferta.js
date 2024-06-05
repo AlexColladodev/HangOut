@@ -3,6 +3,9 @@ import { StyleSheet, View, TextInput, Button, ScrollView, Text, Alert, Image, To
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import FondoComun from '../../components/FondoComun';
+import styles from '../../styles/stylesCreate';
+import commonStyles from '../../styles/stylesCommon'
+import BASE_URL from '../../config_ip';
 
 const CrearOferta = () => {
   const [nombreOferta, setNombreOferta] = useState('');
@@ -22,6 +25,9 @@ const CrearOferta = () => {
     if (!result.canceled) {
       setImageUri(result.assets[0].uri);
     }
+  };
+
+  const handleSubmit = () => {
   };
 
   const handleSave = async () => {
@@ -45,7 +51,7 @@ const CrearOferta = () => {
     }
 
     try {
-      const response = await axios.post('http://10.133.133.241:5000/establecimientos/nueva_oferta', data, {
+      const response = await axios.post(`${BASE_URL}/establecimientos/nueva_oferta`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -68,8 +74,9 @@ const CrearOferta = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
+        <View style={commonStyles.dataContainer}>
         <Text style={styles.title}>Crear Oferta</Text>
         <View style={styles.inputContainer}>
           <TextInput
@@ -94,44 +101,13 @@ const CrearOferta = () => {
           <Button title="Seleccionar Imagen Oferta" onPress={selectImage} />
           {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
         </View>
-        <Button title="Guardar" color="#BB6BD9" onPress={handleSave} />
+          <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
+            <Text style={styles.saveButtonText}>Guardar</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginVertical: 20,
-    alignSelf: 'center',
-  },
-  inputContainer: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  input: {
-    backgroundColor: '#F0F0F0',
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 5,
-    width: '100%',
-  },
-  image: {
-    width: 200,
-    height: 150,
-    marginVertical: 10,
-  },
-});
 
 export default CrearOferta;

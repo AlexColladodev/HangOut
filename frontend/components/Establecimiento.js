@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ActivityIndicator } from 'react-native';
 import axios from 'axios';
+import BASE_URL from '../config_ip';
 
 const Establecimiento = ({ id }) => {
   const [data, setData] = useState(null);
   const [rating, setRating] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://10.133.133.241:5000/establecimientos/${id}`)
+    axios.get(`${BASE_URL}/establecimientos/${id}`)
       .then(response => {
         setData(response.data);
       })
@@ -15,7 +16,7 @@ const Establecimiento = ({ id }) => {
         console.error("Error fetching data: ", error);
       });
 
-    axios.get(`http://10.133.133.241:5000/establecimientos/rating/${id}`)
+    axios.get(`${BASE_URL}/establecimientos/rating/${id}`)
       .then(response => {
         setRating(response.data.media);
       })

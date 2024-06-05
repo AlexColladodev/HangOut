@@ -5,6 +5,7 @@ from bson import json_util
 from bson.objectid import ObjectId
 from datetime import date, datetime
 from pymongo.errors import PyMongoError
+from pymongo import ASCENDING
 
 class Evento:
 
@@ -74,20 +75,19 @@ class Evento:
             return json_util.dumps(evento)
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar evento: {e}")
-        
+
+
     def consultar_eventos_ordenados():
         try:
-            # Consultar todos los eventos y ordenarlos por fecha_evento ascendente
-            eventos = mongo.db.eventos.find().sort("fecha_evento", 1)
-            
-            # Extraer solo los IDs de los eventos ordenados
+            fecha_actual = datetime.now()
+
+            eventos = mongo.db.eventos.find({"fecha_evento": {"$gte": fecha_actual}}).sort("fecha_evento", ASCENDING)
+
             eventos_ids = [str(evento["_id"]) for evento in eventos]
-            
+
             return {"eventos_ordenados": eventos_ids}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar y ordenar eventos: {e}")
-
-
 
 
     def actualizar_evento(id, data):

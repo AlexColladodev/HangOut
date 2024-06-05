@@ -24,10 +24,12 @@ import InicioSesion from './screens/common/InicioSesion'
 import TipoAdministrador from './screens/common/TipoAdministrador';
 import DatosEvento from './screens/admin/DatosEvento';
 import DatosOferta from './screens/admin/DatosOferta'
+import ModificarEstablecimiento from './screens/admin/ModificarEstablecimiento';
+import InicioAdmin from './screens/admin/InicioAdmin';
 
 const App = () => {
   return (
-    <ModificarUsuario/>
+    <InicioUsuario/>
   );
 };
 

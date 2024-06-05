@@ -67,3 +67,15 @@ def actualizar_actividad(id):
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
+
+@blueprint.route("/participa/<id>", methods=["GET"])
+def usuario_participa(id):
+    try:
+        resultado = Actividad.usuario_participa(id)
+        return jsonify(resultado), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error inesperado: {e}"}), 500

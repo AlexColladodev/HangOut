@@ -3,6 +3,9 @@ import { StyleSheet, View, TextInput, ScrollView, Text, TouchableOpacity, Alert 
 import FondoComun from '../../components/FondoComun';
 import { Rating } from 'react-native-ratings';
 import axios from 'axios';
+import styles from '../../styles/stylesCreate';
+import commonStyles from '../../styles/stylesCommon';
+import BASE_URL from '../../config_ip';
 
 const CrearReview = () => {
   const [mensaje, setMensaje] = useState('');
@@ -18,7 +21,7 @@ const CrearReview = () => {
       id_establecimiento: "664f72d5497c42eeec76db0b"
     };
 
-    axios.post('http://10.133.133.241:5000/reviews', reviewData)
+    axios.post(`${BASE_URL}/reviews`, reviewData)
       .then(response => {
         Alert.alert('Éxito', 'Review Creada con Éxito');
         // Manejar la lógica para el éxito
@@ -32,8 +35,9 @@ const CrearReview = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
+        <View style={commonStyles.dataContainer}>
         <Text style={styles.title}>Crear Review</Text>
         <View style={styles.inputContainer}>
           <TextInput
@@ -54,73 +58,15 @@ const CrearReview = () => {
             onFinishRating={(rating) => setCalificacion(rating)}
             starContainerStyle={styles.starContainer}
           />
+          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+            <Text style={styles.saveButtonText}>Guardar</Text>
+          </TouchableOpacity>
+        </View>
         </View>
       </ScrollView>
-      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-        <Text style={styles.saveButtonText}>Guardar</Text>
-      </TouchableOpacity>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 100,
-  },
-  logo: {
-    width: 100,
-    height: 50,
-    resizeMode: 'contain',
-    marginBottom: 20,
-    alignSelf: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginVertical: 20,
-    alignSelf: 'center',
-  },
-  inputContainer: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  input: {
-    backgroundColor: '#F0F0F0',
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 5,
-    width: '100%',
-    textAlignVertical: 'top',
-  },
-  label: {
-    fontSize: 18,
-    marginVertical: 10,
-  },
-  starContainer: {
-    marginVertical: 10, // Opcional: Ajusta el margen vertical si es necesario
-  },
-  saveButton: {
-    backgroundColor: 'purple',
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    bottom: 20,
-    left: '5%',
-    right: '5%',
-    borderRadius: 5,
-  },
-  saveButtonText: {
-    color: 'white',
-    fontSize: 18,
-  },
-});
 
 export default CrearReview;

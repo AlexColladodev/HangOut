@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, TouchableOpacity, FlatList } from 'react-native';
 import axios from 'axios';
 import FondoComun from '../../components/FondoComun';
-import styles from '../../styles/styles_data';
+import styles from '../../styles/stylesData';
 import Usuario from '../../components/Usuario';
+import commonStyles from '../../styles/stylesCommon';
+import BASE_URL from '../../config_ip';
 
 const DatosActividad = () => {
   const [data, setData] = useState(null);
@@ -12,7 +14,7 @@ const DatosActividad = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://10.133.133.241:5000/actividades/665b5a566bd71b0279ca3933');
+      const response = await axios.get(`${BASE_URL}/actividades/665b5a566bd71b0279ca3933`);
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -38,7 +40,7 @@ const DatosActividad = () => {
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text style={styles.errorText}>Error al cargar los datos</Text>
+        <Text style={commonStyles.errorText}>Error al cargar los datos</Text>
         <Button title="Reintentar" onPress={fetchData} />
       </View>
     );
@@ -48,10 +50,10 @@ const DatosActividad = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
-        <View style={styles.dataContainer}>
-          <Text style={styles.label}>Datos Actividad</Text>
+        <View style={commonStyles.dataContainer}>
+          <Text style={commonStyles.label}>Datos Actividad</Text>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre Actividad:</Text>
             <View style={styles.box}>

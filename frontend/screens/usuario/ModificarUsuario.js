@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, SafeAreaView, TextInput, Alert, Button, Platform, Image } from 'react-native';
+import { View, Text, ActivityIndicator, ScrollView, TouchableOpacity, SafeAreaView, TextInput, Alert, Button, Platform, Image } from 'react-native';
 import axios from 'axios';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import 'moment/locale/es'; // Importar el locale español
 import FondoComun from '../../components/FondoComun';
-import styles from '../../styles/styles_mod'
+import styles from '../../styles/stylesModify';
+import ambientes from '../../components/Ambientes';
+import SeleccionarPreferencia from '../../components/SeleccionarPreferencia';
+import commonStyles from '../../styles/stylesCommon';
+import BASE_URL from '../../config_ip';
 
 const ModificarUsuario = () => {
   const [data, setData] = useState({
@@ -22,32 +26,17 @@ const ModificarUsuario = () => {
   const [loading, setLoading] = useState(true);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const ambientes = [
-    { name: "Chill", image: require("../../assets/ambiente/chill.png") },
-    { name: "Monologos", image: require("../../assets/ambiente/monologos.png") },
-    { name: "Cine", image: require("../../assets/ambiente/cine.png") },
-    { name: "Discoteca", image: require("../../assets/ambiente/discoteca.png") },
-    { name: "Bar", image: require("../../assets/ambiente/bar.png") },
-    { name: "Cervezas", image: require("../../assets/ambiente/cervezas.png") },
-    { name: "Rock", image: require("../../assets/ambiente/rock.png") },
-    { name: "En Vivo", image: require("../../assets/ambiente/en_vivo.png") },
-    { name: "Reggaeton", image: require("../../assets/ambiente/reggaeton.png") },
-    { name: "Latino", image: require("../../assets/ambiente/latino.png") },
-    { name: "Deportes", image: require("../../assets/ambiente/deportes.png") },
-    { name: "Karaoke", image: require("../../assets/ambiente/karaoke.png") },
-  ];
-
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [ambienteSeleccionado, setAmbienteSeleccionado] = useState([]);
 
   useEffect(() => {
-    axios.get('http://10.133.133.241:5000/usuario_generico/665b56eb6bd71b0279ca391b')
+    axios.get(`${BASE_URL}/usuario_generico/665b56eb6bd71b0279ca391b`)
       .then(response => {
         const fetchedData = response.data;
         setData({
           ...fetchedData,
           fecha_nacimiento: new Date(fetchedData.fecha_nac),
         });
-        setSelectedTags(fetchedData.preferencias.map(pref => ambientes.findIndex(amb => amb.name === pref)));
+        setAmbienteSeleccionado(fetchedData.preferencias.map(pref => ambientes.findIndex(amb => amb.name === pref)));
         setLoading(false);
       })
       .catch(error => {
@@ -70,11 +59,11 @@ const ModificarUsuario = () => {
     setShowDatePicker(true);
   };
 
-  const handleSelectTag = index => {
-    const newSelectedTags = selectedTags.includes(index)
-      ? selectedTags.filter(tag => tag !== index)
-      : [...selectedTags, index];
-    setSelectedTags(newSelectedTags);
+  const seleccionAmbiente = index => {
+    const newSelectedTags = ambienteSeleccionado.includes(index)
+      ? ambienteSeleccionado.filter(tag => tag !== index)
+      : [...ambienteSeleccionado, index];
+    setAmbienteSeleccionado(newSelectedTags);
     const newPreferencias = newSelectedTags.map(tagIndex => ambientes[tagIndex].name);
     setData(prevState => ({ ...prevState, preferencias: newPreferencias }));
   };
@@ -93,7 +82,7 @@ const ModificarUsuario = () => {
       reviews,
     };
 
-    axios.put('http://10.133.133.241:5000/usuario_generico/665b56eb6bd71b0279ca391b', updatedData)
+    axios.put(`${BASE_URL}/usuario_generico/665b56eb6bd71b0279ca391b`, updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
@@ -117,11 +106,13 @@ const ModificarUsuario = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
-        <View style={styles.dataContainer}>
-          <Text style={styles.label}>Modificar Datos Usuario</Text>
-          <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
+        <View style={commonStyles.dataContainer}>
+          <Text style={commonStyles.label}>Modificar Datos Usuario</Text>
+          <View style={styles.profileImageContainer}>
+            <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
+          </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre:</Text>
             <TextInput
@@ -186,25 +177,12 @@ const ModificarUsuario = () => {
             )}
           </View>
           <Text style={styles.preferencesTitle}>Preferencias:</Text>
-          <View style={styles.tagContainer}>
-            {ambientes.map((ambiente, index) => (
-              <View key={index} style={styles.tagWrapper}>
-                <TouchableOpacity
-                  style={[
-                    styles.tag,
-                    selectedTags.includes(index) ? styles.tagSelected : null,
-                  ]}
-                  onPress={() => handleSelectTag(index)}
-                >
-                  <Image
-                    source={ambiente.image}
-                    style={styles.tagImage}
-                  />
-                </TouchableOpacity>
-                <Text style={styles.tagText}>{ambiente.name}</Text>
-              </View>
-            ))}
-          </View>
+          <SeleccionarPreferencia 
+            ambientes={ambientes}
+            seleccionados={ambienteSeleccionado}
+            seleccionAmbiente={seleccionAmbiente}
+            styles={styles}
+          />
           <TouchableOpacity style={styles.modifyButton} onPress={handleSubmit}>
             <Text style={styles.modifyButtonText}>Guardar</Text>
           </TouchableOpacity>

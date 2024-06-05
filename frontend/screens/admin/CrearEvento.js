@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, Button, ScrollView, Text, Platform, Alert, Image } from 'react-native';
+import { StyleSheet, View, TextInput, Button, ScrollView, Text, Platform, Alert, Image, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
 import FondoComun from '../../components/FondoComun';
+import styles from '../../styles/stylesCreate';
+import commonStyles from '../../styles/stylesCommon'
+import BASE_URL from '../../config_ip';
 
 const CrearEvento = () => {
   const [nombreEvento, setNombreEvento] = useState('');
@@ -48,6 +51,10 @@ const CrearEvento = () => {
     }
   };
 
+  const handleSubmit = () => {
+  };
+
+
   const handleSave = async () => {
     const data = new FormData();
     data.append('nombre_evento', nombreEvento);
@@ -71,7 +78,7 @@ const CrearEvento = () => {
     }
 
     try {
-      const response = await fetch('http://10.133.133.241:5000/establecimientos/nuevo_evento', {
+      const response = await fetch(`${BASE_URL}/establecimientos/nuevo_evento`, {
         method: 'POST',
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -81,7 +88,6 @@ const CrearEvento = () => {
 
       if (response.ok) {
         Alert.alert('Éxito', 'Evento creado con éxito');
-        // Resetear los campos después de guardar
         setNombreEvento('');
         setDescripcionEvento('');
         setFechaEvento(new Date());
@@ -98,8 +104,9 @@ const CrearEvento = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <FondoComun />
+        <View style={commonStyles.dataContainer}>
         <Text style={styles.title}>Crear Evento</Text> 
         <View style={styles.inputContainer}>
           <TextInput
@@ -179,65 +186,13 @@ const CrearEvento = () => {
           <Button title="Seleccionar Imagen Evento" onPress={selectImage} />
           {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
         </View>
-        <Button title="Guardar" color="#BB6BD9" onPress={handleSave} />
+        <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
+            <Text style={styles.saveButtonText}>Guardar</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  contentContainer: {
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginVertical: 20,
-    alignSelf: 'center',
-  },
-  inputContainer: {
-    width: '100%',
-    marginBottom: 20,
-  },
-  input: {
-    backgroundColor: '#F0F0F0',
-    padding: 15,
-    marginBottom: 10,
-    borderRadius: 5,
-    width: '100%',
-  },
-  datePickerContainer: {
-    marginBottom: 20,
-  },
-  dateRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  dateInput: {
-    backgroundColor: '#F0F0F0',
-    padding: 10,
-    marginRight: 5,
-    borderRadius: 5,
-    textAlign: 'center',
-  },
-  datePart: {
-    flex: 1,
-  },
-  pickerLabel: {
-    padding: 10,
-    color: '#000'
-  },
-  image: {
-    width: 200,
-    height: 150,
-    marginVertical: 10,
-  },
-});
 
 export default CrearEvento;

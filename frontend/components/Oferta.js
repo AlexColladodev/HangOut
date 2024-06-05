@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import axios from 'axios';
+import BASE_URL from '../config_ip';
 
-const DEFAULT_IMAGE_URL = 'http://10.133.133.241:5000/_uploads/photos/default_no_image.png';
+const DEFAULT_IMAGE_URL = `${BASE_URL}/_uploads/photos/default_no_image.png`;
+
 
 const Oferta = ({ id }) => {
   const [oferta, setOferta] = useState(null);
@@ -11,7 +13,7 @@ const Oferta = ({ id }) => {
 
   const fetchOferta = async () => {
     try {
-      const response = await axios.get(`http://10.133.133.241:5000/ofertas/${id}`);
+      const response = await axios.get(`${BASE_URL}/ofertas/${id}`);
       const ofertaData = response.data;
 
       console.log('Datos de la oferta:', ofertaData);
