@@ -7,6 +7,7 @@ import commonStyles from '../../styles/stylesCommon';
 import styles from '../../styles/stylesData';
 import BASE_URL from '../../config_ip';
 import Header from '../../components/Header'
+import Footer from '../../components/Footer';
 
 const InicioAdmin = ({ adminId = "665b57a06bd71b0279ca3925" }) => {
   const [data, setData] = useState(null);
@@ -64,6 +65,12 @@ const InicioAdmin = ({ adminId = "665b57a06bd71b0279ca3925" }) => {
         )}
       />
     </View>
+    <Footer 
+        onHangoutPress={() => console.log('Hangout Pressed')} 
+        onAddPress={() => console.log('Add Pressed')} 
+        onProfilePress={() => console.log('Profile Pressed')} 
+        showAddButton={false} 
+      />
     </View>
   );
 };

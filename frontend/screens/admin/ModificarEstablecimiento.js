@@ -8,6 +8,7 @@ import SeleccionarPreferencia from '../../components/SeleccionarPreferencia';
 import commonStyles from '../../styles/stylesCommon'
 import BASE_URL from '../../config_ip';
 import Header from '../../components/Header'
+import Footer from '../../components/Footer';
 
 const ModificarEstablecimiento = ({ establecimientoId = "666197975ccba976dcffb41e" }) => {
   const [data, setData] = useState({
@@ -95,6 +96,12 @@ const ModificarEstablecimiento = ({ establecimientoId = "666197975ccba976dcffb41
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <Footer 
+        onHangoutPress={() => console.log('Hangout Pressed')} 
+        onAddPress={() => console.log('Add Pressed')} 
+        onProfilePress={() => console.log('Profile Pressed')} 
+        showAddButton={false} 
+      />
     </View>
   );
 };

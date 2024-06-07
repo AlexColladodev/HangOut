@@ -14,7 +14,7 @@ class AdministradorEstablecimiento:
         self.nombre_usuario = data.get("nombre_usuario")
         self.password = data.get("password")
         self.dni = data.get("dni")
-        self.email_empresa = data.get("email_empresa")
+        self.email = data.get("email")
         self.establecimientos = data.get("establecimientos", [])
         self.telefono = data.get("telefono")
         self.fecha_nac = data.get("fecha_nac")
@@ -23,7 +23,7 @@ class AdministradorEstablecimiento:
 
     def insertar_administrador_establecimiento(self):
         try:
-            if not self.correo_es_valido(self.email_empresa):
+            if not self.correo_es_valido(self.email):
                 raise ValueError("Formato de correo inválido")
             
             data_insertar = self.__dict__
@@ -81,7 +81,7 @@ class AdministradorEstablecimiento:
 
             updates.pop("dni")
             updates.pop("establecimientos")
-            updates.pop("email_empresa")
+            updates.pop("email")
             updates.pop("password")
 
             resultado = mongo.db.administradores_establecimientos.update_one({"_id": ObjectId(id)}, {"$set": updates})

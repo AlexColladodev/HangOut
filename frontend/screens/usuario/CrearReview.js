@@ -7,6 +7,7 @@ import styles from '../../styles/stylesCreate';
 import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
 import Header from '../../components/Header'
+import Footer from '../../components/Footer';
 
 const CrearReview = () => {
   const [mensaje, setMensaje] = useState('');
@@ -48,6 +49,12 @@ const CrearReview = () => {
           </View>
         </View>
       </ScrollView>
+      <Footer 
+        onHangoutPress={() => console.log('Hangout Pressed')} 
+        onAddPress={() => console.log('Add Pressed')} 
+        onProfilePress={() => console.log('Profile Pressed')} 
+        showAddButton={true} 
+      />
     </View>
   );
 };

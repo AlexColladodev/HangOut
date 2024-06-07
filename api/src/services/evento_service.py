@@ -3,6 +3,7 @@ from models.evento import Evento
 from schemas.evento_schema import EventoSchema
 from uploads_config import photos
 from config import DevelopmentConfig
+from marshmallow import ValidationError
 
 
 blueprint = Blueprint("Evento", "eventos", url_prefix="/eventos")
@@ -20,8 +21,13 @@ def crear_evento():
         return jsonify(respuesta), 200
     except RuntimeError as e:
         return jsonify({"error": str(e)}, 500)
+    except ValidationError as e:
+        errors = e.messages
+        first_error_key = next(iter(errors))
+        error_message = errors[first_error_key][0]
+        return jsonify({"error": error_message}), 400
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": f"{e}"}), 500
 
 
 @blueprint.route("/<id>", methods=["DELETE"])

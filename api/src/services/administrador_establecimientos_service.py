@@ -5,6 +5,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 import requests
 from config import DevelopmentConfig
 from uploads_config import photos
+from marshmallow import ValidationError
 
 blueprint = Blueprint("AdministradorEstablecimiento", "administrador_establecimiento", url_prefix="/administrador_establecimiento")
 
@@ -15,12 +16,12 @@ url = f"{DevelopmentConfig.BASE_URL}/establecimientos"
 def crear_administrador_establecimiento():
     if 'imagen' in request.files and request.files['imagen'].filename != '':
         filename = photos.save(request.files['imagen'])
-        imagen_url = photos.url(filename)
+        imagen_url = f"/_uploads/photos/{filename}"
         data = request.form.to_dict()
-        data['imagen_url'] = str(imagen_url)
+        data['imagen_url'] = imagen_url
     else:
         data = request.form.to_dict()
-        data['imagen_url'] = f'{DevelopmentConfig.IP_URL}/_uploads/photos/default.png'
+        data['imagen_url'] = f'/_uploads/photos/default.png'
         data.pop('imagen')
         
     schema = AdministradorEstablecimientoSchema()
@@ -32,8 +33,13 @@ def crear_administrador_establecimiento():
         return jsonify(resultado), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
+    except ValidationError as e:
+        errors = e.messages
+        first_error_key = next(iter(errors))
+        error_message = errors[first_error_key][0]
+        return jsonify({"error": error_message}), 400
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": f"{e}"}), 500
 
 
 @blueprint.route("/<id>", methods=["DELETE"])
@@ -46,7 +52,7 @@ def eliminar_administrador_establecimiento(id):
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": f"Error inesperado: {e}"}), 500
+        return jsonify({"error": f"{e}"}), 500
 
 
 @blueprint.route("", methods=["GET"])

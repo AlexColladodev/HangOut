@@ -6,6 +6,7 @@ import styles from '../../styles/stylesUsers';
 import commonStyles from '../../styles/stylesCommon'
 import BASE_URL from '../../config_ip';
 import Header from '../../components/Header'
+import Footer from '../../components/Footer';
 
 const DatosAdministrador = () => {
   const [data, setData] = useState(null);
@@ -14,7 +15,7 @@ const DatosAdministrador = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/administrador_establecimiento/665b57a06bd71b0279ca3925`);
+      const response = await axios.get(`${BASE_URL}/administrador_establecimiento/666360e91cb2a02d514a0e37`);
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -92,6 +93,12 @@ const DatosAdministrador = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <Footer 
+        onHangoutPress={() => console.log('Hangout Pressed')} 
+        onAddPress={() => console.log('Add Pressed')} 
+        onProfilePress={() => console.log('Profile Pressed')} 
+        showAddButton={false} 
+      />
     </View>
   );
 };

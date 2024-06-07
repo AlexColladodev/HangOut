@@ -3,6 +3,7 @@ from models.oferta import Oferta
 from schemas.oferta_schema import OfertaSchema
 from config import DevelopmentConfig
 from uploads_config import photos
+from marshmallow import ValidationError
 
 blueprint = Blueprint("Oferta", "ofertas", url_prefix="/ofertas")
 
@@ -18,8 +19,13 @@ def crear_oferta():
         return resultado, 200
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500
+    except ValidationError as e:
+        errors = e.messages
+        first_error_key = next(iter(errors))
+        error_message = errors[first_error_key][0]
+        return jsonify({"error": error_message}), 400
     except Exception as e:
-        return jsonify({"error": f"Error inesperado: {e}"}), 500
+        return jsonify({"error": f"{e}"}), 500
 
 
 @blueprint.route("/<id>", methods=["DELETE"])

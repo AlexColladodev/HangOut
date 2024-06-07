@@ -20,7 +20,7 @@ def validar_existencia_id(value):
     try:
         oid = ObjectId(value)
     except Exception:
-        raise ValidationError("Id de Usuario debe ser un ObjectId válido.")
+        raise ValidationError("Id de Usuario debe ser  válido.")
 
     if mongo.db.usuarios_genericos.find_one({"_id": oid}) is None:
         raise ValidationError("Id de Usuario no válido")

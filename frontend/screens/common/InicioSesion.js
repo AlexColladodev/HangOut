@@ -2,7 +2,14 @@ import React from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, Image } from 'react-native';
 import FondoInicio from '../../components/FondoInicio';
 
-const InicioSesion = () => {
+const InicioSesion = ({ navigation }) => {
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      title: 'Iniciar Sesión'
+    });
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <FondoInicio />

@@ -6,10 +6,12 @@ import Evento from '../../components/Evento';
 import Oferta from '../../components/Oferta'; 
 import styles from '../../styles/stylesData';
 import Preferencia from '../../components/Preferencia';
+import Review from '../../components/Review';
 import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Header from '../../components/Header'
+import Footer from '../../components/Footer';
 
 const DatosEstablecimientoUsuario = () => {
   const [data, setData] = useState(null);
@@ -129,8 +131,25 @@ const DatosEstablecimientoUsuario = () => {
               />
             )}
           </View>
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionLabel}>Reviews:</Text>
+            <FlatList
+              data={data.reviews}
+              keyExtractor={(item) => item.toString()}
+              renderItem={({ item }) => <Review reviewId={item} />}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.lista}
+            />
+          </View>
         </View>
       </ScrollView>
+      <Footer 
+        onHangoutPress={() => console.log('Hangout Pressed')} 
+        onAddPress={() => console.log('Add Pressed')} 
+        onProfilePress={() => console.log('Profile Pressed')} 
+        showAddButton={true} 
+      />
     </View>
   );
 };

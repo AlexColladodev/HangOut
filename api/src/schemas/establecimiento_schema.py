@@ -36,7 +36,7 @@ def validar_existencia_id(value):
         raise ValidationError("Id de Administrador de establecimiento no válido")
     
 class EstablecimientosSchema(Schema):
-    cif = fields.Str(required=True, validate=[validate.Length(min=9), validar_cif_unico])
+    cif = fields.Str(required=True, validate=[validar_cif_unico])
     nombre_establecimiento = fields.Str(required=True, validate=[validate.Length(min=1), validar_nombre_establecimiento_unico])
     id_administrador = fields.Str(required=True, validate=[validar_existencia_id])
     ambiente = fields.List(fields.Str(), required=True)

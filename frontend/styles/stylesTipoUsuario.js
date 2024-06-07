@@ -1,6 +1,8 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
-const styles = StyleSheet.create({
+const { width, height } = Dimensions.get('window');
+
+const stylesTipoUsuario = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#f9f9f9',
@@ -76,17 +78,17 @@ const styles = StyleSheet.create({
       position: 'absolute',
       bottom: 20,
     },
-    button: {
-      backgroundColor: '#6200ee',
-      padding: 15,
-      borderRadius: 20,
+    boton: {
+      backgroundColor: 'purple',
+      padding: 10,
       alignItems: 'center',
-      width: '35%',
+      marginVertical: 20,
+      width: width * 0.9, 
     },
-    buttonText: {
-      color: '#fff',
-      fontSize: 16,
+    botonTexto: {
+      color: 'white',
+      fontSize: 18,
     },
   });
 
-  export default styles;
+  export default stylesTipoUsuario;

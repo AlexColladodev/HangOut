@@ -18,10 +18,8 @@ import Establecimiento from './components/Establecimiento';
 import CrearActividad from './screens/usuario/CrearActividad'
 import InicioUsuario from './screens/usuario/InicioUsuario';
 import CrearEvento from './screens/admin/CrearEvento';
-import TipoUsuario from './screens/common/TipoUsuario';
 import Inicio from './screens/common/Inicio'
 import InicioSesion from './screens/common/InicioSesion'
-import TipoAdministrador from './screens/common/TipoAdministrador';
 import DatosEvento from './screens/admin/DatosEvento';
 import DatosOferta from './screens/admin/DatosOferta'
 import ModificarEstablecimiento from './screens/admin/ModificarEstablecimiento';
@@ -30,12 +28,22 @@ import Fondo from './components/Fondo';
 import DatosEstablecimientoUsuario from './screens/usuario/DatosEstablecimientoUsuario';
 import DatosEventoUsuario from './screens/usuario/DatosEventoUsuario';
 import Header from './components/Header'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const App = () => {
+const Stack = createNativeStackNavigator();
+
+function App() {
   return (
-    <RegistrarseComun/>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Inicio">
+        <Stack.Screen name="Inicio" component={Inicio} />
+        <Stack.Screen name="InicioSesion" component={InicioSesion} />
+        <Stack.Screen name="RegistrarseComun" component={RegistrarseComun} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-};
+}
 
 
 

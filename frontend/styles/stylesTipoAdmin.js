@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
-const styles = StyleSheet.create({
+const stylesTipoAdmin = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f9f9f9',
@@ -97,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default styles;
+export default stylesTipoAdmin;

@@ -10,6 +10,7 @@ import styles from '../../styles/stylesInicioUsuario';
 import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
 import Header from '../../components/Header'
+import Footer from '../../components/Footer';
 
 
 const InicioUsuario = ({ id_usuario }) => {
@@ -175,6 +176,12 @@ const InicioUsuario = ({ id_usuario }) => {
           </View>
         </View>
       </ScrollView>
+      <Footer 
+        onHangoutPress={() => console.log('Hangout Pressed')} 
+        onAddPress={() => console.log('Add Pressed')} 
+        onProfilePress={() => console.log('Profile Pressed')} 
+        showAddButton={true} 
+      />
     </View>
   );
 };

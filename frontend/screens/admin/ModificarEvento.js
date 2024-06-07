@@ -7,6 +7,7 @@ import styles from '../../styles/stylesModify';
 import commonStyles from '../../styles/stylesCommon'
 import BASE_URL from '../../config_ip';
 import Header from '../../components/Header'
+import Footer from '../../components/Footer';
 
 const ModificarEvento = () => {
   const [data, setData] = useState({
@@ -190,6 +191,12 @@ const ModificarEvento = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <Footer 
+        onHangoutPress={() => console.log('Hangout Pressed')} 
+        onAddPress={() => console.log('Add Pressed')} 
+        onProfilePress={() => console.log('Profile Pressed')} 
+        showAddButton={false} 
+      />
     </View>
   );
 };

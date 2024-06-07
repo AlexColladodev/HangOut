@@ -3,15 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import FondoInicio from '../../components/FondoInicio'; 
 import BASE_URL from '../../config_ip';
 
-const Registrarse = () => {
-
-};
-
-const Inicio_Sesion = () => {
-
-};
-
-const Inicio = () => {
+const Inicio = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <FondoInicio />
@@ -20,10 +12,10 @@ const Inicio = () => {
       </View>
       <View style={styles.buttonContainer}>
         <View style={styles.buttonBox}>
-          <TouchableOpacity style={styles.button1} onPress={Registrarse}>
+          <TouchableOpacity style={styles.button1} onPress={() => navigation.navigate('RegistrarseComun')}>
             <Text style={styles.buttonText}>Registrarse</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button2} onPress={Inicio_Sesion}>
+          <TouchableOpacity style={styles.button2} onPress={() => navigation.navigate('InicioSesion')}>
             <Text style={styles.buttonText}>Iniciar Sesión</Text>
           </TouchableOpacity>
         </View>
@@ -99,7 +91,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'black',
     fontWeight: 'bold',
-    padding: 20
+    padding: 20,
   },
 });
 

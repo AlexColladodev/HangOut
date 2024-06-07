@@ -10,6 +10,7 @@ import Actividad from '../../components/Actividad';
 import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
 import Header from '../../components/Header'
+import Footer from '../../components/Footer';
 
 const DatosUsuario = () => {
   const [data, setData] = useState(null);
@@ -18,7 +19,7 @@ const DatosUsuario = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/usuario_generico/665b56eb6bd71b0279ca391b`);
+      const response = await axios.get(`${BASE_URL}/usuario_generico/66635fe472a96e33018854ab`);
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -146,6 +147,12 @@ const DatosUsuario = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+      <Footer 
+        onHangoutPress={() => console.log('Hangout Pressed')} 
+        onAddPress={() => console.log('Add Pressed')} 
+        onProfilePress={() => console.log('Profile Pressed')} 
+        showAddButton={true} 
+      />
     </View>
   );
   
