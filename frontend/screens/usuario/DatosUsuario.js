@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, TouchableOpacity, FlatList } from 'react-native';
 import axios from 'axios';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesUsers';
 import Usuario from '../../components/Usuario';
 import Preferencia from '../../components/Preferencia';
@@ -9,6 +9,7 @@ import ReviewUsuario from '../../components/ReviewUsuario';
 import Actividad from '../../components/Actividad';
 import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const DatosUsuario = () => {
   const [data, setData] = useState(null);
@@ -17,7 +18,7 @@ const DatosUsuario = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/usuario_generico/665b56ff6bd71b0279ca391c`);
+      const response = await axios.get(`${BASE_URL}/usuario_generico/665b56eb6bd71b0279ca391b`);
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -49,14 +50,18 @@ const DatosUsuario = () => {
     );
   }
 
+  console.log(data.imagen_url)
+
   return (
     <View style={{ flex: 1 }}>
+    <Header titulo="Mi perfil" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-          <Text style={commonStyles.label}>Datos Usuario</Text>
           <View style={styles.profileImageContainer}>
-            <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
+            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.profileImage} />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre:</Text>

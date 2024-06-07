@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, SafeAreaView, Button, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, ActivityIndicator, Button, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
 import axios from 'axios';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import Establecimiento from '../../components/Establecimiento';
 import commonStyles from '../../styles/stylesCommon';
 import styles from '../../styles/stylesData';
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const InicioAdmin = ({ adminId = "665b57a06bd71b0279ca3925" }) => {
   const [data, setData] = useState(null);
@@ -41,24 +42,29 @@ const InicioAdmin = ({ adminId = "665b57a06bd71b0279ca3925" }) => {
     );
   }
 
+  const handleCreate = () => {
+
+  };
+
   return (
-    <SafeAreaView style={commonStyles.container}>
+    <View style={{ flex: 1 }}>
+    <Header titulo="Inicio" onBackPress={() => (navigation.goBack())} />
+    <View style={commonStyles.container}>
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <FlatList
-        ListHeaderComponent={() => (
-          <View style={commonStyles.dataContainer}>
-            <FondoComun />
-          </View>
-        )}
         data={data.establecimientos}
         keyExtractor={(item) => item.toString()}
         renderItem={({ item }) => <Establecimiento id={item} />}
         ListFooterComponent={() => (
-          <TouchableOpacity style={styles.boton} onPress={() => console.log('Crear Establecimiento')}>
+          <TouchableOpacity style={styles.boton} onPress={handleCreate}>
             <Text style={styles.botonTexto}>Crear Establecimiento</Text>
           </TouchableOpacity>
         )}
       />
-    </SafeAreaView>
+    </View>
+    </View>
   );
 };
 

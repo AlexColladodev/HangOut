@@ -9,9 +9,6 @@ const FondoComun = () => {
       <View style={styles.fondoContainer}>
         <Fondo />
       </View>
-      <View style={styles.logoContainer}>
-        <Image source={require('../assets/HangOutLogo.png')} style={styles.logo} />
-      </View>
     </View>
   );
 };
@@ -28,7 +25,7 @@ const styles = StyleSheet.create({
 
   fondoContainer: {
     position: 'absolute',
-    top: 105,  // Ajusta este valor según sea necesario para mover el componente Fondo hacia abajo
+    top: 105,
     width: '100%',
   },
 

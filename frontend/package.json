@@ -15,6 +15,7 @@
     "@react-native-community/datetimepicker": "^8.0.1",
     "@react-native-picker/picker": "^2.7.5",
     "axios": "^1.7.2",
+    "date-fns": "^3.6.0",
     "expo": "~51.0.8",
     "expo-image-picker": "^15.0.5",
     "expo-status-bar": "~1.12.1",

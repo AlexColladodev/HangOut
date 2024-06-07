@@ -3,11 +3,12 @@ import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Te
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import moment from 'moment';
-import 'moment/locale/es'; // Importar el locale español
-import FondoComun from '../../components/FondoComun';
+import 'moment/locale/es'; 
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesModify';
 import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const ModificarActividad = () => {
   const [data, setData] = useState({
@@ -69,10 +70,10 @@ const ModificarActividad = () => {
     const updatedData = {
       nombre_actividad,
       descripcion_actividad,
-      fecha_actividad: fecha_actividad.toISOString().split('T')[0], // Formato YYYY-MM-DD
-      hora_actividad: hora_actividad.toTimeString().split(' ')[0], // Formato HH:mm:ss
+      fecha_actividad: fecha_actividad.toISOString().split('T')[0],
+      hora_actividad: hora_actividad.toTimeString().split(' ')[0],
       ubicacion,
-      id_usuario_creador: '665b56ff6bd71b0279ca391c', // Añadir el id_usuario_creador por defecto
+      id_usuario_creador: '665b56ff6bd71b0279ca391c',
     };
 
     axios.put(`${BASE_URL}/actividades/665b5af16bd71b0279ca3939`, updatedData)
@@ -80,7 +81,7 @@ const ModificarActividad = () => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
       .catch(error => {
-        console.error('Error detail:', error.response.data); // Esto te dará más detalle del error
+        console.error('Error detail:', error.response.data);
         Alert.alert('Error', 'Hubo un problema al actualizar los datos.');
       });
   };
@@ -98,11 +99,13 @@ const ModificarActividad = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
+    <Header titulo="Modificar Actividad" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-          <Text style={commonStyles.label}>Modificar Datos Actividad</Text>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre Actividad:</Text>
             <TextInput
@@ -185,12 +188,12 @@ const ModificarActividad = () => {
               onChangeText={(value) => handleInputChange('ubicacion', value)}
             />
           </View>
-          <TouchableOpacity style={styles.modifyButton} onPress={handleSubmit}>
-            <Text style={styles.modifyButtonText}>Guardar</Text>
+          <TouchableOpacity style={styles.boton} onPress={handleSubmit}>
+            <Text style={styles.botonTexto}>Guardar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

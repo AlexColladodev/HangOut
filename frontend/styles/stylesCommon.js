@@ -1,9 +1,10 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
+const { width, height } = Dimensions.get('window');
+
 const commonStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f9f9f9',
   },
   contentContainer: {
     padding: 20,
@@ -12,7 +13,7 @@ const commonStyles = StyleSheet.create({
     paddingBottom: 100,
   },
   dataContainer: {
-    marginTop: 50,
+    marginTop: 15,
     width: '100%',
     alignItems: 'center',
   },
@@ -24,8 +25,15 @@ const commonStyles = StyleSheet.create({
   },
   errorText: {
     fontSize: 18,
-    color: 'red', // Color rojo es común en la mayoría de archivos
+    color: 'red',
     marginBottom: 10,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 20,
   },
 });
 

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, ScrollView, TouchableOpacity, SafeAreaView, TextInput, Alert, Button } from 'react-native';
 import axios from 'axios';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesModify';
 import ambientes from '../../components/Ambientes';
 import SeleccionarPreferencia from '../../components/SeleccionarPreferencia';
 import commonStyles from '../../styles/stylesCommon'
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
-const ModificarEstablecimiento = ({ establecimientoId = "665b5df730fb9962d8d08eea" }) => {
+const ModificarEstablecimiento = ({ establecimientoId = "666197975ccba976dcffb41e" }) => {
   const [data, setData] = useState({
     nombre_establecimiento: '',
     ambiente: [],
@@ -18,7 +19,7 @@ const ModificarEstablecimiento = ({ establecimientoId = "665b5df730fb9962d8d08ee
   const [ambienteSeleccionado, setAmbienteSeleccionado] = useState([]);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/establecimientos/${establecimientoId}`)
+    axios.get(`${BASE_URL}/establecimientos/666197975ccba976dcffb41e`)
       .then(response => {
         const fetchedData = response.data;
         setData({
@@ -48,21 +49,7 @@ const ModificarEstablecimiento = ({ establecimientoId = "665b5df730fb9962d8d08ee
     setData(prevState => ({ ...prevState, ambiente: newAmbiente }));
   };
 
-  const handleSubmit = () => {
-    const { nombre_establecimiento, ambiente } = data;
-    const updatedData = {
-      nombre_establecimiento,
-      ambiente,
-    };
-
-    axios.put(`${BASE_URL}/establecimientos/${establecimientoId}`, updatedData)
-      .then(response => {
-        Alert.alert('Éxito', 'Los datos del establecimiento han sido actualizados.');
-      })
-      .catch(error => {
-        console.error(error);
-        Alert.alert('Error', 'Hubo un problema al actualizar los datos.');
-      });
+  const handleSave = () => {
   };
 
   if (loading) {
@@ -78,12 +65,16 @@ const ModificarEstablecimiento = ({ establecimientoId = "665b5df730fb9962d8d08ee
     );
   }
 
+  console.log(data)
+
   return (
     <View style={{ flex: 1 }}>
+    <Header titulo="Modificar Establecimiento" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-          <Text style={commonStyles.label}>Modificar Datos del Establecimiento</Text>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre del Establecimiento:</Text>
             <TextInput
@@ -99,8 +90,8 @@ const ModificarEstablecimiento = ({ establecimientoId = "665b5df730fb9962d8d08ee
             seleccionAmbiente={seleccionAmbiente}
             styles={styles}
           />
-          <TouchableOpacity style={styles.modifyButton} onPress={handleSubmit}>
-            <Text style={styles.modifyButtonText}>Guardar</Text>
+          <TouchableOpacity style={styles.boton} onPress={handleSave}>
+            <Text style={styles.botonTexto}>Guardar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

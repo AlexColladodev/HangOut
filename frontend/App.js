@@ -26,10 +26,14 @@ import DatosEvento from './screens/admin/DatosEvento';
 import DatosOferta from './screens/admin/DatosOferta'
 import ModificarEstablecimiento from './screens/admin/ModificarEstablecimiento';
 import InicioAdmin from './screens/admin/InicioAdmin';
+import Fondo from './components/Fondo';
+import DatosEstablecimientoUsuario from './screens/usuario/DatosEstablecimientoUsuario';
+import DatosEventoUsuario from './screens/usuario/DatosEventoUsuario';
+import Header from './components/Header'
 
 const App = () => {
   return (
-    <InicioUsuario/>
+    <RegistrarseComun/>
   );
 };
 

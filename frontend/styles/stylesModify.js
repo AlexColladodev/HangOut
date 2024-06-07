@@ -32,14 +32,14 @@ const styles = StyleSheet.create({
   datePart: {
     flex: 1,
   },
-  modifyButton: {
+  boton: {
     backgroundColor: 'purple',
     padding: 10,
     alignItems: 'center',
     marginVertical: 20,
     width: '100%',
   },
-  modifyButtonText: {
+  botonTexto: {
     color: 'white',
     fontSize: 18,
   },

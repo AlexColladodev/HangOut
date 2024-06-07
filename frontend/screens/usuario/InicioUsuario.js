@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import Establecimiento from '../../components/Establecimiento';
 import Evento from '../../components/Evento';
 import Actividad from '../../components/Actividad';
@@ -9,6 +9,7 @@ import ambientes from '../../components/Ambientes';
 import styles from '../../styles/stylesInicioUsuario';
 import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 
 const InicioUsuario = ({ id_usuario }) => {
@@ -99,8 +100,11 @@ const InicioUsuario = ({ id_usuario }) => {
 
   return (
     <View style={{ flex: 1 }}>
+    <Header titulo="Inicio" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
           <Text style={styles.title}>Establecimientos</Text>
           <View style={styles.horizontalListContainer}>

@@ -16,12 +16,12 @@ url_review = f"{DevelopmentConfig.BASE_URL}/reviews"
 def crear_usuario_generico():
     if 'imagen' in request.files and request.files['imagen'].filename != '':
         filename = photos.save(request.files['imagen'])
-        imagen_url = photos.url(filename)
+        imagen_url = f"/_uploads/photos/{filename}"
         data = request.form.to_dict()
-        data['imagen_url'] = str(imagen_url)
+        data['imagen_url'] = imagen_url
     else:
         data = request.form.to_dict()
-        data['imagen_url'] = f'{DevelopmentConfig.IP_URL}/_uploads/photos/default.png'
+        data['imagen_url'] = f'/_uploads/photos/default.png'
         data.pop('imagen')
         
     schema = UsuarioGenericoSchema()

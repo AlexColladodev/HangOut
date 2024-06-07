@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity, Text, ScrollView } from 'react-native';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import ambientes from '../../components/Ambientes'
 import SeleccionarPreferencia from '../../components/SeleccionarPreferencia';
 import styles from '../../styles/stylesTipoUsuario';
+import commonStyles from '../../styles/stylesCommon';
+import Header from '../../components/Header'
 
 const TipoUsuario = () => {
     const [ambientesSeleccionados, setAmbientesSeleccionados] = useState([]);
@@ -18,10 +20,12 @@ const TipoUsuario = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <FondoComun />
-        <View style={styles.dataContainer}>
-            <Text style={styles.title}>Tipo de Cuenta Usuario</Text>
+    <Header titulo="Registro Usuario" onBackPress={() => (navigation.goBack())} />
+      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
+      <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, zIndex: -1 }}>
+        <Fondo />
+      </View>
+        <View style={commonStyles.dataContainer}>
           <Text style={styles.preferencesTitle}>Preferencias:</Text>
           <SeleccionarPreferencia 
             ambientes={ambientes}

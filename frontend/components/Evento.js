@@ -74,7 +74,7 @@ const Evento = ({ id, mostrarEstablecimiento }) => {
       <View style={styles.dateContainer}>
         <Text style={styles.dateText}>{evento.fecha_evento || 'Fecha no disponible'}</Text>
       </View>
-      <Image source={{ uri: evento.imagen_url || DEFAULT_IMAGE_URL }} style={styles.image} />
+      <Image source={{ uri: `${BASE_URL}${evento.imagen_url}` }} style={styles.image} />
       <View style={styles.infoContainer}>
         <Text style={styles.nombre} numberOfLines={1} ellipsizeMode="tail">{evento.nombre_evento || 'Nombre no disponible'}</Text>
         {mostrarEstablecimiento && establecimiento && (

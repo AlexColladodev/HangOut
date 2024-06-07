@@ -11,16 +11,16 @@ const ReviewUsuario = ({ reviewId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch review data
+
         const reviewResponse = await axios.get(`${BASE_URL}/reviews/${reviewId}`);
         const reviewData = reviewResponse.data;
         setReview(reviewData);
 
-        // Fetch user data
+
         const userResponse = await axios.get(`${BASE_URL}/usuario_generico/${reviewData.id_usuario}`);
         setUserName(userResponse.data.nombre_usuario);
 
-        // Fetch establecimiento data
+
         const establecimientoResponse = await axios.get(`${BASE_URL}/establecimientos/${reviewData.id_establecimiento}`);
         setNombreEstablecimiento(establecimientoResponse.data.nombre_establecimiento);
       } catch (error) {

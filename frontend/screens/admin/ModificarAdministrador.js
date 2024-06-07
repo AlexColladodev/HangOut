@@ -4,10 +4,11 @@ import axios from 'axios';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import 'moment/locale/es'; 
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesModify';
 import commonStyles from '../../styles/stylesCommon'
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const ModificarAdministrador = () => {
   const [data, setData] = useState({
@@ -50,7 +51,7 @@ const ModificarAdministrador = () => {
     setShowDatePicker(true);
   };
 
-  const handleSubmit = () => {
+  const handleSave = () => {
     const { nombre, nombre_usuario, email_empresa } = data;
     const updatedData = {
       nombre,
@@ -83,12 +84,14 @@ const ModificarAdministrador = () => {
 
   return (
     <View style={{ flex: 1 }}>
+    <Header titulo="Modificar Perfil" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-          <Text style={commonStyles.label}>Modificar Datos Administrador Establecimiento</Text>
           <View style={styles.profileImageContainer}>
-            <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
+            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.profileImage} />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre:</Text>
@@ -153,8 +156,8 @@ const ModificarAdministrador = () => {
               />
             )}
           </View>
-          <TouchableOpacity style={styles.modifyButton} onPress={handleSubmit}>
-            <Text style={styles.modifyButtonText}>Modificar</Text>
+          <TouchableOpacity style={styles.boton} onPress={handleSave}>
+            <Text style={styles.botonTexto}>Guardar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

@@ -18,12 +18,12 @@ url_evento = f"{DevelopmentConfig.BASE_URL}/eventos"
 def crear_establecimiento():
     if 'imagen' in request.files and request.files['imagen'].filename != '':
         filename = photos.save(request.files['imagen'])
-        imagen_url = photos.url(filename)
+        imagen_url = f"/_uploads/photos/{filename}"
         data = request.form.to_dict()
-        data['imagen_url'] = str(imagen_url)
+        data['imagen_url'] = imagen_url
     else:
         data = request.form.to_dict()
-        data['imagen_url'] = f'{DevelopmentConfig.IP_URL}/_uploads/photos/default_establecimiento.png'
+        data['imagen_url'] = f'/_uploads/photos/default_establecimiento.png'
         data.pop('imagen')
 
     data['ambiente'] = data['ambiente'].split(',')
@@ -108,12 +108,12 @@ def consultar_establecimiento(id):
 def add_oferta():
     if 'imagen' in request.files and request.files['imagen'].filename != '':
         filename = photos.save(request.files['imagen'])
-        imagen_url = photos.url(filename)
+        imagen_url = f"/_uploads/photos/{filename}"
         data = request.form.to_dict()
-        data['imagen_url'] = str(imagen_url)
+        data['imagen_url'] = imagen_url
     else:
         data = request.form.to_dict()
-        data['imagen_url'] = f'{DevelopmentConfig.IP_URL}/_uploads/photos/default_no_image.png'
+        data['imagen_url'] = f'/_uploads/photos/default_establecimiento.png'
         data.pop('imagen')
 
     id_establecimiento = data.get("id_establecimiento")
@@ -133,12 +133,12 @@ def add_oferta():
 def add_evento():
     if 'imagen' in request.files and request.files['imagen'].filename != '':
         filename = photos.save(request.files['imagen'])
-        imagen_url = photos.url(filename)
+        imagen_url = f"/_uploads/photos/{filename}"
         data = request.form.to_dict()
-        data['imagen_url'] = str(imagen_url)
+        data['imagen_url'] = imagen_url
     else:
         data = request.form.to_dict()
-        data['imagen_url'] = f'{DevelopmentConfig.IP_URL}/_uploads/photos/default_no_image.png'
+        data['imagen_url'] = f'/_uploads/photos/default_establecimiento.png'
         data.pop('imagen')
 
     id_establecimiento = data.get("id_establecimiento")

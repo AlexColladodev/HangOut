@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Button, ScrollView, Text, Alert, Image, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesCreate';
-import commonStyles from '../../styles/stylesCommon'
+import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const CrearOferta = () => {
   const [nombreOferta, setNombreOferta] = useState('');
   const [descripcionOferta, setDescripcionOferta] = useState('');
   const [precioOferta, setPrecioOferta] = useState('');
   const [imageUri, setImageUri] = useState(null);
-  const idEstablecimiento = '665b5df730fb9962d8d08eea';
+  const idEstablecimiento = '666197975ccba976dcffb41e';
 
   const selectImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -25,9 +26,6 @@ const CrearOferta = () => {
     if (!result.canceled) {
       setImageUri(result.assets[0].uri);
     }
-  };
-
-  const handleSubmit = () => {
   };
 
   const handleSave = async () => {
@@ -59,7 +57,6 @@ const CrearOferta = () => {
 
       if (response.status === 200) {
         Alert.alert('Éxito', 'Oferta creada con éxito');
-        // Resetear los campos después de guardar
         setNombreOferta('');
         setDescripcionOferta('');
         setPrecioOferta('');
@@ -74,35 +71,37 @@ const CrearOferta = () => {
 
   return (
     <View style={{ flex: 1 }}>
+    <Header titulo="Crear Oferta" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-        <Text style={styles.title}>Crear Oferta</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder="Nombre Oferta:"
-            value={nombreOferta}
-            onChangeText={setNombreOferta}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Descripción Oferta:"
-            value={descripcionOferta}
-            onChangeText={setDescripcionOferta}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Precio Oferta:"
-            value={precioOferta}
-            onChangeText={text => setPrecioOferta(text.replace(/[^0-9.]/g, ''))}
-            style={styles.input}
-            keyboardType="numeric"
-          />
-          <Button title="Seleccionar Imagen Oferta" onPress={selectImage} />
-          {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
-        </View>
-          <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
-            <Text style={styles.saveButtonText}>Guardar</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Nombre Oferta:"
+              value={nombreOferta}
+              onChangeText={setNombreOferta}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Descripción Oferta:"
+              value={descripcionOferta}
+              onChangeText={setDescripcionOferta}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Precio Oferta:"
+              value={precioOferta}
+              onChangeText={text => setPrecioOferta(text.replace(/[^0-9.]/g, ''))}
+              style={styles.input}
+              keyboardType="numeric"
+            />
+            <Button title="Seleccionar Imagen Oferta" onPress={selectImage} />
+            {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
+          </View>
+          <TouchableOpacity style={styles.boton} onPress={handleSave}>
+            <Text style={styles.botonTexto}>Guardar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

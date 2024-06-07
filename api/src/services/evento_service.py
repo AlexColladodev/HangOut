@@ -12,8 +12,6 @@ blueprint = Blueprint("Evento", "eventos", url_prefix="/eventos")
 def crear_evento():
     data = request.json
     schema = EventoSchema()
-    
-    print(data)
 
     try:
         datos_validados = schema.load(data)

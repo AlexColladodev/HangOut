@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, TouchableOpacity, FlatList } from 'react-native';
 import axios from 'axios';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesData';
 import Usuario from '../../components/Usuario';
 import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const DatosActividad = () => {
   const [data, setData] = useState(null);
@@ -50,10 +51,12 @@ const DatosActividad = () => {
 
   return (
     <View style={{ flex: 1 }}>
+    <Header titulo="Datos Actividad" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-          <Text style={commonStyles.label}>Datos Actividad</Text>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre Actividad:</Text>
             <View style={styles.box}>

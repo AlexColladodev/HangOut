@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
-import { ScrollView, View, Text, TextInput, TouchableOpacity, Alert, Button, Image } from 'react-native';
-import FondoComun from '../../components/FondoComun';
+import { ScrollView, View, Text, TextInput, TouchableOpacity, Alert, Button, Image, Dimensions } from 'react-native';
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesCreate';
-import ambientes from '../../components/Ambientes'
+import ambientes from '../../components/Ambientes';
 import SeleccionarPreferencia from '../../components/SeleccionarPreferencia';
-import commonStyles from '../../styles/stylesCommon'
+import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const CrearEstablecimiento = () => {
   const [nombre, setNombre] = useState('');
@@ -36,17 +37,14 @@ const CrearEstablecimiento = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    const selectedCheckBoxes = Object.keys(checkBoxState).filter(key => checkBoxState[key]);
+  const handleSave = async () => {
+    const selectedAmbientes = ambientesSeleccionados.map(index => ambientes[index].name).join(',');
     const data = new FormData();
     data.append('nombre_establecimiento', nombre);
     data.append('cif', cif);
-  
-
-    const ambienteArray = selectedCheckBoxes; 
-    data.append('ambiente', ambienteArray); 
-  
+    data.append('ambiente', selectedAmbientes);
     data.append('id_administrador', '665b57a06bd71b0279ca3925');
+
     if (imageUri) {
       const uriParts = imageUri.split('.');
       const fileType = uriParts[uriParts.length - 1];
@@ -59,7 +57,7 @@ const CrearEstablecimiento = () => {
     } else {
       data.append('imagen', null);
     }
-  
+
     try {
       const response = await axios.post(`${BASE_URL}/establecimientos`, data, {
         headers: {
@@ -73,44 +71,45 @@ const CrearEstablecimiento = () => {
       Alert.alert('Error', error.response.data.error);
     }
   };
-  
+
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
+      <Header titulo="Crear Establecimiento" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
+      <ScrollView style={[commonStyles.container, { zIndex: 1 }]} contentContainerStyle={commonStyles.contentContainer}>
         <View style={commonStyles.dataContainer}>
-        <Text style={styles.title}>Crear Establecimiento</Text> 
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder="Nombre Establecimiento"
-            style={styles.input}
-            value={nombre}
-            onChangeText={setNombre}
-          />
-          <TextInput
-            placeholder="CIF"
-            style={styles.input}
-            value={cif}
-            onChangeText={setCIF}
-          />
-          <Text style={commonStyles.label}>Ambiente:</Text>
-          <SeleccionarPreferencia 
-            ambientes={ambientes}
-            seleccionados={ambientesSeleccionados}
-            seleccionAmbiente={seleccionAmbiente}
-            styles={styles}
-          />
-          <Button title="Seleccionar Imagen Establecimiento" onPress={selectImage} />
-          {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
-          <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
-            <Text style={styles.saveButtonText}>Guardar</Text>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Nombre Establecimiento"
+              style={styles.input}
+              value={nombre}
+              onChangeText={setNombre}
+            />
+            <TextInput
+              placeholder="CIF"
+              style={styles.input}
+              value={cif}
+              onChangeText={setCIF}
+            />
+            <Text style={commonStyles.label}>Ambiente:</Text>
+            <SeleccionarPreferencia 
+              ambientes={ambientes}
+              seleccionados={ambientesSeleccionados}
+              seleccionAmbiente={seleccionAmbiente}
+              styles={styles}
+            />
+            <Button title="Seleccionar Imagen Establecimiento" onPress={selectImage} />
+            {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
+            <TouchableOpacity style={styles.boton} onPress={handleSave}>
+              <Text style={styles.botonTexto}>Guardar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </View>
   );
 };
-
 
 export default CrearEstablecimiento;

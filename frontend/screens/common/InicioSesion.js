@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, Image } from 'react-native';
-import Fondo from '../../components/Fondo';
+import FondoInicio from '../../components/FondoInicio';
 
 const InicioSesion = () => {
   return (
     <View style={styles.container}>
-      <Fondo />
+      <FondoInicio />
       <View style={styles.logoContainer}>
         <Image source={require('../../assets/HangOutLogo.png')} style={styles.logo} />
       </View>

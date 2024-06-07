@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, TextInput, Button, Alert, Platform, TouchableOpacity, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesModify';
 import commonStyles from '../../styles/stylesCommon'
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const ModificarEvento = () => {
   const [data, setData] = useState({
@@ -20,7 +21,7 @@ const ModificarEvento = () => {
   const [showHora, setShowHora] = useState(false);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/eventos/665e0db67d438e985b7b77b1`)
+    axios.get(`${BASE_URL}/eventos/66619a1e73eefd646296196c`)
       .then(response => {
         const fetchedData = response.data;
         setData({
@@ -61,17 +62,17 @@ const ModificarEvento = () => {
     setShowHora(true);
   };
 
-  const Modificar = () => {
+  const handleSave = () => {
     const { nombre_evento, descripcion_evento, fecha_evento, hora_evento, precio } = data;
     const updatedData = {
       nombre_evento,
       descripcion_evento,
       fecha_evento: fecha_evento.toISOString().split('T')[0], // Formato YYYY-MM-DD
       hora_evento: hora_evento.toTimeString().split(' ')[0], // Formato HH:mm:ss
-      precio: parseFloat(precio), // Convert to number
+      precio: parseFloat(precio), 
     };
 
-    axios.put(`${BASE_URL}/eventos/665e0db67d438e985b7b77b1`, updatedData)
+    axios.put(`${BASE_URL}/eventos/66619a1e73eefd646296196c`, updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
       })
@@ -95,12 +96,14 @@ const ModificarEvento = () => {
 
   return (
     <View style={{ flex: 1 }}>
+    <Header titulo="Modificar Evento" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-          <Text style={styles.label}>Modificar Datos Evento</Text>
           <View style={styles.imagenContainer}>
-            <Image source={{ uri: data.imagen_url }} style={styles.imagen} />
+            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.imagen} />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre Evento:</Text>
@@ -182,8 +185,8 @@ const ModificarEvento = () => {
               onChangeText={(value) => handleInputChange('precio', value)}
             />
           </View>
-          <TouchableOpacity style={styles.modifyButton} onPress={Modificar}>
-            <Text style={styles.modifyButtonText}>Modificar</Text>
+          <TouchableOpacity style={styles.boton} onPress={handleSave}>
+            <Text style={styles.botonTexto}>Modificar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

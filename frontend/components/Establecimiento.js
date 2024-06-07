@@ -33,7 +33,7 @@ const Establecimiento = ({ id }) => {
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: data.imagen_url }} style={styles.image} />
+      <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.image} />
       <View style={styles.textContainer}>
         <Text style={styles.name}>{data.nombre_establecimiento}</Text>
         <Text style={styles.ambience}>{ambientes}</Text>

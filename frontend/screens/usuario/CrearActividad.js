@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Button, ScrollView, Text, Platform, TouchableOpacity, Alert } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import axios from 'axios';
 import styles from '../../styles/stylesCreate';
 import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const CrearActividad = () => {
   const [nombreActividad, setNombreActividad] = useState('');
@@ -57,10 +58,12 @@ const CrearActividad = () => {
 
   return (
     <View style={{ flex: 1 }}>
+    <Header titulo="Crear Actividad" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-        <Text style={commonStyles.label}>Crear Actividad</Text>
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Nombre Actividad:"
@@ -137,10 +140,10 @@ const CrearActividad = () => {
           </View>
         </View>
         </View>
-      </ScrollView>
-      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-        <Text style={styles.saveButtonText}>Guardar</Text>
+        <TouchableOpacity style={styles.boton} onPress={handleSave}>
+        <Text style={styles.botonTexto}>Guardar</Text>
       </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesData';
 import commonStyles from '../../styles/stylesCommon'
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const DatosOferta = () => {
   const [data, setData] = useState(null);
@@ -13,7 +14,7 @@ const DatosOferta = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/ofertas/665e0d32e7479afa974873c2`);
+      const response = await axios.get(`${BASE_URL}/ofertas/66619b9b7be998a04c13ca42`);
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -24,7 +25,7 @@ const DatosOferta = () => {
     }
   };
 
-  const Modificar = () => {
+  const handleModify = () => {
 
   };
 
@@ -47,12 +48,14 @@ const DatosOferta = () => {
 
   return (
     <View style={{ flex: 1 }}>
+    <Header titulo="Datos Oferta" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-          <Text style={commonStyles.label}>Datos Oferta</Text>
           <View style={styles.imagenContainer}>
-            <Image source={{ uri: data.imagen_url }} style={styles.imagen} />
+            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.imagen} />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre Oferta:</Text>
@@ -72,7 +75,7 @@ const DatosOferta = () => {
             <Text style={styles.fieldValue}>{data.precio_oferta} €</Text>
             </View>
           </View>
-          <TouchableOpacity style={styles.boton} onPress={Modificar}>
+          <TouchableOpacity style={styles.boton} onPress={handleModify}>
             <Text style={styles.botonTexto}>Modificar</Text>
           </TouchableOpacity>
         </View>

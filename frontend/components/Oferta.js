@@ -16,8 +16,6 @@ const Oferta = ({ id }) => {
       const response = await axios.get(`${BASE_URL}/ofertas/${id}`);
       const ofertaData = response.data;
 
-      console.log('Datos de la oferta:', ofertaData);
-
       setOferta(ofertaData);
       setLoading(false);
       setError(false);
@@ -52,12 +50,13 @@ const Oferta = ({ id }) => {
     );
   }
 
+
   return (
     <View style={styles.container}>
-      <Image source={{ uri: oferta.imagen_url || DEFAULT_IMAGE_URL }} style={styles.image} />
+      <Image source={{ uri: `${BASE_URL}${oferta.imagen_url}` }} style={styles.image} />
       <View style={styles.infoContainer}>
         <Text style={styles.nombre} numberOfLines={1} ellipsizeMode="tail">{oferta.nombre_oferta || 'Nombre no disponible'}</Text>
-        <Text style={styles.precio}>€{oferta.precio_oferta || 'Precio no disponible'}</Text>
+        <Text style={styles.precio}>{`€ ${oferta.precio_oferta}`}</Text>
       </View>
     </View>
   );
@@ -79,7 +78,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    width: 250, // Adjust width for horizontal display
+    width: 250, 
   },
   image: {
     width: '100%',
@@ -89,21 +88,21 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center', // Center align the text
+    alignItems: 'center', 
     width: '100%',
     marginTop: 10,
   },
   nombre: {
     fontSize: 18,
     fontWeight: 'bold',
-    textAlign: 'center', // Center align the text
+    textAlign: 'center', 
   },
   precio: {
     fontSize: 16,
     marginTop: 5,
-    color: '#000000', // Black color for price
-    fontWeight: 'bold', // Bold text for price
-    textAlign: 'center', // Center align the text
+    color: '#000000', 
+    fontWeight: 'bold', 
+    textAlign: 'center', 
     width: '100%',
   },
   centered: {

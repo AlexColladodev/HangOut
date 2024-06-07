@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Text, ScrollView, TouchableOpacity } from 'react-native';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesTipoAdmin';
 import commonStyles from '../../styles/stylesCommon';
+import Header from '../../components/Header'
 
 const TipoAdministrador = () => {
   const [dni, setDni] = useState('');
@@ -12,10 +13,12 @@ const TipoAdministrador = () => {
 
   return (
     <View style={{ flex: 1 }}>
+    <Header titulo="Registro Administrador" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-            <Text style={commonStyles.label}>Tipo de Cuenta Administrador</Text>
           <View style={styles.inputContainer}>
             <Text style={styles.dniLabel}>DNI:</Text>
             <TextInput 

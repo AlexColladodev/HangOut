@@ -8,11 +8,11 @@ const Review = ({ reviewId }) => {
   const [userName, setUserName] = useState('');
 
   useEffect(() => {
-    // Fetch review data
+
     axios.get(`${BASE_URL}/reviews/${reviewId}`)
       .then(response => {
         setReview(response.data);
-        // Fetch user data
+
         return axios.get(`${BASE_URL}/usuario_generico/${response.data.id_usuario}`);
       })
       .then(response => {

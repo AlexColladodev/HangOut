@@ -3,13 +3,14 @@ import { View, Text, ActivityIndicator, ScrollView, TouchableOpacity, SafeAreaVi
 import axios from 'axios';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import 'moment/locale/es'; // Importar el locale español
-import FondoComun from '../../components/FondoComun';
+import 'moment/locale/es';
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesModify';
 import ambientes from '../../components/Ambientes';
 import SeleccionarPreferencia from '../../components/SeleccionarPreferencia';
 import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const ModificarUsuario = () => {
   const [data, setData] = useState({
@@ -25,8 +26,7 @@ const ModificarUsuario = () => {
   });
   const [loading, setLoading] = useState(true);
   const [showDatePicker, setShowDatePicker] = useState(false);
-
-  const [ambienteSeleccionado, setAmbienteSeleccionado] = useState([]);
+  const [preferenciaSeleccionada, setPreferenciaSeleccionada] = useState([]);
 
   useEffect(() => {
     axios.get(`${BASE_URL}/usuario_generico/665b56eb6bd71b0279ca391b`)
@@ -35,8 +35,11 @@ const ModificarUsuario = () => {
         setData({
           ...fetchedData,
           fecha_nacimiento: new Date(fetchedData.fecha_nac),
+          preferencias: fetchedData.preferencias || [], 
         });
-        setAmbienteSeleccionado(fetchedData.preferencias.map(pref => ambientes.findIndex(amb => amb.name === pref)));
+        setPreferenciaSeleccionada(
+          (fetchedData.preferencias || []).map(pref => ambientes.findIndex(a => a.name === pref))
+        );
         setLoading(false);
       })
       .catch(error => {
@@ -59,12 +62,12 @@ const ModificarUsuario = () => {
     setShowDatePicker(true);
   };
 
-  const seleccionAmbiente = index => {
-    const newSelectedTags = ambienteSeleccionado.includes(index)
-      ? ambienteSeleccionado.filter(tag => tag !== index)
-      : [...ambienteSeleccionado, index];
-    setAmbienteSeleccionado(newSelectedTags);
-    const newPreferencias = newSelectedTags.map(tagIndex => ambientes[tagIndex].name);
+  const seleccionPreferencia = index => {
+    const newSelectedTags = preferenciaSeleccionada.includes(index)
+      ? preferenciaSeleccionada.filter(tag => tag !== index)
+      : [...preferenciaSeleccionada, index];
+    setPreferenciaSeleccionada(newSelectedTags);
+    const newPreferencias = newSelectedTags.map(tagIndex => ambientes[tagIndex]?.name);
     setData(prevState => ({ ...prevState, preferencias: newPreferencias }));
   };
 
@@ -75,9 +78,9 @@ const ModificarUsuario = () => {
       nombre_usuario,
       email,
       telefono,
-      fecha_nacimiento: data.fecha_nacimiento.toISOString().split('T')[0], // Formato YYYY-MM-DD
+      fecha_nacimiento: data.fecha_nacimiento.toISOString().split('T')[0],
       seguidos,
-      preferencias,
+      preferencias: preferencias.join(','),
       actividades_creadas,
       reviews,
     };
@@ -105,13 +108,15 @@ const ModificarUsuario = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
+    <Header titulo="Modificar Perfil" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-          <Text style={commonStyles.label}>Modificar Datos Usuario</Text>
           <View style={styles.profileImageContainer}>
-            <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
+            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.profileImage} />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre:</Text>
@@ -179,16 +184,16 @@ const ModificarUsuario = () => {
           <Text style={styles.preferencesTitle}>Preferencias:</Text>
           <SeleccionarPreferencia 
             ambientes={ambientes}
-            seleccionados={ambienteSeleccionado}
-            seleccionAmbiente={seleccionAmbiente}
+            seleccionados={preferenciaSeleccionada}
+            seleccionAmbiente={seleccionPreferencia}
             styles={styles}
           />
-          <TouchableOpacity style={styles.modifyButton} onPress={handleSubmit}>
-            <Text style={styles.modifyButtonText}>Guardar</Text>
+          <TouchableOpacity style={styles.boton} onPress={handleSubmit}>
+            <Text style={styles.botonTexto}>Guardar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

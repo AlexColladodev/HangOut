@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import Fondo from '../../components/Fondo'; 
+import FondoInicio from '../../components/FondoInicio'; 
 import BASE_URL from '../../config_ip';
 
 const Registrarse = () => {
@@ -14,7 +14,7 @@ const Inicio_Sesion = () => {
 const Inicio = () => {
   return (
     <View style={styles.container}>
-      <Fondo />
+      <FondoInicio />
       <View style={styles.logoContainer}>
         <Image source={require('../../assets/HangOutLogo.png')} style={styles.logo} />
       </View>

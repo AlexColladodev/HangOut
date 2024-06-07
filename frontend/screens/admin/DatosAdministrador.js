@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesUsers';
 import commonStyles from '../../styles/stylesCommon'
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const DatosAdministrador = () => {
   const [data, setData] = useState(null);
@@ -24,7 +25,7 @@ const DatosAdministrador = () => {
     }
   };
 
-  const Modificar = () => {
+  const handleModify = () => {
 
   };
 
@@ -47,12 +48,14 @@ const DatosAdministrador = () => {
 
   return (
     <View style={{ flex: 1 }}>
+    <Header titulo="Datos Administrador" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-          <Text style={commonStyles.label}>Datos Administrador Establecimiento</Text>
           <View style={styles.profileImageContainer}>
-            <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
+            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.profileImage} />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Nombre:</Text>
@@ -84,7 +87,7 @@ const DatosAdministrador = () => {
             <Text style={styles.fieldValue}>{data.fecha_nac}</Text>
             </View>
           </View>
-          <TouchableOpacity style={styles.botonModificar} onPress={Modificar}>
+          <TouchableOpacity style={styles.botonModificar} onPress={handleModify}>
             <Text style={styles.botonModificarTexto}>Modificar</Text>
           </TouchableOpacity>
         </View>

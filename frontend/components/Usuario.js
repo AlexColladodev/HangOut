@@ -40,7 +40,7 @@ const Usuario = ({ id }) => {
   return (
     <View style={styles.outerContainer}>
       <View style={styles.innerContainer}>
-        <Image source={{ uri: data.imagen_url }} style={styles.profileImage} />
+        <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.profileImage} />
         <Text style={styles.userName}>{data.nombre_usuario}</Text>
       </View>
     </View>

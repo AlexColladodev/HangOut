@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/es';
@@ -22,7 +22,7 @@ const Actividad = ({ actividadId }) => {
   }, [actividadId]);
 
   if (!actividad) {
-    return <Text>Loading...</Text>;
+    return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
   const fechaActividad = moment(actividad.fecha_actividad.$date).locale('es').format('LL');

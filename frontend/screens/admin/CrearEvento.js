@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Button, ScrollView, Text, Platform, Alert, Image, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import styles from '../../styles/stylesCreate';
-import commonStyles from '../../styles/stylesCommon'
+import commonStyles from '../../styles/stylesCommon';
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const CrearEvento = () => {
   const [nombreEvento, setNombreEvento] = useState('');
@@ -16,7 +17,7 @@ const CrearEvento = () => {
   const [showFecha, setShowFecha] = useState(false);
   const [showHora, setShowHora] = useState(false);
   const [imageUri, setImageUri] = useState(null);
-  const idEstablecimiento = '665b5df730fb9962d8d08eea';
+  const idEstablecimiento = '666197975ccba976dcffb41e';
 
   const onChangeFecha = (event, selectedDate) => {
     const currentDate = selectedDate || fechaEvento;
@@ -50,10 +51,6 @@ const CrearEvento = () => {
       setImageUri(result.assets[0].uri);
     }
   };
-
-  const handleSubmit = () => {
-  };
-
 
   const handleSave = async () => {
     const data = new FormData();
@@ -104,90 +101,92 @@ const CrearEvento = () => {
 
   return (
     <View style={{ flex: 1 }}>
+      <Header titulo="Crear Evento" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
         <View style={commonStyles.dataContainer}>
-        <Text style={styles.title}>Crear Evento</Text> 
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder="Nombre Evento:"
-            value={nombreEvento}
-            onChangeText={setNombreEvento}
-            style={styles.input}
-          />
-          <TextInput
-            placeholder="Descripción Evento:"
-            value={descripcionEvento}
-            onChangeText={setDescripcionEvento}
-            style={styles.input}
-          />
-          <View style={styles.datePickerContainer}>
-            <Text style={styles.pickerLabel}>Fecha Evento:</Text>
-            <View style={styles.dateRow}>
-              <TextInput
-                value={fechaEvento.getDate().toString()}
-                style={[styles.dateInput, styles.datePart]}
-                editable={false}
-              />
-              <TextInput
-                value={fechaEvento.toLocaleString('default', { month: 'short' })}
-                style={[styles.dateInput, styles.datePart]}
-                editable={false}
-              />
-              <TextInput
-                value={fechaEvento.getFullYear().toString()}
-                style={[styles.dateInput, styles.datePart]}
-                editable={false}
-              />
-              <Button onPress={showDatepicker} title="Cambiar" color="#FF5252" />
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Nombre Evento:"
+              value={nombreEvento}
+              onChangeText={setNombreEvento}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Descripción Evento:"
+              value={descripcionEvento}
+              onChangeText={setDescripcionEvento}
+              style={styles.input}
+            />
+            <View style={styles.datePickerContainer}>
+              <Text style={styles.pickerLabel}>Fecha Evento:</Text>
+              <View style={styles.dateRow}>
+                <TextInput
+                  value={fechaEvento.getDate().toString()}
+                  style={[styles.dateInput, styles.datePart]}
+                  editable={false}
+                />
+                <TextInput
+                  value={fechaEvento.toLocaleString('default', { month: 'short' })}
+                  style={[styles.dateInput, styles.datePart]}
+                  editable={false}
+                />
+                <TextInput
+                  value={fechaEvento.getFullYear().toString()}
+                  style={[styles.dateInput, styles.datePart]}
+                  editable={false}
+                />
+                <Button onPress={showDatepicker} title="Cambiar" color="#FF5252" />
+              </View>
+              {showFecha && (
+                <DateTimePicker
+                  value={fechaEvento}
+                  mode="date"
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChangeFecha}
+                />
+              )}
             </View>
-            {showFecha && (
-              <DateTimePicker
-                value={fechaEvento}
-                mode="date"
-                is24Hour={true}
-                display="default"
-                onChange={onChangeFecha}
-              />
-            )}
-          </View>
-          <View style={styles.datePickerContainer}>
-            <Text style={styles.pickerLabel}>Hora Evento:</Text>
-            <View style={styles.dateRow}>
-              <TextInput
-                value={horaEvento.getHours().toString()}
-                style={[styles.dateInput, styles.datePart]}
-                editable={false}
-              />
-              <TextInput
-                value={horaEvento.getMinutes().toString().padStart(2, '0')}
-                style={[styles.dateInput, styles.datePart]}
-                editable={false}
-              />
-              <Button onPress={showTimepicker} title="Cambiar" color="#FF5252" />
+            <View style={styles.datePickerContainer}>
+              <Text style={styles.pickerLabel}>Hora Evento:</Text>
+              <View style={styles.dateRow}>
+                <TextInput
+                  value={horaEvento.getHours().toString()}
+                  style={[styles.dateInput, styles.datePart]}
+                  editable={false}
+                />
+                <TextInput
+                  value={horaEvento.getMinutes().toString().padStart(2, '0')}
+                  style={[styles.dateInput, styles.datePart]}
+                  editable={false}
+                />
+                <Button onPress={showTimepicker} title="Cambiar" color="#FF5252" />
+              </View>
+              {showHora && (
+                <DateTimePicker
+                  value={horaEvento}
+                  mode="time"
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChangeHora}
+                />
+              )}
             </View>
-            {showHora && (
-              <DateTimePicker
-                value={horaEvento}
-                mode="time"
-                is24Hour={true}
-                display="default"
-                onChange={onChangeHora}
-              />
-            )}
+            <TextInput
+              placeholder="Precio Evento:"
+              value={precioEvento}
+              onChangeText={text => setPrecioEvento(text.replace(/[^0-9.]/g, ''))}
+              style={styles.input}
+              keyboardType="numeric"
+            />
+            <Button title="Seleccionar Imagen Evento" onPress={selectImage} />
+            {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
           </View>
-          <TextInput
-            placeholder="Precio Evento:"
-            value={precioEvento}
-            onChangeText={text => setPrecioEvento(text.replace(/[^0-9.]/g, ''))}
-            style={styles.input}
-            keyboardType="numeric"
-          />
-          <Button title="Seleccionar Imagen Evento" onPress={selectImage} />
-          {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
-        </View>
-        <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
-            <Text style={styles.saveButtonText}>Guardar</Text>
+          <TouchableOpacity style={styles.boton} onPress={handleSave}>
+            <Text style={styles.botonTexto}>Guardar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

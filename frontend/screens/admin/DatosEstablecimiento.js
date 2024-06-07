@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import FondoComun from '../../components/FondoComun';
+import Fondo from '../../components/Fondo';
 import Evento from '../../components/Evento'; 
 import Review from '../../components/Review'; 
 import Oferta from '../../components/Oferta'; 
@@ -9,6 +9,7 @@ import styles from '../../styles/stylesData';
 import Preferencia from '../../components/Preferencia';
 import commonStyles from '../../styles/stylesCommon'
 import BASE_URL from '../../config_ip';
+import Header from '../../components/Header'
 
 const DatosEstablecimiento = () => {
   const [data, setData] = useState(null);
@@ -18,7 +19,7 @@ const DatosEstablecimiento = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/establecimientos/665b5df730fb9962d8d08eea`);
+      const response = await axios.get(`${BASE_URL}/establecimientos/666197975ccba976dcffb41e`);
       const establecimientoData = response.data;
 
       const ofertaPromises = establecimientoData.ofertas.map(async (ofertaId) => {
@@ -39,7 +40,7 @@ const DatosEstablecimiento = () => {
     }
   };
 
-  const Modificar = () => {
+  const handleModify = () => {
   };
 
   useEffect(() => {
@@ -61,12 +62,14 @@ const DatosEstablecimiento = () => {
 
   return (
     <View style={{ flex: 1 }}>
+    <Header titulo="Datos Establecimiento" onBackPress={() => (navigation.goBack())} />
+      <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
+        <Fondo />
+      </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-        <FondoComun />
           <View style={commonStyles.dataContainer}>
-          <Text style={commonStyles.label}>Datos del Establecimiento</Text>
           <View style={styles.imagenContainer}>
-            <Image source={{ uri: data.imagen_url }} style={styles.imagen} />
+            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.imagen} />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>CIF:</Text>
@@ -132,7 +135,7 @@ const DatosEstablecimiento = () => {
             />
           </View>
 
-          <TouchableOpacity style={styles.boton} onPress={Modificar}>
+          <TouchableOpacity style={styles.boton} onPress={handleModify}>
             <Text style={styles.botonTexto}>Modificar</Text>
           </TouchableOpacity>
           </View>

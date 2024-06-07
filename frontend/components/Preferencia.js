@@ -4,7 +4,7 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 
 const ambientes = {
   "Chill": require("../assets/ambiente/chill.png"),
-  "Monologos": require("../assets/ambiente/monologos.png"),
+  "Monólogos": require("../assets/ambiente/monologos.png"),
   "Cine": require("../assets/ambiente/cine.png"),
   "Discoteca": require("../assets/ambiente/discoteca.png"),
   "Bar": require("../assets/ambiente/bar.png"),
