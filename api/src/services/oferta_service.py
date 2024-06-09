@@ -27,7 +27,6 @@ def crear_oferta():
     except Exception as e:
         return jsonify({"error": f"{e}"}), 500
 
-
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_oferta(id):
     try:
@@ -40,7 +39,6 @@ def eliminar_oferta(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
-
 @blueprint.route("", methods=["GET"])
 def consultar_ofertas():
     try:
@@ -50,7 +48,6 @@ def consultar_ofertas():
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
-
 
 @blueprint.route("/<id>", methods=["GET"])
 def consultar_oferta(id):
@@ -64,7 +61,6 @@ def consultar_oferta(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
-
 @blueprint.route("/<id>", methods=["PUT"])
 def actualizar_oferta(id):
     data = request.json
@@ -74,9 +70,15 @@ def actualizar_oferta(id):
         datos_validados = schema.load(data, partial=True)
         respuesta = Oferta.actualizar_oferta(id, datos_validados)
         return respuesta
+    except ValidationError as e:
+        errors = e.messages
+        first_error_key = next(iter(errors))
+        error_message = errors[first_error_key][0]
+        return jsonify({"error": error_message}), 400
     except ValueError as e:
         return jsonify({"error": str(e)}), 404
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
+

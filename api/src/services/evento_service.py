@@ -5,9 +5,7 @@ from uploads_config import photos
 from config import DevelopmentConfig
 from marshmallow import ValidationError
 
-
 blueprint = Blueprint("Evento", "eventos", url_prefix="/eventos")
-
 
 @blueprint.route("", methods=["POST"])
 def crear_evento():
@@ -19,16 +17,15 @@ def crear_evento():
         evento = Evento(datos_validados)
         respuesta = evento.insertar_evento()
         return jsonify(respuesta), 200
-    except RuntimeError as e:
-        return jsonify({"error": str(e)}, 500)
     except ValidationError as e:
         errors = e.messages
         first_error_key = next(iter(errors))
         error_message = errors[first_error_key][0]
         return jsonify({"error": error_message}), 400
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"{e}"}), 500
-
 
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_evento(id):
@@ -42,7 +39,6 @@ def eliminar_evento(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
-
 @blueprint.route("", methods=["GET"])
 def consultar_eventos():
     try:
@@ -52,7 +48,6 @@ def consultar_eventos():
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
-
 
 @blueprint.route("/<id>", methods=["GET"])
 def consultar_evento(id):
@@ -66,21 +61,24 @@ def consultar_evento(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
-
 @blueprint.route("/<id>", methods=["PUT"])
 def actualizar_evento(id):
     data = request.json
-    
+    schema = EventoSchema()
+
     try:
-        schema = EventoSchema()
         datos_validados = schema.load(data, partial=True)
         respuesta = Evento.actualizar_evento(id, datos_validados)
         return respuesta
+    except ValidationError as e:
+        errors = e.messages
+        first_error_key = next(iter(errors))
+        error_message = errors[first_error_key][0]
+        return jsonify({"error": error_message}), 400
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
-
 
 @blueprint.route("/ordenados", methods=["GET"])
 def consultar_eventos_ordenados():

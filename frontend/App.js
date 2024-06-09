@@ -30,21 +30,54 @@ import DatosEventoUsuario from './screens/usuario/DatosEventoUsuario';
 import Header from './components/Header'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { AdminProvider } from './context/AdminContext';
 
 const Stack = createNativeStackNavigator();
+const UsuarioStack = createNativeStackNavigator();
+const AdminStack = createNativeStackNavigator();
 
-function App() {
+function UsuarioStackScreen() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Inicio">
-        <Stack.Screen name="Inicio" component={Inicio} />
-        <Stack.Screen name="InicioSesion" component={InicioSesion} />
-        <Stack.Screen name="RegistrarseComun" component={RegistrarseComun} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <UsuarioStack.Navigator>
+      <UsuarioStack.Screen name="InicioUsuario" component={InicioUsuario} />
+      {/* Agregar otras pantallas para usuarios */}
+    </UsuarioStack.Navigator>
   );
 }
 
+function AdminStackScreen() {
+  return (
+    <AdminStack.Navigator>
+      <AdminStack.Screen name="InicioAdmin" component={InicioAdmin} />
+      <AdminStack.Screen name="CrearEstablecimiento" component={CrearEstablecimiento} />
+      <AdminStack.Screen name="CrearEvento" component={CrearEvento} />
+      <AdminStack.Screen name="CrearOferta" component={CrearOferta} />
+      <AdminStack.Screen name="DatosAdministrador" component={DatosAdministrador} />
+      <AdminStack.Screen name="DatosEstablecimiento" component={DatosEstablecimiento} />
+      <AdminStack.Screen name="DatosEvento" component={DatosEvento} />
+      <AdminStack.Screen name="DatosOferta" component={DatosOferta} />
+      <AdminStack.Screen name="ModificarAdministrador" component={ModificarAdministrador} />
+      <AdminStack.Screen name="ModificarEstablecimiento" component={ModificarEstablecimiento} />
+      <AdminStack.Screen name="ModificarEvento" component={ModificarEvento} />
+      <AdminStack.Screen name="ModificarOferta" component={ModificarOferta} />
+    </AdminStack.Navigator>
+  );
+}
 
+function App() {
+  return (
+    <AdminProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Inicio">
+          <Stack.Screen name="Inicio" component={Inicio} />
+          <Stack.Screen name="InicioSesion" component={InicioSesion} />
+          <Stack.Screen name="RegistrarseComun" component={RegistrarseComun} />
+          <Stack.Screen name="UsuarioStack" component={UsuarioStackScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="AdminStack" component={AdminStackScreen} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AdminProvider>
+  );
+}
 
 export default App;

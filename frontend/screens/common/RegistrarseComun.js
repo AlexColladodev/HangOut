@@ -110,6 +110,7 @@ const RegistrarseComun = ({ navigation }) => {
       formData.append('imagen', null);
     }
 
+
     try {
       if (accountType === "Administrador de Establecimiento") {
         formData.append('dni', dni);

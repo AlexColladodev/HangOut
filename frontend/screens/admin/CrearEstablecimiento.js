@@ -1,21 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import { ScrollView, View, Text, TextInput, TouchableOpacity, Alert, Button, Image, Dimensions } from 'react-native';
 import Fondo from '../../components/Fondo';
-import styles from '../../styles/stylesCreate';
+import inputStyles from '../../styles/inputStyles';
+import ambienteStyles from '../../styles/ambienteStyles';
 import ambientes from '../../components/Ambientes';
 import SeleccionarPreferencia from '../../components/SeleccionarPreferencia';
-import commonStyles from '../../styles/stylesCommon';
+import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header'
 import Footer from '../../components/Footer';
+import { AdminContext } from '../../context/AdminContext';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const CrearEstablecimiento = () => {
+const CrearEstablecimiento = ({ navigation, route }) => {
+  const { adminId } = useContext(AdminContext);
   const [nombre, setNombre] = useState('');
   const [cif, setCIF] = useState('');
   const [imageUri, setImageUri] = useState(null);
   const [ambientesSeleccionados, setAmbientesSeleccionados] = useState([]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Crear Establecimiento'
+    });
+  }, [navigation]);
 
   const seleccionAmbiente = index => {
     if (ambientesSeleccionados.includes(index)) {
@@ -44,12 +53,12 @@ const CrearEstablecimiento = () => {
     data.append('nombre_establecimiento', nombre);
     data.append('cif', cif);
     data.append('ambiente', selectedAmbientes);
-    data.append('id_administrador', '665b57a06bd71b0279ca3925');
+    data.append('id_administrador', adminId);
 
     if (imageUri) {
       const uriParts = imageUri.split('.');
       const fileType = uriParts[uriParts.length - 1];
-  
+
       data.append('imagen', {
         uri: imageUri,
         name: `photo.${fileType}`,
@@ -65,8 +74,9 @@ const CrearEstablecimiento = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('Response: ', response.data);
+      let id = response.data.id;
       Alert.alert('Success', 'Establecimiento guardado exitosamente');
+      navigation.navigate('DatosEstablecimiento', { id });
     } catch (error) {
       console.error('Error: ', error.response.data.error);
       Alert.alert('Error', error.response.data.error);
@@ -75,22 +85,21 @@ const CrearEstablecimiento = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Header titulo="Crear Establecimiento" onBackPress={() => (navigation.goBack())} />
       <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
         <Fondo />
       </View>
       <ScrollView style={[commonStyles.container, { zIndex: 1 }]} contentContainerStyle={commonStyles.contentContainer}>
         <View style={commonStyles.dataContainer}>
-          <View style={styles.inputContainer}>
+          <View style={inputStyles.inputContainer}>
             <TextInput
               placeholder="Nombre Establecimiento"
-              style={styles.input}
+              style={inputStyles.input}
               value={nombre}
               onChangeText={setNombre}
             />
             <TextInput
               placeholder="CIF"
-              style={styles.input}
+              style={inputStyles.input}
               value={cif}
               onChangeText={setCIF}
             />
@@ -99,21 +108,21 @@ const CrearEstablecimiento = () => {
               ambientes={ambientes}
               seleccionados={ambientesSeleccionados}
               seleccionAmbiente={seleccionAmbiente}
-              styles={styles}
+              styles={ambienteStyles}
             />
             <Button title="Seleccionar Imagen Establecimiento" onPress={selectImage} />
-            {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
-            <TouchableOpacity style={styles.boton} onPress={handleSave}>
-              <Text style={styles.botonTexto}>Guardar</Text>
+            {imageUri && <Image source={{ uri: imageUri }} style={commonStyles.imageSelected} />}
+            <TouchableOpacity style={commonStyles.saveButton} onPress={handleSave}>
+              <Text style={commonStyles.saveButtonText}>Guardar</Text>
+              <Icon name="save" size={30} color="#000" />
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
       <Footer 
-        onHangoutPress={() => console.log('Hangout Pressed')} 
-        onAddPress={() => console.log('Add Pressed')} 
-        onProfilePress={() => console.log('Profile Pressed')} 
         showAddButton={false} 
+        onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
+        onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />
     </View>
   );

@@ -30,7 +30,7 @@ def crear_establecimiento():
     data['ambiente'] = data['ambiente'].split(',')
 
     schema = EstablecimientosSchema()
-    
+
     try:
         datos_validados = schema.load(data)
         establecimiento = Establecimiento(datos_validados)
@@ -48,21 +48,15 @@ def crear_establecimiento():
     except Exception as e:
         return jsonify({"error": f"{e}"}), 500
 
-
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_establecimiento(id):
     try:
         respuesta = Establecimiento.eliminar_establecimiento(id)
         id_administrador = respuesta.get("id_administrador")
 
-        #Al eliminar un establecimiento se debe:
-
         id_establecimiento = str(id)
 
-        #Eliminar el id de la lista "establecimientos" del administrador
         AdministradorEstablecimiento.del_establecimiento_administrador(id_administrador, id_establecimiento)
-
-        #Eliminar Ofertas-Eventos-Reviews asociadas a ese establecimiento
         Oferta.del_oferta_establecimiento(id)
         Evento.del_evento_establecimiento(id)
         Review.del_review_establecimiento(id)
@@ -75,8 +69,6 @@ def eliminar_establecimiento(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
-
-
 @blueprint.route("", methods=["GET"])
 def consultar_establecimientos():
     try:
@@ -86,7 +78,7 @@ def consultar_establecimientos():
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
-    
+
 @blueprint.route("/ordenados", methods=["GET"])
 def consultar_establecimientos_ordenados():
     try:
@@ -95,8 +87,8 @@ def consultar_establecimientos_ordenados():
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500
     except Exception as e:
-        return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
-    
+        return jsonify({"error": f"Error inesperado al consultar establecimientos: {e}"}), 500
+
 @blueprint.route("<id>", methods=["GET"])
 def consultar_establecimiento(id):
     try:
@@ -109,7 +101,6 @@ def consultar_establecimiento(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
 
-
 @blueprint.route("/nueva_oferta", methods=["POST"])
 def add_oferta():
     if 'imagen' in request.files and request.files['imagen'].filename != '':
@@ -120,20 +111,26 @@ def add_oferta():
     else:
         data = request.form.to_dict()
         data['imagen_url'] = f'/_uploads/photos/default_establecimiento.png'
-        data.pop('imagen')
+        data.pop('imagen', None)
 
     id_establecimiento = data.get("id_establecimiento")
 
     try:
-        respuesta_json = requests.post(url_oferta, json=data).json()
+        response = requests.post(url_oferta, json=data)
+        response.raise_for_status()
+        respuesta_json = response.json()
         id_oferta = respuesta_json.get("id_oferta")
+        if not id_oferta:
+            raise ValueError("No se recibió 'id_oferta' en la respuesta del servidor.")
         Establecimiento.add_ofertas_establecimiento(id_establecimiento, id_oferta)
         return respuesta_json, 200
-    except RuntimeError as e:
-        return jsonify({"error": str(e)}), 500
+    except requests.RequestException as e:
+        error_message = e.response.json().get("error", str(e))
+        return jsonify({"error": error_message}), e.response.status_code if e.response else 500
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
-
 
 @blueprint.route("/nuevo_evento", methods=["POST"])
 def add_evento():
@@ -145,39 +142,60 @@ def add_evento():
     else:
         data = request.form.to_dict()
         data['imagen_url'] = f'/_uploads/photos/default_establecimiento.png'
-        data.pop('imagen')
+        data.pop('imagen', None)
 
     id_establecimiento = data.get("id_establecimiento")
 
     try:
-        respuesta_json = requests.post(url_evento, json=data).json()
+        response = requests.post(url_evento, json=data)
+        response.raise_for_status()
+        respuesta_json = response.json()
         id_evento = respuesta_json.get("id_evento")
+        if not id_evento:
+            raise ValueError("No se recibió 'id_evento' en la respuesta del servidor.")
         Establecimiento.add_evento_establecimiento(id_establecimiento, id_evento)
         return respuesta_json, 200
-    except RuntimeError as e:
-        return jsonify({"error": str(e)}), 500
+    except requests.RequestException as e:
+        if e.response and e.response.status_code == 400:
+            error_message = e.response.json().get("error", "Datos sin rellenar")
+            return jsonify({"error": error_message}), 400
+        error_message = e.response.json().get("error", str(e))
+        return jsonify({"error": error_message}), e.response.status_code if e.response else 500
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
-
 
 @blueprint.route("/filtrar", methods=["GET"])
 def filtrar():
     ambientes_solicitados = request.args.getlist("ambiente")
-    
+
     try:
         respuesta = Establecimiento.filtrar_por_ambientes(ambientes_solicitados)
-        print(respuesta)
         return jsonify(respuesta), 200
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
-    
 
 @blueprint.route("/rating/<id>", methods=["GET"])
 def obtener_calificacion(id):
     try:
         respuesta = Establecimiento.media_reviews(id)
+        return respuesta, 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error inesperado al consultar la media: {e}"}), 500
+
+@blueprint.route("/<id>", methods=["PUT"])
+def actualizar_establecimiento(id):
+    data = request.json
+
+    try:
+        respuesta = Establecimiento.actualizar_establecimiento(id, data)
         return respuesta, 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 404

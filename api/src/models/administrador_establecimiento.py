@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash
 from bson import json_util
 from bson.objectid import ObjectId
 from pymongo.errors import PyMongoError
+from datetime import datetime
 
 class AdministradorEstablecimiento:
 
@@ -20,28 +21,38 @@ class AdministradorEstablecimiento:
         self.fecha_nac = data.get("fecha_nac")
         self.imagen_url = data.get("imagen_url")
 
-
     def insertar_administrador_establecimiento(self):
         try:
             if not self.correo_es_valido(self.email):
                 raise ValueError("Formato de correo inválido")
-            
-            data_insertar = self.__dict__
-            data_insertar["password"] = generate_password_hash(data_insertar["password"])
+
+            if self.fecha_nac:
+                if isinstance(self.fecha_nac, str):
+                    self.fecha_nac = datetime.fromisoformat(self.fecha_nac)
+
+            data_insertar = {
+                "nombre": self.nombre,
+                "nombre_usuario": self.nombre_usuario,
+                "email": self.email,
+                "password": generate_password_hash(self.password),
+                "fecha_nac": self.fecha_nac,
+                "telefono": self.telefono,
+                "imagen_url": self.imagen_url,
+                "dni": self.dni
+            }
+
             id = str(mongo.db.administradores_establecimientos.insert_one(data_insertar).inserted_id)
-            
+
             return {"message": f"Administrador de establecimiento creado con éxito", "id": id}
-        
         except PyMongoError as e:
             raise ValueError("Error al insertar administrador de establecimiento en la base de datos") from e
-
 
     def eliminar_administrador_establecimiento(id):
         try:
             administrador_eliminar = mongo.db.administradores_establecimientos.find_one({"_id": ObjectId(id)})
 
             if not administrador_eliminar:
-                raise ValueError("Adminsitrador de establecimiento no encontrado")
+                raise ValueError("Administrador de establecimiento no encontrado")
             
             resultado = mongo.db.administradores_establecimientos.delete_one({"_id": ObjectId(id)})
 
@@ -49,10 +60,8 @@ class AdministradorEstablecimiento:
                 raise RuntimeError("No se pudo eliminar el administrador de establecimiento")
             
             return {"message": f"Administrador de establecimiento con id: {id} eliminado con éxito"}
-        
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al eliminar actividad: {e}")
-
 
     def consultar_administradores_establecimiento():
         try:
@@ -61,44 +70,46 @@ class AdministradorEstablecimiento:
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar administradores de establecimientos: {e}")
 
-
     def consultar_administrador_establecimiento(id):
         try:
             administrador = mongo.db.administradores_establecimientos.find_one({"_id": ObjectId(id)})
 
             if not administrador:
-                raise ValueError("Adminsitrador de establecimiento no encontrado")
+                raise ValueError("Administrador de establecimiento no encontrado")
             
             respuesta = json_util.dumps(administrador)
             return respuesta
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar administrador de establecimiento: {e}")
 
-
     def actualizar_administrador_establecimiento(id, data):
         try:
             updates = data.copy()
 
-            updates.pop("dni")
-            updates.pop("establecimientos")
-            updates.pop("email")
-            updates.pop("password")
+            updates.pop("dni", None)
+            updates.pop("establecimientos", None)
+            updates.pop("password", None)
+
+            if 'fecha_nac' in updates:
+                if isinstance(updates['fecha_nac'], str):
+                    try:
+                        updates['fecha_nac'] = datetime.fromisoformat(updates['fecha_nac'])
+                    except ValueError as e:
+                        raise RuntimeError(f"Formato de fecha inválido: {e}")
 
             resultado = mongo.db.administradores_establecimientos.update_one({"_id": ObjectId(id)}, {"$set": updates})
 
             if resultado.modified_count == 0:
                 raise RuntimeError("No ha habido cambios a realizar")
-            
+
             return {"message": f"Administrador de establecimiento con id: {id} actualizado con éxito"}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al actualizar administrador de establecimiento: {e}")
-
 
     @classmethod
     def correo_es_valido(cls, email):
         patron = r'\w+@\w+\.\w+'
         return re.match(patron, email) is not None
-
 
     def add_establecimiento_administrador(id_administrador, id_establecimiento):
         try:
@@ -106,11 +117,9 @@ class AdministradorEstablecimiento:
                 {"_id": ObjectId(id_administrador)},
                 {"$addToSet": {"establecimientos": id_establecimiento}}
             )
-            
             return {"message": f"Establecimiento {id_establecimiento} agregado al administrador {id_administrador} con éxito", "id_admin": id_administrador}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al actualizar administrador de establecimiento: {e}")
-
 
     def del_establecimiento_administrador(id_administrador, id_establecimiento):
         try:
@@ -118,8 +127,6 @@ class AdministradorEstablecimiento:
                 {"_id": ObjectId(id_administrador)},
                 {"$pull": {"establecimientos": str(id_establecimiento)}}
             )
-
             return {"message": "Eliminado de la lista de establecimiento del administrador"}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos de eliminar un establecimiento de la lista de administrador: {e}")
-        

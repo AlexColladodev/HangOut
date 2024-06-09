@@ -5,7 +5,6 @@ from marshmallow import ValidationError
 
 blueprint = Blueprint("Review", "reviews", url_prefix="/reviews")
 
-
 @blueprint.route("", methods=["POST"])
 def crear_review():
     data = request.json
@@ -25,7 +24,6 @@ def crear_review():
         return jsonify({"error": error_message}), 400
     except Exception as e:
         return jsonify({"error": f"{e}"}), 500
-        
 
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_review(id):
@@ -38,7 +36,7 @@ def eliminar_review(id):
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
-    
+
 @blueprint.route("", methods=["GET"])
 def consultar_reviews():
     try:
@@ -48,7 +46,7 @@ def consultar_reviews():
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
-    
+
 @blueprint.route("/<id>", methods=["GET"])
 def consultar_review(id):
     try:
@@ -60,6 +58,3 @@ def consultar_review(id):
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
-    
-
-    

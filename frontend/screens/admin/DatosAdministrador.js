@@ -2,20 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import Fondo from '../../components/Fondo';
-import styles from '../../styles/stylesUsers';
-import commonStyles from '../../styles/stylesCommon'
+import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header'
 import Footer from '../../components/Footer';
+import { AdminContext } from '../../context/AdminContext';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const DatosAdministrador = () => {
+const DatosAdministrador = ({ navigation, route }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const { adminId } = route.params;
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      title: 'Administrador',
+      headerRight: () => (
+        <TouchableOpacity onPress={() => navigation.navigate('ModificarAdministrador', { data })}>
+          <Icon name="edit" size={25} color="black" style={{ marginRight: 15 }} />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, data]);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/administrador_establecimiento/666360e91cb2a02d514a0e37`);
+      const response = await axios.get(`${BASE_URL}/administrador_establecimiento/${adminId}`);
       setData(response.data);
       setLoading(false);
       setError(false);
@@ -26,78 +38,78 @@ const DatosAdministrador = () => {
     }
   };
 
-  const handleModify = () => {
-
-  };
-
   useEffect(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const focusListener = navigation.addListener('focus', fetchData);
+    return () => {
+      navigation.removeListener('focus', fetchData);
+    };
+  }, [navigation]);
+
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.centered} />;
+    return <ActivityIndicator size="large" color="#0000ff" style={commonStyles.centered} />;
   }
 
   if (error) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.errorText}>Error al cargar los datos</Text>
+      <View style={commonStyles.centered}>
+        <Text style={commonStyles.errorText}>Error al cargar los datos</Text>
         <Button title="Reintentar" onPress={fetchData} />
       </View>
     );
   }
 
+  const formattedFechaNac = new Date(data.fecha_nac.$date).toLocaleDateString();
+
   return (
     <View style={{ flex: 1 }}>
-    <Header titulo="Datos Administrador" onBackPress={() => (navigation.goBack())} />
       <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
         <Fondo />
       </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <View style={commonStyles.dataContainer}>
-          <View style={styles.profileImageContainer}>
-            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.profileImage} />
+          <View style={commonStyles.profileImageContainer}>
+            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={commonStyles.profileImage} />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Nombre:</Text>
-            <View style={styles.box}>
-            <Text style={styles.fieldValue}>{data.nombre}</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Nombre:</Text>
+            <View style={commonStyles.box}>
+              <Text style={commonStyles.fieldValue}>{data.nombre}</Text>
             </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Nombre Usuario:</Text>
-            <View style={styles.box}>
-            <Text style={styles.fieldValue}>{data.nombre_usuario}</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Nombre Usuario:</Text>
+            <View style={commonStyles.box}>
+              <Text style={commonStyles.fieldValue}>{data.nombre_usuario}</Text>
             </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Correo Electrónico:</Text>
-            <View style={styles.box}>
-            <Text style={styles.fieldValue}>{data.email_empresa}</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Correo Electrónico:</Text>
+            <View style={commonStyles.box}>
+              <Text style={commonStyles.fieldValue}>{data.email}</Text>
             </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Teléfono:</Text>
-            <View style={styles.box}>
-            <Text style={styles.fieldValue}>{data.telefono}</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Teléfono:</Text>
+            <View style={commonStyles.box}>
+              <Text style={commonStyles.fieldValue}>{data.telefono}</Text>
             </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Fecha de Nacimiento:</Text>
-            <View style={styles.box}>
-            <Text style={styles.fieldValue}>{data.fecha_nac}</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Fecha de Nacimiento:</Text>
+            <View style={commonStyles.box}>
+              <Text style={commonStyles.fieldValue}>{formattedFechaNac}</Text>
             </View>
           </View>
-          <TouchableOpacity style={styles.botonModificar} onPress={handleModify}>
-            <Text style={styles.botonModificarTexto}>Modificar</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
-      <Footer 
-        onHangoutPress={() => console.log('Hangout Pressed')} 
-        onAddPress={() => console.log('Add Pressed')} 
-        onProfilePress={() => console.log('Profile Pressed')} 
-        showAddButton={false} 
+      <Footer
+        showAddButton={false}
+        onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
+        onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />
     </View>
   );

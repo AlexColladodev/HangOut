@@ -24,6 +24,7 @@ class Establecimiento:
         except Exception as e:
             raise RuntimeError("Error en la base de datos al crear establecimiento: " + str(e))
 
+    @staticmethod
     def eliminar_establecimiento(id):
         try:
             establecimiento_eliminar = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
@@ -39,6 +40,7 @@ class Establecimiento:
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al eliminar establecimiento: {e}")
 
+    @staticmethod
     def consultar_establecimientos():
         try:
             establecimientos = mongo.db.establecimientos.find({}, {"_id": 1})
@@ -46,8 +48,8 @@ class Establecimiento:
             return json_util.dumps(ids_establecimientos)
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar los establecimientos: {e}")
-        
-    #Intentar modificarlo Puntaje Bayesiano
+
+    @staticmethod
     def consultar_establecimientos_ordenados() -> List[str]:
         try:
             establecimientos = mongo.db.establecimientos.find({}, {"_id": 1})
@@ -56,17 +58,16 @@ class Establecimiento:
             for establecimiento in establecimientos:
                 id_establecimiento = str(establecimiento["_id"])
                 media_result = Establecimiento.media_reviews(id_establecimiento)
-                media = media_result.get("media", 0.0)
+                media = media_result.get("media")
                 medias.append((id_establecimiento, media))
 
-            
             medias.sort(key=lambda x: x[1], reverse=True)
             ids_ordenados = [id_media[0] for id_media in medias]
             return json_util.dumps(ids_ordenados)
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar los establecimientos ordenados: {e}")
-        
 
+    @staticmethod
     def consultar_establecimiento(id):
         try:
             establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
@@ -76,17 +77,31 @@ class Establecimiento:
             return respuesta
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar el establecimiento: {e}")
-        
-    #No implementada ruta aún
-    def actualizar_ambiente(nuevo_ambiente, id_establecimiento):
+
+    @staticmethod
+    def actualizar_establecimiento(id_establecimiento, data):
         try:
-            mongo.db.establecimientos.update_one({"_id": ObjectId(id_establecimiento)},
-                {"ambiente": nuevo_ambiente})
-            return {"message": "Ambiente actualizado con éxito"}
+            establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id_establecimiento)})
+            if not establecimiento:
+                raise ValueError(f"Establecimiento con id {id_establecimiento} no encontrado")
+
+            update_data = {}
+            if 'nombre_establecimiento' in data:
+                update_data['nombre_establecimiento'] = data['nombre_establecimiento']
+            if 'ambiente' in data:
+                update_data['ambiente'] = data['ambiente']
+
+            if update_data:
+                mongo.db.establecimientos.update_one(
+                    {"_id": ObjectId(id_establecimiento)},
+                    {"$set": update_data}
+                )
+
+            return {"message": "Establecimiento actualizado exitosamente"}
         except PyMongoError as e:
-            raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
+            raise RuntimeError(f"Error de base de datos al actualizar el establecimiento: {e}")
 
-
+    @staticmethod
     def add_evento_establecimiento(id_establecimiento, id_evento):
         try:
             mongo.db.establecimientos.update_one(
@@ -97,7 +112,7 @@ class Establecimiento:
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al añadir evento al establecimiento: {e}")
 
-
+    @staticmethod
     def add_ofertas_establecimiento(id_establecimiento, id_oferta):
         try:
             mongo.db.establecimientos.update_one(
@@ -108,7 +123,7 @@ class Establecimiento:
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
 
-
+    @staticmethod
     def filtrar_por_ambientes(ambientes_solicitados):
         try:
             establecimientos = mongo.db.establecimientos.find({
@@ -119,19 +134,18 @@ class Establecimiento:
         except Exception as e:
             raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
 
-
+    @staticmethod
     def add_review_establecimiento(id_establecimiento, id_review):
         try:
             mongo.db.establecimientos.update_one(
                 {"_id": ObjectId(id_establecimiento)},
                 {"$addToSet": {"reviews": id_review}}
             )
-            
             return {"message": "Review añadida a Establecimiento"}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
-        
-        
+
+    @staticmethod
     def media_reviews(id):
         try:
             establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
@@ -140,20 +154,21 @@ class Establecimiento:
                 raise ValueError("Establecimiento no encontrado")
 
             suma = 0.0
+            media = 0.0
             cantidad_reviews = len(establecimiento.get("reviews", []))
             reviews = establecimiento.get("reviews", [])
 
             for review_id in reviews:
                 review = mongo.db.reviews.find_one({"_id": ObjectId(review_id)})
-                
+
                 if review:
                     suma += review["calificacion"]
 
                 if cantidad_reviews > 0:
                     media = suma / cantidad_reviews
                 else:
-                    media = None
+                    media = 0
                 
-            return {"media": media}
+            return {"media": media, "n_reviews": cantidad_reviews}
         except PyMongoError as e:
             raise RuntimeError(f"No se pudo contar la media: {e}")

@@ -38,7 +38,6 @@ class Actividad:
         except PyMongoError as e:
             raise RuntimeError("Error al insertar actividad en la base de datos") from e
 
-
     def eliminar_actividad(id):
         try:
             actividad_eliminar = mongo.db.actividades.find_one({"_id": ObjectId(id)})
@@ -55,14 +54,12 @@ class Actividad:
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al eliminar actividad: {e}")
 
-
     def consultar_actividades():
         try:
             actividades = mongo.db.actividades.find()
             return json_util.dumps(actividades)
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar actividades: {e}")
-
 
     def consultar_actividad(id):
         try:
@@ -75,9 +72,7 @@ class Actividad:
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar actividades: {e}")
 
-
     def actualizar_actividad(id, data):
-
         data.pop("id_usuario_creador")
         data.pop("participantes")
 
@@ -93,8 +88,6 @@ class Actividad:
             return {"message": "Actividad actualizada con éxito"}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos: {e}")
-        
-
 
     def usuario_participa(id):
         try:
@@ -116,6 +109,3 @@ class Actividad:
             return {"actividades": resultado}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos: {e}")
-
-
-

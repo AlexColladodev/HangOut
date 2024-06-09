@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/es';
@@ -7,7 +7,7 @@ import BASE_URL from '../config_ip';
 
 const DEFAULT_IMAGE_URL = `${BASE_URL}/_uploads/photos/default_no_image.png`;
 
-const Evento = ({ id, mostrarEstablecimiento }) => {
+const Evento = ({ id, mostrarEstablecimiento, onPress }) => {
   const [evento, setEvento] = useState(null);
   const [establecimiento, setEstablecimiento] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -70,7 +70,7 @@ const Evento = ({ id, mostrarEstablecimiento }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={styles.dateContainer}>
         <Text style={styles.dateText}>{evento.fecha_evento || 'Fecha no disponible'}</Text>
       </View>
@@ -81,7 +81,7 @@ const Evento = ({ id, mostrarEstablecimiento }) => {
           <Text style={styles.establecimiento} numberOfLines={1} ellipsizeMode="tail">{establecimiento || 'Establecimiento no disponible'}</Text>
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

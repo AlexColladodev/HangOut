@@ -25,7 +25,6 @@ def crear_usuario_generico():
         data['imagen_url'] = f'/_uploads/photos/default.png'
         data.pop('imagen')
 
-
     data['preferencias'] = data['preferencias'].split(',')
     schema = UsuarioGenericoSchema()
     
@@ -44,7 +43,6 @@ def crear_usuario_generico():
     except Exception as e:
         return jsonify({"error": f"{e}"}), 500
 
-
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_usuario(id):
     try:
@@ -57,7 +55,6 @@ def eliminar_usuario(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
-
 @blueprint.route("", methods=["GET"])
 def consultar_usuarios():
     try:
@@ -67,7 +64,6 @@ def consultar_usuarios():
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
-
 
 @blueprint.route("/<id>", methods=["GET"])
 def consultar_unico_usuario(id):
@@ -80,7 +76,6 @@ def consultar_unico_usuario(id):
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
-
 
 @blueprint.route("/<id>", methods=["PUT"])
 def actualizar_usuario(id):
@@ -95,7 +90,6 @@ def actualizar_usuario(id):
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
-
 
 @blueprint.route("/nueva_actividad", methods=["POST"])
 def add_actividad():
@@ -113,7 +107,6 @@ def add_actividad():
         return jsonify({"error": "Error en la solicitud al servicio de actividades", "detalles": str(e)}), 400
     except Exception as e:
         return jsonify({"error": "Error general al añadir actividad al usuario", "detalles": str(e)}), 500
-
 
 @blueprint.route("/seguir_usuario", methods=["POST"])
 @jwt_required()
@@ -135,7 +128,6 @@ def seguir_usuario():
     else:
         return jsonify({"message": "No existe el usuario con nombre: " + nombre_usuario}), 400
 
-
 @blueprint.route("/participa", methods=["POST"])
 @jwt_required()
 def participa():
@@ -153,7 +145,6 @@ def participa():
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
-
 @blueprint.route("/no_participa", methods=["POST"])
 @jwt_required()
 def no_participa():
@@ -169,7 +160,6 @@ def no_participa():
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
-
 
 @blueprint.route("/review", methods=["POST"])
 @jwt_required()

@@ -25,7 +25,6 @@ def crear_actividad():
     except Exception as e:
         return jsonify({"error": f"{e}"}), 500
 
-
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_actividad(id):
     try:
@@ -38,7 +37,6 @@ def eliminar_actividad(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
-
 @blueprint.route("", methods=["GET"])
 def consultar_actividades():
     try:
@@ -49,7 +47,6 @@ def consultar_actividades():
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
 
-
 @blueprint.route("/<id>", methods=["GET"])
 def consultar_actividad(id):
     try:
@@ -59,7 +56,6 @@ def consultar_actividad(id):
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar actividad: {e}"}), 500
-
 
 @blueprint.route("/<id>", methods=["PUT"])
 def actualizar_actividad(id):

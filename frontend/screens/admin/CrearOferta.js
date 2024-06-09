@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, View, TextInput, Button, ScrollView, Text, Alert, Image, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import Fondo from '../../components/Fondo';
-import styles from '../../styles/stylesCreate';
-import commonStyles from '../../styles/stylesCommon';
+import inputStyles from '../../styles/inputStyles';
+import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header'
+import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import { AdminContext } from '../../context/AdminContext';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const CrearOferta = () => {
+const CrearOferta = ({ navigation, route }) => {
   const [nombreOferta, setNombreOferta] = useState('');
   const [descripcionOferta, setDescripcionOferta] = useState('');
   const [precioOferta, setPrecioOferta] = useState('');
   const [imageUri, setImageUri] = useState(null);
-  const idEstablecimiento = '666197975ccba976dcffb41e';
+  const { id } = route.params;
+  const { adminId } = useContext(AdminContext);
 
   const selectImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -34,7 +37,7 @@ const CrearOferta = () => {
     data.append('nombre_oferta', nombreOferta);
     data.append('descripcion_oferta', descripcionOferta);
     data.append('precio_oferta', precioOferta);
-    data.append('id_establecimiento', idEstablecimiento);
+    data.append('id_establecimiento', id);
 
     if (imageUri) {
       const uriParts = imageUri.split('.');
@@ -62,55 +65,57 @@ const CrearOferta = () => {
         setDescripcionOferta('');
         setPrecioOferta('');
         setImageUri(null);
+        navigation.navigate('DatosEstablecimiento', { id }); 
       } else {
-        Alert.alert('Error', 'Hubo un problema al crear la oferta');
+        const errorMsg = response.data.error || 'Hubo un problema al crear la oferta';
+        Alert.alert('Error', errorMsg);
       }
     } catch (error) {
-      Alert.alert('Error', 'No se pudo conectar con el servidor');
+      const errorMsg = error.response?.data?.error || 'No se pudo conectar con el servidor';
+      Alert.alert('Error', errorMsg);
     }
   };
 
   return (
     <View style={{ flex: 1 }}>
-    <Header titulo="Crear Oferta" onBackPress={() => (navigation.goBack())} />
       <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
         <Fondo />
       </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <View style={commonStyles.dataContainer}>
-          <View style={styles.inputContainer}>
+          <View style={inputStyles.inputContainer}>
             <TextInput
               placeholder="Nombre Oferta:"
               value={nombreOferta}
               onChangeText={setNombreOferta}
-              style={styles.input}
+              style={inputStyles.input}
             />
             <TextInput
               placeholder="Descripción Oferta:"
               value={descripcionOferta}
               onChangeText={setDescripcionOferta}
-              style={styles.input}
+              style={inputStyles.input}
             />
             <TextInput
               placeholder="Precio Oferta:"
               value={precioOferta}
               onChangeText={text => setPrecioOferta(text.replace(/[^0-9.]/g, ''))}
-              style={styles.input}
+              style={inputStyles.input}
               keyboardType="numeric"
             />
             <Button title="Seleccionar Imagen Oferta" onPress={selectImage} />
-            {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
+            {imageUri && <Image source={{ uri: imageUri }} style={commonStyles.image} />}
           </View>
-          <TouchableOpacity style={styles.boton} onPress={handleSave}>
-            <Text style={styles.botonTexto}>Guardar</Text>
+          <TouchableOpacity style={commonStyles.saveButton} onPress={handleSave}>
+            <Text style={commonStyles.saveButtonText}>Guardar</Text>
+            <Icon name="save" size={30} color="#000" />
           </TouchableOpacity>
         </View>
       </ScrollView>
       <Footer 
-        onHangoutPress={() => console.log('Hangout Pressed')} 
-        onAddPress={() => console.log('Add Pressed')} 
-        onProfilePress={() => console.log('Profile Pressed')} 
         showAddButton={false} 
+        onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
+        onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />
     </View>
   );

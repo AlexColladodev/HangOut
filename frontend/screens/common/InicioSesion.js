@@ -1,14 +1,47 @@
-import React from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Text, Image } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { StyleSheet, View, TextInput, TouchableOpacity, Text, Image, Alert } from 'react-native';
 import FondoInicio from '../../components/FondoInicio';
+import axios from 'axios';
+import BASE_URL from '../../config_ip';
+import { AdminContext } from '../../context/AdminContext'; // Ajusta la ruta según tu estructura
 
 const InicioSesion = ({ navigation }) => {
+  const [nombreUsuario, setNombreUsuario] = useState('');
+  const [password, setPassword] = useState('');
+  const { setAdminId } = useContext(AdminContext);  // Obtener la función para setear adminId del contexto
 
   React.useEffect(() => {
     navigation.setOptions({
       title: 'Iniciar Sesión'
     });
   }, [navigation]);
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(`${BASE_URL}/login`, {
+        nombre_usuario: nombreUsuario,
+        password: password
+      });
+      const data = response.data;
+
+      if (data.acceso) {
+        const { token, rol } = data;
+
+        if (rol === 'usuario_generico') {
+          const userId = String(data.usuario_generico._id);
+          navigation.navigate('UsuarioStack', { screen: 'InicioUsuario', params: { userId, token } });
+        } else if (rol === 'administrador_establecimiento') {
+          const adminId = String(data.administrador_establecimiento._id);
+          setAdminId(adminId);  // Setear adminId en el contexto
+          navigation.navigate('AdminStack', { screen: 'InicioAdmin', params: { adminId, token } });
+        }
+      } else {
+        Alert.alert('Error', 'Acceso denegado');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Nombre de usuario o contraseña incorrectos');
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -22,14 +55,18 @@ const InicioSesion = ({ navigation }) => {
             style={styles.input}
             placeholder="Nombre Usuario"
             placeholderTextColor="#000"
+            onChangeText={setNombreUsuario}
+            value={nombreUsuario}
           />
           <TextInput 
             style={styles.input}
             placeholder="Contraseña"
             placeholderTextColor="#000"
             secureTextEntry
+            onChangeText={setPassword}
+            value={password}
           />
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Iniciar Sesión</Text>
           </TouchableOpacity>
         </View>

@@ -1,42 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, TextInput, Button, Alert, Platform, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, Text, ActivityIndicator, ScrollView, TextInput, Button, Alert, Platform, TouchableOpacity, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import Fondo from '../../components/Fondo';
-import styles from '../../styles/stylesModify';
-import commonStyles from '../../styles/stylesCommon'
+import inputStyles from '../../styles/inputStyles';
+import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header'
+import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import { AdminContext } from '../../context/AdminContext';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const ModificarEvento = () => {
-  const [data, setData] = useState({
-    nombre_evento: '',
-    descripcion_evento: '',
-    fecha_evento: new Date(),
-    hora_evento: new Date(),
-    precio: '',
-  });
+const ModificarEvento = ({ navigation, route }) => {
+  const [data, setData] = useState(route.params.data);
   const [loading, setLoading] = useState(true);
   const [showFecha, setShowFecha] = useState(false);
   const [showHora, setShowHora] = useState(false);
+  const [fechaEvento, setFechaEvento] = useState(new Date(data.fecha_evento.$date));
+  const [horaEvento, setHoraEvento] = useState(new Date(`1970-01-01T${data.hora_evento}`));
+  const { adminId } = useContext(AdminContext);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/eventos/66619a1e73eefd646296196c`)
-      .then(response => {
-        const fetchedData = response.data;
-        setData({
-          ...fetchedData,
-          fecha_evento: new Date(fetchedData.fecha_evento.$date),
-          hora_evento: new Date(`1970-01-01T${fetchedData.hora_evento}Z`),
-          precio: fetchedData.precio.toString(),
-        });
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-        setLoading(false);
-      });
+    setLoading(false);
   }, []);
 
   const handleInputChange = (field, value) => {
@@ -44,15 +29,17 @@ const ModificarEvento = () => {
   };
 
   const onChangeFecha = (event, selectedDate) => {
-    const currentDate = selectedDate || data.fecha_evento;
-    setShowFecha(Platform.OS === 'ios');
-    setData(prevState => ({ ...prevState, fecha_evento: currentDate }));
+    setShowFecha(false);
+    if (selectedDate) {
+      setFechaEvento(selectedDate);
+    }
   };
 
   const onChangeHora = (event, selectedDate) => {
-    const currentDate = selectedDate || data.hora_evento;
-    setShowHora(Platform.OS === 'ios');
-    setData(prevState => ({ ...prevState, hora_evento: currentDate }));
+    setShowHora(false);
+    if (selectedDate) {
+      setHoraEvento(selectedDate);
+    }
   };
 
   const showDatepicker = () => {
@@ -63,88 +50,93 @@ const ModificarEvento = () => {
     setShowHora(true);
   };
 
-  const handleSave = () => {
-    const { nombre_evento, descripcion_evento, fecha_evento, hora_evento, precio } = data;
+  const handleSave = async () => {
+    const { _id, nombre_evento, descripcion_evento, precio, id_establecimiento, imagen_url } = data;
+
+    const fechaEventoISO = fechaEvento.toISOString().split('T')[0]; 
+    const horaEventoISO = horaEvento.toTimeString().split(' ')[0]; 
+
     const updatedData = {
       nombre_evento,
       descripcion_evento,
-      fecha_evento: fecha_evento.toISOString().split('T')[0], // Formato YYYY-MM-DD
-      hora_evento: hora_evento.toTimeString().split(' ')[0], // Formato HH:mm:ss
-      precio: parseFloat(precio), 
+      fecha_evento: fechaEventoISO, 
+      hora_evento: horaEventoISO, 
+      precio: parseFloat(precio),
+      id_establecimiento,
+      imagen_url
     };
 
-    axios.put(`${BASE_URL}/eventos/66619a1e73eefd646296196c`, updatedData)
-      .then(response => {
-        Alert.alert('Éxito', 'Los datos han sido actualizados.');
-      })
-      .catch(error => {
-        console.error(error);
-        Alert.alert('Error', 'Hubo un problema al actualizar los datos.');
+    let id = _id.$oid;
+
+    try {
+      const response = await axios.put(`${BASE_URL}/eventos/${id}`, updatedData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+
+      if (response.status === 200) {
+        Alert.alert('Éxito', 'Evento actualizado con éxito');
+        navigation.navigate('DatosEvento', { id });
+      } else {
+        const errorMsg = response.data.error || 'Hubo un problema al crear el evento';
+        Alert.alert('Error', errorMsg);
+      }
+    } catch (error) {
+      const errorMsg = error.response?.data?.error || 'No se pudo conectar con el servidor';
+      Alert.alert('Error', errorMsg);
+    }
   };
-
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
-
-  if (!data) {
-    return (
-      <View style={commonStyles.container}>
-        <Text style={commonStyles.label}>Error al cargar los datos</Text>
-      </View>
-    );
-  }
 
   return (
     <View style={{ flex: 1 }}>
-    <Header titulo="Modificar Evento" onBackPress={() => (navigation.goBack())} />
       <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
         <Fondo />
       </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <View style={commonStyles.dataContainer}>
-          <View style={styles.imagenContainer}>
-            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.imagen} />
+          <View style={commonStyles.imageContainer}>
+            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={commonStyles.showImage} />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Nombre Evento:</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Nombre Evento:</Text>
             <TextInput
-              style={styles.input}
+              style={inputStyles.input}
               value={data.nombre_evento}
               onChangeText={(value) => handleInputChange('nombre_evento', value)}
             />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Descripción Evento:</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Descripción Evento:</Text>
             <TextInput
-              style={styles.input}
+              style={inputStyles.input}
               value={data.descripcion_evento}
               onChangeText={(value) => handleInputChange('descripcion_evento', value)}
             />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Fecha Evento:</Text>
-            <View style={styles.dateRow}>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Fecha Evento:</Text>
+            <View style={inputStyles.dateRow}>
               <TextInput
-                value={data.fecha_evento.getDate().toString()}
-                style={[styles.dateInput, styles.datePart]}
+                value={fechaEvento.getDate().toString()}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={data.fecha_evento.toLocaleString('default', { month: 'short' })}
-                style={[styles.dateInput, styles.datePart]}
+                value={fechaEvento.toLocaleString('default', { month: 'short' })}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={data.fecha_evento.getFullYear().toString()}
-                style={[styles.dateInput, styles.datePart]}
+                value={fechaEvento.getFullYear().toString()}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <Button onPress={showDatepicker} title="Cambiar" color="#FF5252" />
             </View>
             {showFecha && (
               <DateTimePicker
-                value={data.fecha_evento}
+                value={fechaEvento}
                 mode="date"
                 is24Hour={true}
                 display="default"
@@ -152,24 +144,24 @@ const ModificarEvento = () => {
               />
             )}
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Hora Evento:</Text>
-            <View style={styles.dateRow}>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Hora Evento:</Text>
+            <View style={inputStyles.dateRow}>
               <TextInput
-                value={data.hora_evento.getHours().toString()}
-                style={[styles.dateInput, styles.datePart]}
+                value={horaEvento.getHours().toString()}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={data.hora_evento.getMinutes().toString().padStart(2, '0')}
-                style={[styles.dateInput, styles.datePart]}
+                value={horaEvento.getMinutes().toString().padStart(2, '0')}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <Button onPress={showTimepicker} title="Cambiar" color="#FF5252" />
             </View>
             {showHora && (
               <DateTimePicker
-                value={data.hora_evento}
+                value={horaEvento}
                 mode="time"
                 is24Hour={true}
                 display="default"
@@ -177,29 +169,28 @@ const ModificarEvento = () => {
               />
             )}
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Precio Evento:</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Precio Evento:</Text>
             <TextInput
-              style={styles.input}
-              value={data.precio}
+              style={inputStyles.input}
+              value={data.precio.toString()}
               keyboardType="numeric"
               onChangeText={(value) => handleInputChange('precio', value)}
             />
           </View>
-          <TouchableOpacity style={styles.boton} onPress={handleSave}>
-            <Text style={styles.botonTexto}>Modificar</Text>
+          <TouchableOpacity style={commonStyles.saveButton} onPress={handleSave}>
+            <Text style={commonStyles.saveButtonText}>Guardar</Text>
+            <Icon name="save" size={30} color="#000" />
           </TouchableOpacity>
         </View>
       </ScrollView>
       <Footer 
-        onHangoutPress={() => console.log('Hangout Pressed')} 
-        onAddPress={() => console.log('Add Pressed')} 
-        onProfilePress={() => console.log('Profile Pressed')} 
         showAddButton={false} 
+        onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
+        onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />
     </View>
   );
 };
-
 
 export default ModificarEvento;

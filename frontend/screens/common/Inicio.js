@@ -3,7 +3,16 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import FondoInicio from '../../components/FondoInicio'; 
 import BASE_URL from '../../config_ip';
 
+
 const Inicio = ({ navigation }) => {
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      title: 'HangOut'
+    });
+  }, [navigation]);
+
+  
   return (
     <View style={styles.container}>
       <FondoInicio />

@@ -1,37 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
+import { View, Text, ActivityIndicator, ScrollView, Button, Image, FlatList, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Fondo from '../../components/Fondo';
-import Evento from '../../components/Evento'; 
-import Review from '../../components/Review'; 
-import Oferta from '../../components/Oferta'; 
-import styles from '../../styles/stylesData';
+import Evento from '../../components/Evento';
+import Review from '../../components/Review';
+import Oferta from '../../components/Oferta';
 import Preferencia from '../../components/Preferencia';
-import commonStyles from '../../styles/stylesCommon'
+import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header'
 import Footer from '../../components/Footer';
+import { AdminContext } from '../../context/AdminContext';
+import { useFocusEffect } from '@react-navigation/native';
 
-const DatosEstablecimiento = () => {
+const DatosEstablecimiento = ({ navigation, route }) => {
+  const { adminId } = useContext(AdminContext);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [ofertas, setOfertas] = useState([]);
+  const { id } = route.params;
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Establecimiento',
+      headerRight: () => (
+        <TouchableOpacity onPress={() => navigation.navigate('ModificarEstablecimiento', { id })}>
+          <Icon name="edit" size={25} color="black" style={{ marginRight: 15 }} />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation, id]);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/establecimientos/666197975ccba976dcffb41e`);
+      const response = await axios.get(`${BASE_URL}/establecimientos/${id}`);
       const establecimientoData = response.data;
-
-      const ofertaPromises = establecimientoData.ofertas.map(async (ofertaId) => {
-        const ofertaResponse = await axios.get(`${BASE_URL}/ofertas/${ofertaId}`);
-        return ofertaResponse.data;
-      });
-
-      const ofertaData = await Promise.all(ofertaPromises);
-
       setData(establecimientoData);
-      setOfertas(ofertaData);
       setLoading(false);
       setError(false);
     } catch (error) {
@@ -41,51 +45,95 @@ const DatosEstablecimiento = () => {
     }
   };
 
-  const handleModify = () => {
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true);
+      fetchData();
+    }, [id])
+  );
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.centered} />;
+    return <ActivityIndicator size="large" color="#0000ff" style={commonStyles.centered} />;
   }
 
   if (error) {
     return (
-      <View style={styles.centered}>
-        <Text style={commonStyles.errorText}>Error al cargar los datos</Text>
+      <View style={commonStyles.centered}>
+        <Text style={commoncommonStyles.errorText}>Error al cargar los datos</Text>
         <Button title="Reintentar" onPress={fetchData} />
       </View>
     );
   }
 
+  const handleOferta = (id) => {
+    navigation.navigate('DatosOferta', { id });
+  };
+
+  const handleEvento = (id) => {
+    navigation.navigate('DatosEvento', { id });
+  };
+
+  const handleAddOferta = () => {
+    navigation.navigate('CrearOferta', { id: id });
+  };
+
+  const handleAddEvento = () => {
+    navigation.navigate('CrearEvento', { id: id });
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Confirmar Eliminación',
+      '¿Estás seguro de que deseas eliminar este establecimiento?',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Eliminar',
+          onPress: () => {
+            axios.delete(`${BASE_URL}/establecimientos/${id}`)
+              .then(response => {
+                Alert.alert('Éxito', 'Establecimiento eliminado correctamente');
+                navigation.navigate('InicioAdmin', { adminId });
+              })
+              .catch(error => {
+                console.error(error);
+                Alert.alert('Error', 'No se pudo eliminar el establecimiento');
+              });
+          },
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
   return (
     <View style={{ flex: 1 }}>
-    <Header titulo="Datos Establecimiento" onBackPress={() => (navigation.goBack())} />
       <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
         <Fondo />
       </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
-          <View style={commonStyles.dataContainer}>
-          <View style={styles.imagenContainer}>
-            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.imagen} />
+        <View style={commonStyles.dataContainer}>
+          <View style={commonStyles.imageContainer}>
+            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={commonStyles.showImage} />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>CIF:</Text>
-            <View style={styles.box}>
-            <Text style={styles.fieldValue}>{data.cif}</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>CIF:</Text>
+            <View style={commonStyles.box}>
+              <Text style={commonStyles.fieldValue}>{data.cif}</Text>
             </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Nombre del Establecimiento:</Text>
-            <View style={styles.box}>
-            <Text style={styles.fieldValue}>{data.nombre_establecimiento}</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Nombre del Establecimiento:</Text>
+            <View style={commonStyles.box}>
+              <Text style={commonStyles.fieldValue}>{data.nombre_establecimiento}</Text>
             </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Ambiente:</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Ambiente:</Text>
             {data.ambiente.length > 0 ? (
               <FlatList
                 data={data.ambiente}
@@ -93,59 +141,72 @@ const DatosEstablecimiento = () => {
                 renderItem={({ item }) => <Preferencia name={item} />}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.lista}
+                contentContainerStyle={commonStyles.lista}
               />
             ) : (
-              <Text style={styles.fieldValue}>N/A</Text>
+              <Text style={commonStyles.fieldValue}>N/A</Text>
             )}
           </View>
 
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionLabel}>Ofertas:</Text>
+          <View style={commonStyles.sectionContainer}>
+            <View style={commonStyles.sectionHeader}>
+              <View style={commonStyles.sectionHeaderRow}>
+                <Text style={commonStyles.sectionLabel}>Ofertas:</Text>
+                <TouchableOpacity onPress={handleAddOferta}>
+                  <Icon name="plus-circle" size={35} color="black" marginLeft={10} />
+                </TouchableOpacity>
+              </View>
+            </View>
             <FlatList
               data={data.ofertas}
               keyExtractor={(item) => item.toString()}
-              renderItem={({ item }) => <Oferta id={item} />}
+              renderItem={({ item }) => <Oferta id={item} onPress={() => handleOferta(item)} />}
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.lista}
+              contentContainerStyle={commonStyles.lista}
             />
           </View>
 
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionLabel}>Eventos:</Text>
+          <View style={commonStyles.sectionContainer}>
+            <View style={commonStyles.sectionHeader}>
+              <View style={commonStyles.sectionHeaderRow}>
+                <Text style={commonStyles.sectionLabel}>Eventos:</Text>
+                <TouchableOpacity onPress={handleAddEvento}>
+                  <Icon name="plus-circle" size={35} color="black" marginLeft={10} />
+                </TouchableOpacity>
+              </View>
+            </View>
             <FlatList
               data={data.eventos}
               keyExtractor={(item) => item.toString()}
-              renderItem={({ item }) => <Evento id={item} />}
+              renderItem={({ item }) => <Evento id={item} onPress={() => handleEvento(item)} />}
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.lista}
+              contentContainerStyle={commonStyles.lista}
             />
           </View>
 
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionLabel}>Reviews:</Text>
+          <View style={commonStyles.sectionContainer}>
+            <Text style={commonStyles.sectionLabel}>Reviews:</Text>
             <FlatList
               data={data.reviews}
               keyExtractor={(item) => item.toString()}
               renderItem={({ item }) => <Review reviewId={item} />}
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.lista}
+              contentContainerStyle={commonStyles.lista}
             />
           </View>
-
-          <TouchableOpacity style={styles.boton} onPress={handleModify}>
-            <Text style={styles.botonTexto}>Modificar</Text>
-          </TouchableOpacity>
-          </View>
+        </View>
+        <TouchableOpacity style={commonStyles.deleteButton} onPress={handleDelete}>
+          <Icon name="trash" size={35} color="red" />
+          <Text style={commonStyles.deleteButtonText}>Eliminar Establecimiento</Text>
+        </TouchableOpacity>  
       </ScrollView>
       <Footer 
-        onHangoutPress={() => console.log('Hangout Pressed')} 
-        onAddPress={() => console.log('Add Pressed')} 
-        onProfilePress={() => console.log('Profile Pressed')} 
         showAddButton={false} 
+        onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
+        onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />
     </View>
   );

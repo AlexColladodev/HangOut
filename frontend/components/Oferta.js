@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import BASE_URL from '../config_ip';
 
 const DEFAULT_IMAGE_URL = `${BASE_URL}/_uploads/photos/default_no_image.png`;
 
 
-const Oferta = ({ id }) => {
+const Oferta = ({ id, onPress }) => {
   const [oferta, setOferta] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -52,13 +52,13 @@ const Oferta = ({ id }) => {
 
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <Image source={{ uri: `${BASE_URL}${oferta.imagen_url}` }} style={styles.image} />
       <View style={styles.infoContainer}>
         <Text style={styles.nombre} numberOfLines={1} ellipsizeMode="tail">{oferta.nombre_oferta || 'Nombre no disponible'}</Text>
         <Text style={styles.precio}>{`€ ${oferta.precio_oferta}`}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

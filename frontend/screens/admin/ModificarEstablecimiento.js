@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, ScrollView, TouchableOpacity, SafeAreaView, TextInput, Alert, Button } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, Text, ActivityIndicator, ScrollView, TouchableOpacity, TextInput, Alert, Button } from 'react-native';
 import axios from 'axios';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Fondo from '../../components/Fondo';
-import styles from '../../styles/stylesModify';
+import inputStyles from '../../styles/inputStyles';
 import ambientes from '../../components/Ambientes';
 import SeleccionarPreferencia from '../../components/SeleccionarPreferencia';
-import commonStyles from '../../styles/stylesCommon'
+import commonStyles from '../../styles/commonStyles';
+import ambienteStyles from '../../styles/ambienteStyles'
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header'
+import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import { AdminContext } from '../../context/AdminContext';
 
-const ModificarEstablecimiento = ({ establecimientoId = "666197975ccba976dcffb41e" }) => {
+const ModificarEstablecimiento = ({ navigation, route }) => {
   const [data, setData] = useState({
     nombre_establecimiento: '',
     ambiente: [],
@@ -18,9 +21,17 @@ const ModificarEstablecimiento = ({ establecimientoId = "666197975ccba976dcffb41
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [ambienteSeleccionado, setAmbienteSeleccionado] = useState([]);
+  const { id } = route.params;
+  const { adminId } = useContext(AdminContext);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/establecimientos/666197975ccba976dcffb41e`)
+    navigation.setOptions({
+      title: 'Modificar Establecimiento'
+    });
+  }, [navigation]);
+
+  useEffect(() => {
+    axios.get(`${BASE_URL}/establecimientos/${id}`)
       .then(response => {
         const fetchedData = response.data;
         setData({
@@ -35,7 +46,7 @@ const ModificarEstablecimiento = ({ establecimientoId = "666197975ccba976dcffb41
         setError(true);
         setLoading(false);
       });
-  }, [establecimientoId]);
+  }, [id]);
 
   const handleInputChange = (field, value) => {
     setData(prevState => ({ ...prevState, [field]: value }));
@@ -51,6 +62,15 @@ const ModificarEstablecimiento = ({ establecimientoId = "666197975ccba976dcffb41
   };
 
   const handleSave = () => {
+    axios.put(`${BASE_URL}/establecimientos/${id}`, data)
+      .then(response => {
+        Alert.alert('Éxito', 'Establecimiento actualizado correctamente');
+        navigation.navigate('DatosEstablecimiento', { id });
+      })
+      .catch(error => {
+        console.error(error);
+        Alert.alert('Error', 'No se pudo actualizar el establecimiento');
+      });
   };
 
   if (loading) {
@@ -66,41 +86,40 @@ const ModificarEstablecimiento = ({ establecimientoId = "666197975ccba976dcffb41
     );
   }
 
-  console.log(data)
-
   return (
     <View style={{ flex: 1 }}>
-    <Header titulo="Modificar Establecimiento" onBackPress={() => (navigation.goBack())} />
       <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
         <Fondo />
       </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <View style={commonStyles.dataContainer}>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Nombre del Establecimiento:</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Nombre del Establecimiento:</Text>
             <TextInput
-              style={styles.input}
+              style={inputStyles.input}
               value={data.nombre_establecimiento}
               onChangeText={(value) => handleInputChange('nombre_establecimiento', value)}
             />
           </View>
-          <Text style={styles.preferencesTitle}>Ambiente:</Text>
+          <View style={commonStyles.fieldContainer}>
+          <Text style={commonStyles.fieldLabel}>Ambiente:</Text>
           <SeleccionarPreferencia 
             ambientes={ambientes}
             seleccionados={ambienteSeleccionado}
             seleccionAmbiente={seleccionAmbiente}
-            styles={styles}
+            styles={ambienteStyles}
           />
-          <TouchableOpacity style={styles.boton} onPress={handleSave}>
-            <Text style={styles.botonTexto}>Guardar</Text>
+          </View>
+          <TouchableOpacity style={commonStyles.saveButton} onPress={handleSave}>
+            <Text style={commonStyles.saveButtonText}>Guardar</Text>
+            <Icon name="save" size={30} color="#000" />
           </TouchableOpacity>
         </View>
       </ScrollView>
       <Footer 
-        onHangoutPress={() => console.log('Hangout Pressed')} 
-        onAddPress={() => console.log('Add Pressed')} 
-        onProfilePress={() => console.log('Profile Pressed')} 
         showAddButton={false} 
+        onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
+        onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />
     </View>
   );

@@ -11,7 +11,6 @@ blueprint = Blueprint("AdministradorEstablecimiento", "administrador_establecimi
 
 url = f"{DevelopmentConfig.BASE_URL}/establecimientos"
 
-
 @blueprint.route("", methods=["POST"])
 def crear_administrador_establecimiento():
     if 'imagen' in request.files and request.files['imagen'].filename != '':
@@ -23,7 +22,7 @@ def crear_administrador_establecimiento():
         data = request.form.to_dict()
         data['imagen_url'] = f'/_uploads/photos/default.png'
         data.pop('imagen')
-        
+
     schema = AdministradorEstablecimientoSchema()
 
     try:
@@ -41,7 +40,6 @@ def crear_administrador_establecimiento():
     except Exception as e:
         return jsonify({"error": f"{e}"}), 500
 
-
 @blueprint.route("/<id>", methods=["DELETE"])
 def eliminar_administrador_establecimiento(id):
     try:
@@ -54,7 +52,6 @@ def eliminar_administrador_establecimiento(id):
     except Exception as e:
         return jsonify({"error": f"{e}"}), 500
 
-
 @blueprint.route("", methods=["GET"])
 def consultar_administradores_establecimiento():
     try:
@@ -64,7 +61,6 @@ def consultar_administradores_establecimiento():
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar administradores de establecimientos: {e}"}), 500
-
 
 @blueprint.route("/<id>", methods=["GET"])
 def consultar_administrador_establecimiento(id):
@@ -78,7 +74,6 @@ def consultar_administrador_establecimiento(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar administradores de establecimientos: {e}"}), 500
 
-
 @blueprint.route("/<id>", methods=["PUT"])
 def actualizar_administrador_establecimiento(id):
     data = request.json
@@ -90,14 +85,12 @@ def actualizar_administrador_establecimiento(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado al modificar administradores de establecimientos: {e}"}), 500
 
-
 @blueprint.route("/nuevo_establecimiento", methods=["POST"])
 @jwt_required()
 def crear_establecimiento():
     data = request.json
     administrador = get_jwt_identity()
     id_administrador = administrador.get("_id")
-
     data["id_administrador"] = str(id_administrador)
 
     try:

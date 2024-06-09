@@ -1,24 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, View, TextInput, Button, ScrollView, Text, Platform, Alert, Image, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
 import Fondo from '../../components/Fondo';
-import styles from '../../styles/stylesCreate';
-import commonStyles from '../../styles/stylesCommon';
+import inputStyles from '../../styles/inputStyles';
+import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header'
 import Footer from '../../components/Footer';
+import { AdminContext } from '../../context/AdminContext';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const CrearEvento = () => {
+const CrearEvento = ({ navigation, route }) => {
   const [nombreEvento, setNombreEvento] = useState('');
   const [descripcionEvento, setDescripcionEvento] = useState('');
   const [fechaEvento, setFechaEvento] = useState(new Date());
   const [horaEvento, setHoraEvento] = useState(new Date());
-  const [precioEvento, setPrecioEvento] = useState('');
+  const [precio, setPrecio] = useState('');
   const [showFecha, setShowFecha] = useState(false);
   const [showHora, setShowHora] = useState(false);
   const [imageUri, setImageUri] = useState(null);
-  const idEstablecimiento = '666197975ccba976dcffb41e';
+  const { id } = route.params;
+  const { adminId } = useContext(AdminContext);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Crear Evento'
+    });
+  }, [navigation]);
 
   const onChangeFecha = (event, selectedDate) => {
     const currentDate = selectedDate || fechaEvento;
@@ -59,8 +68,8 @@ const CrearEvento = () => {
     data.append('descripcion_evento', descripcionEvento);
     data.append('fecha_evento', fechaEvento.toISOString().split('T')[0]); // formato YYYY-MM-DD
     data.append('hora_evento', horaEvento.toTimeString().split(' ')[0]); // formato HH:MM:SS
-    data.append('precio', precioEvento);
-    data.append('id_establecimiento', idEstablecimiento);
+    data.append('precio', precio);
+    data.append('id_establecimiento', id);
 
     if (imageUri) {
       const uriParts = imageUri.split('.');
@@ -75,68 +84,70 @@ const CrearEvento = () => {
       data.append('imagen', null);
     }
 
+    console.log(data)
+
     try {
-      const response = await fetch(`${BASE_URL}/establecimientos/nuevo_evento`, {
-        method: 'POST',
+      const response = await axios.post(`${BASE_URL}/establecimientos/nuevo_evento`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        body: data,
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         Alert.alert('Éxito', 'Evento creado con éxito');
         setNombreEvento('');
         setDescripcionEvento('');
         setFechaEvento(new Date());
         setHoraEvento(new Date());
-        setPrecioEvento('');
+        setPrecio('');
         setImageUri(null);
+        navigation.navigate('DatosEstablecimiento', { id });
       } else {
-        Alert.alert('Error', 'Hubo un problema al crear el evento');
+        const errorMsg = response.data.error || 'Hubo un problema al crear el evento';
+        Alert.alert('Error', errorMsg);
       }
     } catch (error) {
-      Alert.alert('Error', 'No se pudo conectar con el servidor');
+      const errorMsg = error.response?.data?.error || 'No se pudo conectar con el servidor';
+      Alert.alert('Error', errorMsg);
     }
   };
 
   return (
     <View style={{ flex: 1 }}>
-      <Header titulo="Crear Evento" onBackPress={() => (navigation.goBack())} />
       <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
         <Fondo />
       </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <View style={commonStyles.dataContainer}>
-          <View style={styles.inputContainer}>
+          <View style={inputStyles.inputContainer}>
             <TextInput
               placeholder="Nombre Evento:"
               value={nombreEvento}
               onChangeText={setNombreEvento}
-              style={styles.input}
+              style={inputStyles.input}
             />
             <TextInput
               placeholder="Descripción Evento:"
               value={descripcionEvento}
               onChangeText={setDescripcionEvento}
-              style={styles.input}
+              style={inputStyles.input}
             />
-            <View style={styles.datePickerContainer}>
-              <Text style={styles.pickerLabel}>Fecha Evento:</Text>
-              <View style={styles.dateRow}>
+            <View style={inputStyles.datePickerContainer}>
+              <Text style={inputStyles.pickerLabel}>Fecha Evento:</Text>
+              <View style={inputStyles.dateRow}>
                 <TextInput
                   value={fechaEvento.getDate().toString()}
-                  style={[styles.dateInput, styles.datePart]}
+                  style={[inputStyles.dateInput, inputStyles.datePart]}
                   editable={false}
                 />
                 <TextInput
                   value={fechaEvento.toLocaleString('default', { month: 'short' })}
-                  style={[styles.dateInput, styles.datePart]}
+                  style={[inputStyles.dateInput, inputStyles.datePart]}
                   editable={false}
                 />
                 <TextInput
                   value={fechaEvento.getFullYear().toString()}
-                  style={[styles.dateInput, styles.datePart]}
+                  style={[inputStyles.dateInput, inputStyles.datePart]}
                   editable={false}
                 />
                 <Button onPress={showDatepicker} title="Cambiar" color="#FF5252" />
@@ -151,17 +162,17 @@ const CrearEvento = () => {
                 />
               )}
             </View>
-            <View style={styles.datePickerContainer}>
-              <Text style={styles.pickerLabel}>Hora Evento:</Text>
-              <View style={styles.dateRow}>
+            <View style={inputStyles.datePickerContainer}>
+              <Text style={inputStyles.pickerLabel}>Hora Evento:</Text>
+              <View style={inputStyles.dateRow}>
                 <TextInput
                   value={horaEvento.getHours().toString()}
-                  style={[styles.dateInput, styles.datePart]}
+                  style={[inputStyles.dateInput, inputStyles.datePart]}
                   editable={false}
                 />
                 <TextInput
                   value={horaEvento.getMinutes().toString().padStart(2, '0')}
-                  style={[styles.dateInput, styles.datePart]}
+                  style={[inputStyles.dateInput, inputStyles.datePart]}
                   editable={false}
                 />
                 <Button onPress={showTimepicker} title="Cambiar" color="#FF5252" />
@@ -177,28 +188,29 @@ const CrearEvento = () => {
               )}
             </View>
             <TextInput
-              placeholder="Precio Evento:"
-              value={precioEvento}
-              onChangeText={text => setPrecioEvento(text.replace(/[^0-9.]/g, ''))}
-              style={styles.input}
+              placeholder="Precio:"
+              value={precio}
+              onChangeText={text => setPrecio(text.replace(/[^0-9.]/g, ''))}
+              style={inputStyles.input}
               keyboardType="numeric"
             />
             <Button title="Seleccionar Imagen Evento" onPress={selectImage} />
-            {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
+            {imageUri && <Image source={{ uri: imageUri }} style={commonStyles.imageSelected} />}
           </View>
-          <TouchableOpacity style={styles.boton} onPress={handleSave}>
-            <Text style={styles.botonTexto}>Guardar</Text>
+          <TouchableOpacity style={commonStyles.saveButton} onPress={handleSave}>
+            <Text style={commonStyles.saveButtonText}>Guardar</Text>
+            <Icon name="save" size={30} color="#000" />
           </TouchableOpacity>
         </View>
       </ScrollView>
       <Footer 
-        onHangoutPress={() => console.log('Hangout Pressed')} 
-        onAddPress={() => console.log('Add Pressed')} 
-        onProfilePress={() => console.log('Profile Pressed')} 
         showAddButton={false} 
+        onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
+        onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />
     </View>
   );
 };
+
 
 export default CrearEvento;
