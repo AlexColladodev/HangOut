@@ -1,0 +1,130 @@
+import { StyleSheet, Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
+
+const inicioStyles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'relative',
+    },
+    logoContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1,
+    },
+    logo: {
+      position: 'absolute',
+      top: '34%',
+      width: 400,
+      height: 230,
+    },
+    buttonContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      zIndex: 1,
+    },
+    buttonBox: {
+      paddingVertical: 20,
+      paddingHorizontal: 50,
+      borderRadius: 30,
+      marginTop: 125,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      flexGrow: 1,
+      alignSelf: 'stretch',
+    },
+    buttonBoxInicioSesion: {
+        paddingVertical: 20,
+        paddingHorizontal: 50,
+        borderRadius: 30,
+        marginTop: 125,
+        alignItems: 'center', 
+      },
+    button2: {
+      backgroundColor: '#8F99FF',
+      padding: 20,
+      margin: 20,
+      marginTop: 60,
+      width: 175,
+      height: 100,
+      borderRadius: 10,
+      shadowColor: '#000',
+      shadowOpacity: 0.3,
+      shadowRadius: 4, 
+      shadowOffset: { width: 0, height: 4 },
+      elevation: 6,
+    },
+    button1: {
+      backgroundColor: '#B66DFF',
+      padding: 20,
+      margin: 20,
+      width: 175,
+      marginTop: 60,
+      height: 100,
+      borderRadius: 10,
+      shadowColor: '#000', 
+      shadowOpacity: 0.5, 
+      shadowRadius: 4, 
+      shadowOffset: { width: 0, height: 4 }, 
+      elevation: 6,
+    },
+    buttonText: { 
+      textAlign: 'center',
+      color: 'black',
+      fontWeight: 'bold',
+      padding: 20,
+    },
+    inputContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        zIndex: 1,
+        alignItems: 'center',
+        width: '100%',
+      },
+      buttonInicio: {
+        paddingVertical: 20,
+        paddingHorizontal: 50,
+        borderRadius: 30,
+        marginTop: 125,
+        alignItems: 'center', 
+      },
+      input: {
+        height: 50,
+        width: 300,
+        backgroundColor: '#FFF',
+        margin: 10,
+        borderRadius: 10,
+        paddingLeft: 10,
+        color: '#000',
+        shadowColor: '#000',
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+      },
+      buttonInicioS: {
+        backgroundColor: '#8F99FF',
+        padding: 15,
+        margin: 20,
+        width: 175,
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.3,
+        shadowRadius: 4, 
+        shadowOffset: { width: 0, height: 4 },
+        elevation: 6,
+      },
+      buttonTextInicioSesion: { 
+        textAlign: 'center',
+        color: 'black',
+        fontWeight: 'bold',
+        padding: 5
+      },
+    
+  });
+  
+
+  export default inicioStyles;

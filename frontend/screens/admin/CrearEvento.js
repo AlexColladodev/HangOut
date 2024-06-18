@@ -66,8 +66,8 @@ const CrearEvento = ({ navigation, route }) => {
     const data = new FormData();
     data.append('nombre_evento', nombreEvento);
     data.append('descripcion_evento', descripcionEvento);
-    data.append('fecha_evento', fechaEvento.toISOString().split('T')[0]); // formato YYYY-MM-DD
-    data.append('hora_evento', horaEvento.toTimeString().split(' ')[0]); // formato HH:MM:SS
+    data.append('fecha_evento', fechaEvento.toISOString().split('T')[0]);
+    data.append('hora_evento', horaEvento.toTimeString().split(' ')[0]);
     data.append('precio', precio);
     data.append('id_establecimiento', id);
 
@@ -84,8 +84,6 @@ const CrearEvento = ({ navigation, route }) => {
       data.append('imagen', null);
     }
 
-    console.log(data)
-
     try {
       const response = await axios.post(`${BASE_URL}/establecimientos/nuevo_evento`, data, {
         headers: {
@@ -94,6 +92,7 @@ const CrearEvento = ({ navigation, route }) => {
       });
 
       if (response.status === 200) {
+        const id_evento = response.data.id_evento;
         Alert.alert('Éxito', 'Evento creado con éxito');
         setNombreEvento('');
         setDescripcionEvento('');
@@ -101,7 +100,7 @@ const CrearEvento = ({ navigation, route }) => {
         setHoraEvento(new Date());
         setPrecio('');
         setImageUri(null);
-        navigation.navigate('DatosEstablecimiento', { id });
+        navigation.navigate('DatosEvento', { id: id_evento });
       } else {
         const errorMsg = response.data.error || 'Hubo un problema al crear el evento';
         Alert.alert('Error', errorMsg);
@@ -203,14 +202,13 @@ const CrearEvento = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <Footer 
-        showAddButton={false} 
+      <Footer
+        showAddButton={false}
         onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
         onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />
     </View>
   );
 };
-
 
 export default CrearEvento;

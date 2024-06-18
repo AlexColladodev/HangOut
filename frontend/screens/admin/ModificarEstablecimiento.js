@@ -7,9 +7,8 @@ import inputStyles from '../../styles/inputStyles';
 import ambientes from '../../components/Ambientes';
 import SeleccionarPreferencia from '../../components/SeleccionarPreferencia';
 import commonStyles from '../../styles/commonStyles';
-import ambienteStyles from '../../styles/ambienteStyles'
+import ambienteStyles from '../../styles/ambienteStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { AdminContext } from '../../context/AdminContext';
 
@@ -65,7 +64,7 @@ const ModificarEstablecimiento = ({ navigation, route }) => {
     axios.put(`${BASE_URL}/establecimientos/${id}`, data)
       .then(response => {
         Alert.alert('Éxito', 'Establecimiento actualizado correctamente');
-        navigation.navigate('DatosEstablecimiento', { id });
+        navigation.navigate('InicioAdmin', { adminId });
       })
       .catch(error => {
         console.error(error);
@@ -102,13 +101,13 @@ const ModificarEstablecimiento = ({ navigation, route }) => {
             />
           </View>
           <View style={commonStyles.fieldContainer}>
-          <Text style={commonStyles.fieldLabel}>Ambiente:</Text>
-          <SeleccionarPreferencia 
-            ambientes={ambientes}
-            seleccionados={ambienteSeleccionado}
-            seleccionAmbiente={seleccionAmbiente}
-            styles={ambienteStyles}
-          />
+            <Text style={commonStyles.fieldLabel}>Ambiente:</Text>
+            <SeleccionarPreferencia
+              ambientes={ambientes}
+              seleccionados={ambienteSeleccionado}
+              seleccionAmbiente={seleccionAmbiente}
+              styles={ambienteStyles}
+            />
           </View>
           <TouchableOpacity style={commonStyles.saveButton} onPress={handleSave}>
             <Text style={commonStyles.saveButtonText}>Guardar</Text>
@@ -116,8 +115,8 @@ const ModificarEstablecimiento = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <Footer 
-        showAddButton={false} 
+      <Footer
+        showAddButton={false}
         onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
         onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />

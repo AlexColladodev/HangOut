@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, SafeAreaView, TextInput, Alert, Button, Image } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity, TextInput, Alert, Image } from 'react-native';
 import axios from 'axios';
 import Fondo from '../../components/Fondo';
 import inputStyles from '../../styles/inputStyles';
 import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { AdminContext } from '../../context/AdminContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -91,8 +90,8 @@ const ModificarOferta = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <Footer 
-        showAddButton={false} 
+      <Footer
+        showAddButton={false}
         onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
         onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />

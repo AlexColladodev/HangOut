@@ -137,7 +137,49 @@ const commonStyles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-
+  preferencesTitle: {
+    fontSize: 18,
+    marginTop: 20,
+    marginBottom: 10,
+    fontWeight: 'bold',
+    alignSelf: 'flex-start',
+  },
+  horizontalListContainer: {
+    flexDirection: 'row',
+  },
+  labelUser: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  reviewHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  createReviewButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#EF9DFF',
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+  },
+  createReviewButtonText: {
+    color: 'black',
+    marginLeft: 5,
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  starContainer: {
+    justifyContent: 'center',
+    marginVertical: 10,
+    alignSelf: 'center',
+  },
+  addFriendIcon: {
+    marginLeft: 15,
+  },
 });
 
 export default commonStyles;

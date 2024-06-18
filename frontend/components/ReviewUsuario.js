@@ -1,45 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import axios from 'axios';
-import BASE_URL from '../config_ip';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
-const ReviewUsuario = ({ reviewId }) => {
-  const [review, setReview] = useState(null);
-  const [userName, setUserName] = useState('');
-  const [nombreEstablecimiento, setNombreEstablecimiento] = useState('');
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-
-        const reviewResponse = await axios.get(`${BASE_URL}/reviews/${reviewId}`);
-        const reviewData = reviewResponse.data;
-        setReview(reviewData);
-
-
-        const userResponse = await axios.get(`${BASE_URL}/usuario_generico/${reviewData.id_usuario}`);
-        setUserName(userResponse.data.nombre_usuario);
-
-
-        const establecimientoResponse = await axios.get(`${BASE_URL}/establecimientos/${reviewData.id_establecimiento}`);
-        setNombreEstablecimiento(establecimientoResponse.data.nombre_establecimiento);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, [reviewId]);
-
-  if (!review || !userName || !nombreEstablecimiento) {
+const ReviewUsuario = ({ review }) => {
+  if (!review) {
     return <Text>Loading...</Text>;
   }
 
+  const formattedDate = format(new Date(review.fecha_creacion), 'dd \'de\' MMMM \'de\' yyyy', { locale: es });
+
   return (
     <View style={styles.container}>
-      <Text style={styles.establecimiento}>{nombreEstablecimiento}</Text>
-      <Text style={styles.userName}>{userName}</Text>
-      <Text style={styles.date}>{review.fecha}</Text>
+      <Text style={styles.establecimiento}>{review.nombre_establecimiento}</Text>
+      <Text style={styles.userName}>{review.nombre_usuario}</Text>
+      <Text style={styles.date}>{formattedDate}</Text>
       <View style={styles.ratingContainer}>
         <Text style={styles.ratingLabel}>Calificación:</Text>
         <Text style={styles.ratingValue}>{review.calificacion}</Text>
@@ -51,6 +26,7 @@ const ReviewUsuario = ({ reviewId }) => {
 
 const styles = StyleSheet.create({
   container: {
+    width: 300,
     padding: 20,
     borderColor: '#ddd',
     borderWidth: 1,

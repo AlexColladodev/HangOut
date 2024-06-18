@@ -9,6 +9,7 @@ from models.evento import Evento
 from models.review import Review
 from uploads_config import photos
 from marshmallow import ValidationError
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 blueprint = Blueprint("Establecimiento", "establecimientos", url_prefix="/establecimientos")
 
@@ -166,13 +167,27 @@ def add_evento():
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
 
-@blueprint.route("/filtrar", methods=["GET"])
+@blueprint.route("/filtro_personalizado", methods=["GET"])
+@jwt_required()
 def filtrar():
+    usuario = get_jwt_identity()
+    lista_preferencias = usuario.get("preferencias")
+
+    try:
+        respuesta = Establecimiento.filtrar_personalizado(lista_preferencias)
+        return Response(respuesta, mimetype="application/json"), 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error inesperado al consultar actividades: {e}"}), 500
+    
+@blueprint.route("/filtrar", methods=["GET"])
+def filtrar_and():
     ambientes_solicitados = request.args.getlist("ambiente")
 
     try:
-        respuesta = Establecimiento.filtrar_por_ambientes(ambientes_solicitados)
-        return jsonify(respuesta), 200
+        respuesta = Establecimiento.filtrar_and(ambientes_solicitados)
+        return Response(respuesta, mimetype="application/json"), 200
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500
     except Exception as e:

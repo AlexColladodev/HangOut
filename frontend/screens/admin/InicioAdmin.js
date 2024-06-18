@@ -11,7 +11,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const InicioAdmin = ({ navigation }) => {
-  const { adminId } = useContext(AdminContext);
+  const { adminId, token } = useContext(AdminContext);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -62,12 +62,23 @@ const InicioAdmin = ({ navigation }) => {
     navigation.navigate('CrearEstablecimiento', { adminId });
   };
 
-  const handleEstablecimientoPress = (id) => {
-    navigation.navigate('DatosEstablecimiento', { id, adminId });
+  const handleEstablecimientoPress = (establecimiento) => {
+    navigation.navigate('DatosEstablecimiento', { establecimiento });
   };
 
   const handleDatosAdmin = () => {
     navigation.navigate('DatosAdministrador', { adminId });
+  };
+
+  const renderEstablecimiento = ({ item }) => {
+    return (
+      <Establecimiento
+        data={item}
+        rating={item.rating}
+        numReviews={item.numero_reviews}
+        onPress={() => handleEstablecimientoPress(item)}
+      />
+    );
   };
 
   return (
@@ -78,9 +89,9 @@ const InicioAdmin = ({ navigation }) => {
         </View>
         <View style={commonStyles.dataContainer}>
           <FlatList
-            data={data.establecimientos}
-            keyExtractor={(item) => item.toString()}
-            renderItem={({ item }) => <Establecimiento id={item} onPress={() => handleEstablecimientoPress(item)} />}
+            data={data.establecimientos_detalle}
+            keyExtractor={(item) => item._id.$oid}
+            renderItem={renderEstablecimiento}
             ListFooterComponent={() => (
               <TouchableOpacity style={commonStyles.saveButton} onPress={handleCreate}>
                 <Icon name="plus-circle" size={30} color="#000" />
@@ -90,8 +101,8 @@ const InicioAdmin = ({ navigation }) => {
           />
         </View>
       </View>
-      <Footer 
-        showAddButton={false} 
+      <Footer
+        showAddButton={false}
         onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
         onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />

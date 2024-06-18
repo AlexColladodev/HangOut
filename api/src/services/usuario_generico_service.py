@@ -58,7 +58,7 @@ def eliminar_usuario(id):
 @blueprint.route("", methods=["GET"])
 def consultar_usuarios():
     try:
-        respuesta = UsuarioGenerico.consultar_todos_usuarios()
+        respuesta = UsuarioGenerico.consultar_usuarios()
         return Response(respuesta, mimetype="application/json"), 200
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500
@@ -127,6 +127,21 @@ def seguir_usuario():
             return jsonify({"error": str(e)}), 400
     else:
         return jsonify({"message": "No existe el usuario con nombre: " + nombre_usuario}), 400
+    
+@blueprint.route("/invita_actividad", methods=["POST"])
+def invita_actividad():
+    data = request.json
+    id_actividad = data.get("id_actividad")
+    id = data.get("id_usuario")
+
+    print(data)
+    try:
+        respuesta = UsuarioGenerico.invita_actividad(id, id_actividad)
+        return respuesta, 200
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 @blueprint.route("/participa", methods=["POST"])
 @jwt_required()
@@ -182,5 +197,8 @@ def crear_review():
         return jsonify({"error": str(e)}), 500
     except requests.exceptions.RequestException as e:
         return jsonify({"error": "Error en la solicitud de creación de review", "detalles": str(e)}), 400
+    except ValidationError as e:
+        return jsonify({"error": f"Error de validación: {e.messages}"}), 400
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
+

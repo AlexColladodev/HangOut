@@ -1,36 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, ActivityIndicator, Dimensions, TouchableOpacity } from 'react-native';
-import axios from 'axios';
+import React from 'react';
+import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import BASE_URL from '../config_ip';
 
-const Establecimiento = ({ id, onPress }) => {
-  const [data, setData] = useState(null);
-  const [rating, setRating] = useState(null);
-  const [numReviews, setNumReviews] = useState(null);
-
-  useEffect(() => {
-    axios.get(`${BASE_URL}/establecimientos/${id}`)
-      .then(response => {
-        setData(response.data);
-      })
-      .catch(error => {
-        console.error("Error fetching data: ", error);
-      });
-
-    axios.get(`${BASE_URL}/establecimientos/rating/${id}`)
-      .then(response => {
-        setRating(response.data.media);
-        setNumReviews(response.data.n_reviews);
-      })
-      .catch(error => {
-        console.error("Error fetching rating: ", error);
-      });
-  }, [id]);
-
-  if (!data || rating === null || numReviews === null) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
-
+const Establecimiento = ({ data, rating, numReviews, onPress }) => {
   const ambientes = data.ambiente.join(', ');
 
   return (

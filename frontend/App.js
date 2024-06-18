@@ -31,6 +31,12 @@ import Header from './components/Header'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AdminProvider } from './context/AdminContext';
+import { UserProvider } from './context/UserContext';
+import DatosOfertaUsuario from './screens/usuario/DatosOfertaUsuario';
+import DatosAmigos from './screens/usuario/DatosAmigos';
+import SeguirUsuario from './screens/usuario/SeguirUsuario';
+import CompartirActividad from './screens/usuario/CompartirActividad';
+
 
 const Stack = createNativeStackNavigator();
 const UsuarioStack = createNativeStackNavigator();
@@ -40,7 +46,18 @@ function UsuarioStackScreen() {
   return (
     <UsuarioStack.Navigator>
       <UsuarioStack.Screen name="InicioUsuario" component={InicioUsuario} />
-      {/* Agregar otras pantallas para usuarios */}
+      <UsuarioStack.Screen name="CrearActividad" component={CrearActividad}/>
+      <UsuarioStack.Screen name="CrearReview" component={CrearReview}/>
+      <UsuarioStack.Screen name="DatosActividad" component={DatosActividad}/>
+      <UsuarioStack.Screen name="DatosEstablecimientoUsuario" component={DatosEstablecimientoUsuario}/>
+      <UsuarioStack.Screen name="DatosEventoUsuario" component={DatosEventoUsuario}/>
+      <UsuarioStack.Screen name="ModificarActividad" component={ModificarActividad}/>
+      <UsuarioStack.Screen name="ModificarUsuario" component={ModificarUsuario}/>
+      <UsuarioStack.Screen name="DatosUsuario" component={DatosUsuario}/>
+      <UsuarioStack.Screen name="DatosOfertaUsuario" component={DatosOfertaUsuario}/>    
+      <UsuarioStack.Screen name="DatosAmigos" component={DatosAmigos}/>      
+      <UsuarioStack.Screen name="SeguirUsuario" component={SeguirUsuario}/>      
+      <UsuarioStack.Screen name="CompartirActividad" component={CompartirActividad}/>   
     </UsuarioStack.Navigator>
   );
 }
@@ -66,6 +83,7 @@ function AdminStackScreen() {
 
 function App() {
   return (
+    <UserProvider>
     <AdminProvider>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Inicio">
@@ -77,6 +95,7 @@ function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </AdminProvider>
+    </UserProvider>
   );
 }
 

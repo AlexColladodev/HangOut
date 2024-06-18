@@ -1,36 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import axios from 'axios';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import BASE_URL from '../config_ip';
 
-const Review = ({ reviewId }) => {
-  const [review, setReview] = useState(null);
-  const [userName, setUserName] = useState('');
+const Review = ({ id }) => {
+  const [reviewData, setReviewData] = useState(null);
 
   useEffect(() => {
-
-    axios.get(`${BASE_URL}/reviews/${reviewId}`)
+    axios.get(`${BASE_URL}/reviews/${id}`)
       .then(response => {
-        setReview(response.data);
-
-        return axios.get(`${BASE_URL}/usuario_generico/${response.data.id_usuario}`);
-      })
-      .then(response => {
-        setUserName(response.data.nombre_usuario);
+        setReviewData(response.data);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
       });
-  }, [reviewId]);
+  }, [id]);
 
-  if (!review || !userName) {
+  if (!reviewData) {
     return <Text>Loading...</Text>;
   }
 
+  const { review, nombre_usuario } = reviewData;
+  const formattedDate = format(new Date(review.fecha_creacion), 'dd \'de\' MMMM \'de\' yyyy', { locale: es });
+
   return (
     <View style={styles.container}>
-      <Text style={styles.userName}>{userName}</Text>
-      <Text style={styles.date}>{review.fecha}</Text>
+      <Text style={styles.userName}>{nombre_usuario}</Text>
+      <Text style={styles.date}>{formattedDate}</Text>
       <View style={styles.ratingContainer}>
         <Text style={styles.ratingLabel}>Calificación:</Text>
         <Text style={styles.ratingValue}>{review.calificacion}</Text>
@@ -42,6 +40,7 @@ const Review = ({ reviewId }) => {
 
 const styles = StyleSheet.create({
   container: {
+    width: 300,
     padding: 20,
     borderColor: '#ddd',
     borderWidth: 1,

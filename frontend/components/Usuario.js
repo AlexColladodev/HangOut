@@ -1,49 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ActivityIndicator } from 'react-native';
-import axios from 'axios';
+import React from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import BASE_URL from '../config_ip';
 
-const Usuario = ({ id }) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/usuario_generico/${id}`);
-        setData(response.data);
-        setLoading(false);
-        setError(false);
-      } catch (error) {
-        console.error(error);
-        setLoading(false);
-        setError(true);
-      }
-    };
-
-    fetchData();
-  }, [id]);
-
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.centered} />;
-  }
-
-  if (error) {
+const Usuario = ({ data, onPress }) => {
+  if (!data) {
     return (
       <View style={styles.centered}>
-        <Text style={styles.errorText}>Error al cargar los datos</Text>
+        <Text style={styles.errorText}>No hay datos disponibles</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.outerContainer}>
+    <TouchableOpacity onPress={onPress} style={styles.outerContainer}>
       <View style={styles.innerContainer}>
         <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.profileImage} />
         <Text style={styles.userName}>{data.nombre_usuario}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

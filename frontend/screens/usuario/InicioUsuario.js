@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
+import { View, Text, FlatList, ScrollView, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 import axios from 'axios';
 import Fondo from '../../components/Fondo';
 import Establecimiento from '../../components/Establecimiento';
 import Evento from '../../components/Evento';
 import Actividad from '../../components/Actividad';
 import ambientes from '../../components/Ambientes';
-import styles from '../../styles/stylesInicioUsuario';
-import commonStyles from '../../styles/stylesCommon';
+import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header'
 import Footer from '../../components/Footer';
+import { UserContext } from '../../context/UserContext';
+import ambienteStyles from '../../styles/ambienteStyles';
+import { useFocusEffect } from '@react-navigation/native';
 
-
-const InicioUsuario = ({ id_usuario }) => {
+const InicioUsuario = ({ navigation }) => {
+  const [preferenciaEstablecimientos, setPreferenciaEstablecimientos] = useState([]);
   const [establecimientos, setEstablecimientos] = useState([]);
   const [eventos, setEventos] = useState([]);
   const [actividades, setActividades] = useState([]);
@@ -21,42 +22,76 @@ const InicioUsuario = ({ id_usuario }) => {
   const [selectedAmbientes, setSelectedAmbientes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { userId, token } = useContext(UserContext);
 
   useEffect(() => {
-    const fetchEstablecimientos = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/establecimientos/ordenados`);
-        setEstablecimientos(response.data);
-      } catch (err) {
-        setError(err.message);
+    const interceptor = axios.interceptors.request.use(
+      (config) => {
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
       }
-    };
+    );
 
-    const fetchEventos = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/eventos/ordenados`);
-        setEventos(response.data.eventos_ordenados);
-      } catch (err) {
-        setError(err.message);
-      }
+    return () => {
+      axios.interceptors.request.eject(interceptor);
     };
+  }, [token]);
 
-    const fetchActividades = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/actividades/participa/665b56ff6bd71b0279ca391c`);
-        setActividades(response.data.actividades);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Inicio'
+    });
+  }, [navigation]);
 
-    const fetchData = async () => {
-      await Promise.all([fetchEstablecimientos(), fetchEventos(), fetchActividades()]);
-      setLoading(false);
-    };
+  const fetchPreferenciaEstablecimientos = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/establecimientos/filtro_personalizado`);
+      setPreferenciaEstablecimientos(response.data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
+  const fetchEstablecimientos = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/establecimientos/ordenados`);
+      setEstablecimientos(response.data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const fetchEventos = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/eventos/ordenados`);
+      setEventos(response.data.eventos_ordenados);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const fetchActividades = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/actividades/participa/${userId}`);
+      setActividades(response.data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const fetchData = async () => {
+    await Promise.all([fetchPreferenciaEstablecimientos(), fetchEstablecimientos(), fetchEventos(), fetchActividades()]);
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchData();
-  }, [id_usuario]);
+  }, [userId]);
 
   const handleSelectAmbiente = async (index) => {
     let updatedSelectedAmbientes = [...selectedAmbientes];
@@ -77,11 +112,17 @@ const InicioUsuario = ({ id_usuario }) => {
 
     try {
       const response = await axios.get(url);
-      setFilteredEstablecimientos(response.data.establecimientos);
+      setFilteredEstablecimientos(response.data);
     } catch (err) {
       setError(err.message);
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [navigation])
+  );
 
   if (loading) {
     return (
@@ -99,88 +140,123 @@ const InicioUsuario = ({ id_usuario }) => {
     );
   }
 
+  const handleEstablecimientoPress = (id) => {
+    navigation.navigate('DatosEstablecimientoUsuario', { id });
+  };
+
+  const handleActividadPress = (actividad) => {
+    navigation.navigate('DatosActividad', { actividad });
+
+  };
+
+  const handleEventoPressUsuario = (id) => {
+    navigation.navigate('DatosEventoUsuario', { id });
+  };
+
+  const renderEstablecimiento = ({ item }) => {
+    const [data, rating, numReviews] = item;
+    return (
+      <Establecimiento
+        data={data}
+        rating={rating}
+        numReviews={numReviews}
+        onPress={() => handleEstablecimientoPress(data._id.$oid)}
+      />
+    );
+  };
+
   return (
     <View style={{ flex: 1 }}>
-    <Header titulo="Inicio" onBackPress={() => (navigation.goBack())} />
       <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
         <Fondo />
       </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <View style={commonStyles.dataContainer}>
-          <Text style={styles.title}>Establecimientos</Text>
-          <View style={styles.horizontalListContainer}>
+          <Text style={commonStyles.label}>Establecimientos basados en tus preferencias</Text>
+          <View style={commonStyles.horizontalListContainer}>
             <FlatList
-              data={establecimientos}
-              keyExtractor={(item) => item.toString()}
-              renderItem={({ item }) => <Establecimiento id={item} />}
+              data={preferenciaEstablecimientos}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderEstablecimiento}
               horizontal
               showsHorizontalScrollIndicator={false}
             />
           </View>
 
-          <Text style={styles.label}>Ambientes</Text>
-          <View style={styles.horizontalListContainer}>
+          <Text style={commonStyles.label}>Mejores Establecimientos</Text>
+          <View style={commonStyles.horizontalListContainer}>
+            <FlatList
+              data={establecimientos}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderEstablecimiento}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+            />
+          </View>
+
+          <Text style={commonStyles.label}>Ambientes</Text>
+          <View style={commonStyles.horizontalListContainer}>
             <FlatList
               data={ambientes}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item, index }) => (
-                <View style={styles.tagWrapper}>
+                <View style={ambienteStyles.tagWrapperUser}>
                   <TouchableOpacity
                     style={[
-                      styles.tag,
-                      selectedAmbientes.includes(index) ? styles.tagSelected : null,
+                      ambienteStyles.tagUser,
+                      selectedAmbientes.includes(index) ? ambienteStyles.tagSelectedUser : null,
                     ]}
                     onPress={() => handleSelectAmbiente(index)}
                   >
-                    <Image source={item.image} style={styles.tagImage} />
+                    <Image source={item.image} style={ambienteStyles.tagImageUser} />
                   </TouchableOpacity>
-                  <Text style={styles.tagText}>{item.name}</Text>
+                  <Text style={ambienteStyles.tagTextUser}>{item.name}</Text>
                 </View>
               )}
               horizontal
               showsHorizontalScrollIndicator={false}
             />
           </View>
-          <View style={styles.horizontalListContainer}>
+          <View style={commonStyles.horizontalListContainer}>
             <FlatList
               data={filteredEstablecimientos}
-              keyExtractor={(item) => item.toString()}
-              renderItem={({ item }) => <Establecimiento id={item} />}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderEstablecimiento}
               horizontal
               showsHorizontalScrollIndicator={false}
             />
           </View>
 
-          <Text style={styles.label}>Eventos próximos</Text>
-          <View style={styles.horizontalListContainer}>
+          <Text style={commonStyles.labelUser}>Eventos próximos</Text>
+          <View style={commonStyles.horizontalListContainer}>
             <FlatList
               data={eventos}
               keyExtractor={(item) => item.toString()}
-              renderItem={({ item }) => <Evento id={item} mostrarEstablecimiento={true} />}
+              renderItem={({ item }) => <Evento id={item} mostrarEstablecimiento={true} onPress={() => handleEventoPressUsuario(item)} />}
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.lista}
+              contentContainerStyle={commonStyles.list}
             />
           </View>
 
-          <Text style={styles.label}>Actividades que participas</Text>
-          <View style={styles.sectionContainer}>
+          <Text style={commonStyles.labelUser}>Tus próximas actividades:</Text>
+          <View style={commonStyles.sectionContainer}>
             <FlatList
               data={actividades}
-              keyExtractor={(item) => item.toString()}
-              renderItem={({ item }) => <Actividad actividadId={item} />}
+              keyExtractor={(item) => item._id.$oid}
+              renderItem={({ item }) => <Actividad actividad={item} onPress={() => handleActividadPress(item)} />}
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.lista}
+              contentContainerStyle={commonStyles.list}
             />
           </View>
         </View>
       </ScrollView>
-      <Footer 
-        onHangoutPress={() => console.log('Hangout Pressed')} 
-        onAddPress={() => console.log('Add Pressed')} 
-        onProfilePress={() => console.log('Profile Pressed')} 
-        showAddButton={true} 
+      <Footer
+        showAddButton={true}
+        onHangoutPressUser={() => navigation.navigate('InicioUsuario', { userId })}
+        onProfilePressUser={() => navigation.navigate('DatosUsuario', { userId })}
+        onCreateActivity={() => navigation.navigate('CrearActividad', { userId })}
       />
     </View>
   );

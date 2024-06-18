@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, ActivityIndicator, ScrollView, TextInput, Button, Alert, Platform, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ActivityIndicator, ScrollView, TextInput, Button, Alert, TouchableOpacity, Image } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import Fondo from '../../components/Fondo';
 import inputStyles from '../../styles/inputStyles';
 import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { AdminContext } from '../../context/AdminContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -52,20 +51,17 @@ const ModificarEvento = ({ navigation, route }) => {
 
   const handleSave = async () => {
     const { _id, nombre_evento, descripcion_evento, precio, id_establecimiento, imagen_url } = data;
-
-    const fechaEventoISO = fechaEvento.toISOString().split('T')[0]; 
-    const horaEventoISO = horaEvento.toTimeString().split(' ')[0]; 
-
+    const fechaEventoISO = fechaEvento.toISOString().split('T')[0];
+    const horaEventoISO = horaEvento.toTimeString().split(' ')[0];
     const updatedData = {
       nombre_evento,
       descripcion_evento,
-      fecha_evento: fechaEventoISO, 
-      hora_evento: horaEventoISO, 
+      fecha_evento: fechaEventoISO,
+      hora_evento: horaEventoISO,
       precio: parseFloat(precio),
       id_establecimiento,
       imagen_url
     };
-
     let id = _id.$oid;
 
     try {
@@ -79,7 +75,7 @@ const ModificarEvento = ({ navigation, route }) => {
         Alert.alert('Éxito', 'Evento actualizado con éxito');
         navigation.navigate('DatosEvento', { id });
       } else {
-        const errorMsg = response.data.error || 'Hubo un problema al crear el evento';
+        const errorMsg = response.data.error || 'Hubo un problema al actualizar el evento';
         Alert.alert('Error', errorMsg);
       }
     } catch (error) {
@@ -184,8 +180,8 @@ const ModificarEvento = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <Footer 
-        showAddButton={false} 
+      <Footer
+        showAddButton={false}
         onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
         onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />

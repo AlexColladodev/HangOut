@@ -1,38 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator} from 'react-native';
-import axios from 'axios';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/es';
-import BASE_URL from '../config_ip';
 
-const Actividad = ({ actividadId }) => {
-  const [actividad, setActividad] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/actividades/${actividadId}`);
-        setActividad(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, [actividadId]);
-
+const Actividad = ({ actividad, onPress }) => {
   if (!actividad) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return null;
   }
 
   const fechaActividad = moment(actividad.fecha_actividad.$date).locale('es').format('LL');
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <Text style={styles.nombreActividad}>{actividad.nombre_actividad}</Text>
       <Text style={styles.fecha}>{fechaActividad}</Text>
       <Text style={styles.ubicacion}>{actividad.ubicacion}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -74,7 +74,7 @@ def actualizar_actividad(id):
 def usuario_participa(id):
     try:
         resultado = Actividad.usuario_participa(id)
-        return jsonify(resultado), 200
+        return Response(resultado, mimetype="application/json"), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 404
     except RuntimeError as e:

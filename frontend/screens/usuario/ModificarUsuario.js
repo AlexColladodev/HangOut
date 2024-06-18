@@ -1,66 +1,49 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, ScrollView, TouchableOpacity, SafeAreaView, TextInput, Alert, Button, Platform, Image } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Alert, Button, Image } from 'react-native';
 import axios from 'axios';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import moment from 'moment';
-import 'moment/locale/es';
 import Fondo from '../../components/Fondo';
-import styles from '../../styles/stylesModify';
 import ambientes from '../../components/Ambientes';
 import SeleccionarPreferencia from '../../components/SeleccionarPreferencia';
-import commonStyles from '../../styles/stylesCommon';
+import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header'
 import Footer from '../../components/Footer';
+import { UserContext } from '../../context/UserContext';
+import inputStyles from '../../styles/inputStyles';
+import ambienteStyles from '../../styles/ambienteStyles';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const ModificarUsuario = () => {
-  const [data, setData] = useState({
-    nombre: '',
-    nombre_usuario: '',
-    email: '',
-    telefono: '',
-    fecha_nacimiento: new Date(),
-    seguidos: [],
-    preferencias: [],
-    actividades_creadas: [],
-    reviews: [],
-  });
-  const [loading, setLoading] = useState(true);
-  const [showDatePicker, setShowDatePicker] = useState(false);
+const ModificarUsuario = ({ navigation, route }) => {
+  const [showFecha, setShowFecha] = useState(false);
   const [preferenciaSeleccionada, setPreferenciaSeleccionada] = useState([]);
+  const [data, setData] = useState(route.params.data);
+  const [fechaNacimiento, setFechaNacimiento] = useState(new Date(data.usuario.fecha_nac.$date));
+  const { userId, token } = useContext(UserContext);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/usuario_generico/665b56eb6bd71b0279ca391b`)
-      .then(response => {
-        const fetchedData = response.data;
-        setData({
-          ...fetchedData,
-          fecha_nacimiento: new Date(fetchedData.fecha_nac),
-          preferencias: fetchedData.preferencias || [], 
-        });
-        setPreferenciaSeleccionada(
-          (fetchedData.preferencias || []).map(pref => ambientes.findIndex(a => a.name === pref))
-        );
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-        setLoading(false);
-      });
-  }, []);
+    navigation.setOptions({
+      title: 'Modificar Perfil'
+    });
+
+    const preferenciasIndices = data.usuario.preferencias.map(pref =>
+      ambientes.findIndex(amb => amb.name === pref)
+    );
+    setPreferenciaSeleccionada(preferenciasIndices);
+  }, [navigation, data]);
 
   const handleInputChange = (field, value) => {
-    setData(prevState => ({ ...prevState, [field]: value }));
+    setData(prevState => ({ ...prevState, usuario: { ...prevState.usuario, [field]: value } }));
   };
 
-  const handleDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || data.fecha_nacimiento;
-    setShowDatePicker(Platform.OS === 'ios');
-    setData(prevState => ({ ...prevState, fecha_nacimiento: currentDate }));
+  const onChangeFecha = (event, selectedDate) => {
+    setShowFecha(false);
+    if (selectedDate) {
+      setFechaNacimiento(selectedDate);
+    }
   };
 
   const showDatepicker = () => {
-    setShowDatePicker(true);
+    setShowFecha(true);
   };
 
   const seleccionPreferencia = index => {
@@ -69,26 +52,28 @@ const ModificarUsuario = () => {
       : [...preferenciaSeleccionada, index];
     setPreferenciaSeleccionada(newSelectedTags);
     const newPreferencias = newSelectedTags.map(tagIndex => ambientes[tagIndex]?.name);
-    setData(prevState => ({ ...prevState, preferencias: newPreferencias }));
+    setData(prevState => ({ ...prevState, usuario: { ...prevState.usuario, preferencias: newPreferencias } }));
   };
 
   const handleSubmit = () => {
-    const { nombre, nombre_usuario, email, telefono, seguidos, preferencias, actividades_creadas, reviews } = data;
+    const { nombre, nombre_usuario, email, telefono, seguidos, preferencias, actividades_creadas, reviews } = data.usuario;
+    const fechaNacimientoISO = fechaNacimiento.toISOString().split('T')[0];
     const updatedData = {
       nombre,
       nombre_usuario,
       email,
       telefono,
-      fecha_nacimiento: data.fecha_nacimiento.toISOString().split('T')[0],
+      fecha_nac: fechaNacimientoISO,
       seguidos,
-      preferencias: preferencias.join(','),
+      preferencias,
       actividades_creadas,
       reviews,
     };
 
-    axios.put(`${BASE_URL}/usuario_generico/665b56eb6bd71b0279ca391b`, updatedData)
+    axios.put(`${BASE_URL}/usuario_generico/${userId}`, updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
+        navigation.navigate('DatosUsuario', { userId });
       })
       .catch(error => {
         console.error(error);
@@ -96,109 +81,104 @@ const ModificarUsuario = () => {
       });
   };
 
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
-
   if (!data) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.label}>Error al cargar los datos</Text>
+      <View style={commonStyles.container}>
+        <Text style={commonStyles.label}>Error al cargar los datos</Text>
       </View>
     );
   }
 
   return (
     <View style={{ flex: 1 }}>
-    <Header titulo="Modificar Perfil" onBackPress={() => (navigation.goBack())} />
       <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
         <Fondo />
       </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <View style={commonStyles.dataContainer}>
-          <View style={styles.profileImageContainer}>
-            <Image source={{ uri: `${BASE_URL}${data.imagen_url}` }} style={styles.profileImage} />
+          <View style={commonStyles.profileImageContainer}>
+            <Image source={{ uri: `${BASE_URL}${data.usuario.imagen_url}` }} style={commonStyles.profileImage} />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Nombre:</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Nombre:</Text>
             <TextInput
-              style={styles.input}
-              value={data.nombre}
+              style={inputStyles.input}
+              value={data.usuario.nombre}
               onChangeText={(value) => handleInputChange('nombre', value)}
             />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Nombre Usuario:</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Nombre Usuario:</Text>
             <TextInput
-              style={styles.input}
-              value={data.nombre_usuario}
+              style={inputStyles.input}
+              value={data.usuario.nombre_usuario}
               onChangeText={(value) => handleInputChange('nombre_usuario', value)}
             />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Correo Electrónico:</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Correo Electrónico:</Text>
             <TextInput
-              style={styles.input}
-              value={data.email}
+              style={inputStyles.input}
+              value={data.usuario.email}
               onChangeText={(value) => handleInputChange('email', value)}
             />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Teléfono:</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Teléfono:</Text>
             <TextInput
-              style={styles.input}
-              value={data.telefono}
+              style={inputStyles.input}
+              value={data.usuario.telefono}
               onChangeText={(value) => handleInputChange('telefono', value)}
             />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Fecha de Nacimiento:</Text>
-            <View style={styles.dateRow}>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Fecha de Nacimiento:</Text>
+            <View style={inputStyles.dateRow}>
               <TextInput
-                value={moment(data.fecha_nacimiento).format('DD')}
-                style={[styles.dateInput, styles.datePart]}
+                value={fechaNacimiento.getDate().toString()}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={moment(data.fecha_nacimiento).format('MMMM')}
-                style={[styles.dateInput, styles.datePart]}
+                value={fechaNacimiento.toLocaleString('default', { month: 'short' })}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={moment(data.fecha_nacimiento).format('YYYY')}
-                style={[styles.dateInput, styles.datePart]}
+                value={fechaNacimiento.getFullYear().toString()}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <Button onPress={showDatepicker} title="Cambiar" color="#FF5252" />
             </View>
-            {showDatePicker && (
+            {showFecha && (
               <DateTimePicker
-                testID="dateTimePicker"
-                value={data.fecha_nacimiento}
+                value={fechaNacimiento}
                 mode="date"
                 is24Hour={true}
                 display="default"
-                onChange={handleDateChange}
+                onChange={onChangeFecha}
               />
             )}
           </View>
-          <Text style={styles.preferencesTitle}>Preferencias:</Text>
-          <SeleccionarPreferencia 
+          <Text style={commonStyles.preferencesTitle}>Preferencias:</Text>
+          <SeleccionarPreferencia
             ambientes={ambientes}
             seleccionados={preferenciaSeleccionada}
             seleccionAmbiente={seleccionPreferencia}
-            styles={styles}
+            styles={ambienteStyles}
           />
-          <TouchableOpacity style={styles.boton} onPress={handleSubmit}>
-            <Text style={styles.botonTexto}>Guardar</Text>
+          <TouchableOpacity style={commonStyles.saveButton} onPress={handleSubmit}>
+            <Text style={commonStyles.saveButtonText}>Guardar</Text>
+            <Icon name="save" size={30} color="#000" />
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <Footer 
-        onHangoutPress={() => console.log('Hangout Pressed')} 
-        onAddPress={() => console.log('Add Pressed')} 
-        onProfilePress={() => console.log('Profile Pressed')} 
-        showAddButton={true} 
+      <Footer
+        showAddButton={true}
+        onHangoutPressUser={() => navigation.navigate('InicioUsuario', { userId })}
+        onProfilePressUser={() => navigation.navigate('DatosUsuario', { userId })}
+        onCreateActivity={() => navigation.navigate('CrearActividad', { userId })}
       />
     </View>
   );

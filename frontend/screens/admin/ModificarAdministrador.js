@@ -4,15 +4,14 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import Fondo from '../../components/Fondo';
 import commonStyles from '../../styles/commonStyles';
-import inputStyles from '../../styles/inputStyles'
+import inputStyles from '../../styles/inputStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { AdminContext } from '../../context/AdminContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ModificarAdministrador = ({ navigation, route }) => {
-  const { adminId } = useContext(AdminContext);
+  const { adminId, token } = useContext(AdminContext);
   const [data, setData] = useState(route.params.data);
   const [showFecha, setShowFecha] = useState(false);
   const [fechaNacimiento, setFechaNacimiento] = useState(new Date(data.fecha_nac.$date));
@@ -34,7 +33,7 @@ const ModificarAdministrador = ({ navigation, route }) => {
 
   const handleSave = async () => {
     const { nombre, nombre_usuario, email, telefono, imagen_url } = data;
-    const fechaNacimientoISO = fechaNacimiento.toISOString().split('T')[0]; // Obtener la fecha en formato YYYY-MM-DD
+    const fechaNacimientoISO = fechaNacimiento.toISOString().split('T')[0];
     const updatedData = {
       dni: data.dni,
       establecimientos: data.establecimientos,
@@ -129,7 +128,7 @@ const ModificarAdministrador = ({ navigation, route }) => {
                 style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
-              <Button onPress={showDatepicker} title="Cambiar" color="#FF5252"/>
+              <Button onPress={showDatepicker} title="Cambiar" color="#FF5252" />
             </View>
             {showFecha && (
               <DateTimePicker
@@ -147,8 +146,8 @@ const ModificarAdministrador = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <Footer 
-        showAddButton={false} 
+      <Footer
+        showAddButton={false}
         onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
         onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />

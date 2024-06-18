@@ -5,7 +5,6 @@ import BASE_URL from '../config_ip';
 
 const DEFAULT_IMAGE_URL = `${BASE_URL}/_uploads/photos/default_no_image.png`;
 
-
 const Oferta = ({ id, onPress }) => {
   const [oferta, setOferta] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,7 +14,6 @@ const Oferta = ({ id, onPress }) => {
     try {
       const response = await axios.get(`${BASE_URL}/ofertas/${id}`);
       const ofertaData = response.data;
-
       setOferta(ofertaData);
       setLoading(false);
       setError(false);
@@ -50,7 +48,6 @@ const Oferta = ({ id, onPress }) => {
     );
   }
 
-
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <Image source={{ uri: `${BASE_URL}${oferta.imagen_url}` }} style={styles.image} />
@@ -78,7 +75,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    width: 250, 
+    width: 250,
   },
   image: {
     width: '100%',
@@ -88,21 +85,21 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center', 
+    alignItems: 'center',
     width: '100%',
     marginTop: 10,
   },
   nombre: {
     fontSize: 18,
     fontWeight: 'bold',
-    textAlign: 'center', 
+    textAlign: 'center',
   },
   precio: {
     fontSize: 16,
     marginTop: 5,
-    color: '#000000', 
-    fontWeight: 'bold', 
-    textAlign: 'center', 
+    color: '#000000',
+    fontWeight: 'bold',
+    textAlign: 'center',
     width: '100%',
   },
   centered: {

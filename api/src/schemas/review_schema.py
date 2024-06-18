@@ -40,12 +40,12 @@ def validar_existencia_id_establecimiento(value):
 class ReviewSchema(Schema):
     calificacion = fields.Float(
         required=True,
-        validate=validate.Range(min=1, max=5),
+        validate=validate.Range(min=0, max=5),
         error_messages={"required": "Calificación sin rellenar"}
     )
     mensaje = fields.Str(
         required=True,
-        validate=[validate.Length(min=1, max=500)],
+        validate=[validate.Length(min=1, max=201)],
         error_messages={"required": "Mensaje sin rellenar", "max": "Mensaje demasiado largo"}
     )
     id_usuario = ObjectIdField(

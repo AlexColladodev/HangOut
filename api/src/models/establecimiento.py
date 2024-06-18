@@ -4,6 +4,7 @@ from db import mongo
 from bson import json_util
 from bson.objectid import ObjectId
 from pymongo.errors import PyMongoError
+import math
 
 class Establecimiento:
     def __init__(self, data: Dict) -> None:
@@ -30,12 +31,10 @@ class Establecimiento:
             establecimiento_eliminar = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
             if not establecimiento_eliminar:
                 raise ValueError("Establecimiento no encontrado")
-            
             id_administrador = establecimiento_eliminar.get("id_administrador")
             resultado = mongo.db.establecimientos.delete_one({"_id": ObjectId(id)})
             if resultado.deleted_count == 0:
                 raise RuntimeError("No se pudo eliminar el establecimiento")
-            
             return {"message": "Establecimiento " + id + " eliminado con éxito", "id_administrador": id_administrador}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al eliminar establecimiento: {e}")
@@ -50,20 +49,21 @@ class Establecimiento:
             raise RuntimeError(f"Error de base de datos al consultar los establecimientos: {e}")
 
     @staticmethod
-    def consultar_establecimientos_ordenados() -> List[str]:
+    def consultar_establecimientos_ordenados() -> List[List]:
         try:
             establecimientos = mongo.db.establecimientos.find({}, {"_id": 1})
-            medias = []
-
-            for establecimiento in establecimientos:
-                id_establecimiento = str(establecimiento["_id"])
-                media_result = Establecimiento.media_reviews(id_establecimiento)
-                media = media_result.get("media")
-                medias.append((id_establecimiento, media))
-
-            medias.sort(key=lambda x: x[1], reverse=True)
-            ids_ordenados = [id_media[0] for id_media in medias]
-            return json_util.dumps(ids_ordenados)
+            ids_establecimientos = [str(establecimiento["_id"]) for establecimiento in establecimientos]
+            ids_ordenados = Establecimiento.ordenar(ids_establecimientos)
+            resultado = []
+            for id_establecimiento in ids_ordenados:
+                establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id_establecimiento)})
+                media_data = Establecimiento.media_reviews(id_establecimiento)
+                resultado.append([
+                    establecimiento,
+                    media_data["media"],
+                    media_data["n_reviews"]
+                ])
+            return json_util.dumps(resultado)
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar los establecimientos ordenados: {e}")
 
@@ -84,19 +84,16 @@ class Establecimiento:
             establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id_establecimiento)})
             if not establecimiento:
                 raise ValueError(f"Establecimiento con id {id_establecimiento} no encontrado")
-
             update_data = {}
             if 'nombre_establecimiento' in data:
                 update_data['nombre_establecimiento'] = data['nombre_establecimiento']
             if 'ambiente' in data:
                 update_data['ambiente'] = data['ambiente']
-
             if update_data:
                 mongo.db.establecimientos.update_one(
                     {"_id": ObjectId(id_establecimiento)},
                     {"$set": update_data}
                 )
-
             return {"message": "Establecimiento actualizado exitosamente"}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al actualizar el establecimiento: {e}")
@@ -124,15 +121,46 @@ class Establecimiento:
             raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
 
     @staticmethod
-    def filtrar_por_ambientes(ambientes_solicitados):
+    def filtrar_personalizado(ambientes_solicitados: List[str]) -> List[List]:
         try:
             establecimientos = mongo.db.establecimientos.find({
                 "ambiente": {"$in": ambientes_solicitados}
             }, {"_id": 1})
-            ids = [str(doc['_id']) for doc in establecimientos]
-            return {"establecimientos": ids}
-        except Exception as e:
-            raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
+            ids_establecimientos = [str(doc["_id"]) for doc in establecimientos]
+            ids_ordenados = Establecimiento.ordenar(ids_establecimientos)
+            resultado = []
+            for id_establecimiento in ids_ordenados:
+                establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id_establecimiento)})
+                media_data = Establecimiento.media_reviews(id_establecimiento)
+                resultado.append([
+                    establecimiento,
+                    media_data["media"],
+                    media_data["n_reviews"]
+                ])
+            return json_util.dumps(resultado)
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al filtrar establecimientos por ambientes: {e}")
+
+    @staticmethod
+    def filtrar_and(ambientes_solicitados: List[str]) -> List[List]:
+        try:
+            establecimientos = mongo.db.establecimientos.find({
+                "ambiente": {"$all": ambientes_solicitados}
+            }, {"_id": 1})
+            ids_establecimientos = [str(doc["_id"]) for doc in establecimientos]
+            ids_ordenados = Establecimiento.ordenar(ids_establecimientos)
+            resultado = []
+            for id_establecimiento in ids_ordenados:
+                establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id_establecimiento)})
+                media_data = Establecimiento.media_reviews(id_establecimiento)
+                resultado.append([
+                    establecimiento,
+                    media_data["media"],
+                    media_data["n_reviews"]
+                ])
+            return json_util.dumps(resultado)
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al filtrar establecimientos por ambientes: {e}")
 
     @staticmethod
     def add_review_establecimiento(id_establecimiento, id_review):
@@ -146,29 +174,101 @@ class Establecimiento:
             raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
 
     @staticmethod
+    def wilson_score(id):
+        try:
+            establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
+            if not establecimiento:
+                raise ValueError("Establecimiento no encontrado")
+            suma = 0.0
+            cantidad_reviews = len(establecimiento.get("reviews", []))
+            reviews = establecimiento.get("reviews", [])
+            for review_id in reviews:
+                review = mongo.db.reviews.find_one({"_id": ObjectId(review_id)})
+                if review:
+                    suma += review["calificacion"]
+            media_establecimiento = suma / cantidad_reviews if cantidad_reviews > 0 else 0
+            p = media_establecimiento / 5
+            n = cantidad_reviews
+            z = 1.96
+            if n == 0:
+                return {"wilson_score": 0, "media": 0, "n_reviews": 0}
+            denominator = 1 + z**2 / n
+            center_adjusted_probability = p + z**2 / (2 * n)
+            adjusted_standard_deviation = math.sqrt((p * (1 - p) + z**2 / (4 * n)) / n)
+            lower_bound = (center_adjusted_probability - z * adjusted_standard_deviation) / denominator
+            wilson_score = lower_bound * 5
+            return {
+                "wilson_score": wilson_score,
+                "media": media_establecimiento,
+                "n_reviews": cantidad_reviews
+            }
+        except PyMongoError as e:
+            raise RuntimeError(f"No se pudo calcular el Wilson Score: {e}")
+
+    @staticmethod
+    def ordenar(ids_establecimientos: List[str]) -> List[str]:
+        try:
+            puntajes = []
+            for id_establecimiento in ids_establecimientos:
+                puntaje_result = Establecimiento.wilson_score(id_establecimiento)
+                puntaje = puntaje_result.get("wilson_score")
+                puntajes.append((id_establecimiento, puntaje))
+            puntajes.sort(key=lambda x: x[1], reverse=True)
+            ids_ordenados = [id_puntaje[0] for id_puntaje in puntajes]
+            return ids_ordenados
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al ordenar los establecimientos: {e}")
+
+    @staticmethod
     def media_reviews(id):
         try:
             establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id)})
-
             if not establecimiento:
                 raise ValueError("Establecimiento no encontrado")
-
             suma = 0.0
             media = 0.0
             cantidad_reviews = len(establecimiento.get("reviews", []))
             reviews = establecimiento.get("reviews", [])
-
             for review_id in reviews:
                 review = mongo.db.reviews.find_one({"_id": ObjectId(review_id)})
-
                 if review:
                     suma += review["calificacion"]
-
                 if cantidad_reviews > 0:
                     media = suma / cantidad_reviews
                 else:
                     media = 0
-                
             return {"media": media, "n_reviews": cantidad_reviews}
         except PyMongoError as e:
             raise RuntimeError(f"No se pudo contar la media: {e}")
+
+    @staticmethod
+    def detalle_establecimiento(id_establecimiento):
+        try:
+            establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id_establecimiento)})
+            if not establecimiento:
+                raise ValueError("Establecimiento no encontrado")
+            media_info = Establecimiento.media_reviews(id_establecimiento)
+            reviews_detalles = []
+            for review_id in establecimiento.get("reviews", []):
+                review = mongo.db.reviews.find_one({"_id": ObjectId(review_id)})
+                if review:
+                    usuario = mongo.db.usuarios_genericos.find_one({"_id": ObjectId(review["id_usuario"])})
+                    if usuario:
+                        review["nombre_usuario"] = usuario.get("nombre_usuario")
+                    review["nombre_establecimiento"] = establecimiento.get("nombre_establecimiento")
+                    reviews_detalles.append(review)
+            establecimiento_detalle = {
+                "_id": establecimiento.get("_id"),
+                "cif": establecimiento.get("cif"),
+                "nombre_establecimiento": establecimiento.get("nombre_establecimiento"),
+                "ambiente": establecimiento.get("ambiente"),
+                "ofertas": establecimiento.get("ofertas"),
+                "eventos": establecimiento.get("eventos"),
+                "imagen_url": establecimiento.get("imagen_url"),
+                "rating": media_info.get("media"),
+                "numero_reviews": media_info.get("n_reviews"),
+                "reviews": reviews_detalles
+            }
+            return json_util.dumps(establecimiento_detalle)
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al obtener detalles del establecimiento: {e}")

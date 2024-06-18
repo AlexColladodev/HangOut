@@ -4,14 +4,13 @@ from werkzeug.security import check_password_hash
 from flask_restx import Api
 from flask_cors import CORS
 from db import init_mongo, mongo
-from uploads_config import configure_upload, photos  # Importar correctamente la función y el objeto photos
+from uploads_config import configure_upload, photos 
 from services import usuario_generico_service, administrador_establecimientos_service, establecimiento_service, actividad_service, evento_service, oferta_service, review_service
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/HangOut"
 app.config["JWT_SECRET_KEY"] = "Ap?&/u]rk0b5=:+E"
 
-# Configurar Flask-Uploads
 configure_upload(app)
 
 jwt = JWTManager(app)

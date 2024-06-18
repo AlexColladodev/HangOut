@@ -6,7 +6,6 @@ import Fondo from '../../components/Fondo';
 import inputStyles from '../../styles/inputStyles';
 import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { AdminContext } from '../../context/AdminContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -17,7 +16,7 @@ const CrearOferta = ({ navigation, route }) => {
   const [precioOferta, setPrecioOferta] = useState('');
   const [imageUri, setImageUri] = useState(null);
   const { id } = route.params;
-  const { adminId } = useContext(AdminContext);
+  const { adminId, token } = useContext(AdminContext);
 
   const selectImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -60,12 +59,13 @@ const CrearOferta = ({ navigation, route }) => {
       });
 
       if (response.status === 200) {
+        const id_oferta = response.data.id_oferta;
         Alert.alert('Éxito', 'Oferta creada con éxito');
         setNombreOferta('');
         setDescripcionOferta('');
         setPrecioOferta('');
         setImageUri(null);
-        navigation.navigate('DatosEstablecimiento', { id }); 
+        navigation.navigate('DatosOferta', { id: id_oferta });
       } else {
         const errorMsg = response.data.error || 'Hubo un problema al crear la oferta';
         Alert.alert('Error', errorMsg);
@@ -112,8 +112,8 @@ const CrearOferta = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <Footer 
-        showAddButton={false} 
+      <Footer
+        showAddButton={false}
         onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
         onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />

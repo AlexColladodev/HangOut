@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator, ScrollView, SafeAreaView, Button, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, ActivityIndicator, ScrollView, Button, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import Fondo from '../../components/Fondo';
 import commonStyles from '../../styles/commonStyles';
@@ -8,11 +8,11 @@ import Footer from '../../components/Footer';
 import { AdminContext } from '../../context/AdminContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const DatosAdministrador = ({ navigation, route }) => {
+const DatosAdministrador = ({ navigation }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const { adminId } = route.params;
+  const { adminId, token } = useContext(AdminContext);
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -28,7 +28,8 @@ const DatosAdministrador = ({ navigation, route }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/administrador_establecimiento/${adminId}`);
-      setData(response.data);
+      const { administrador } = response.data;
+      setData(administrador);
       setLoading(false);
       setError(false);
     } catch (error) {

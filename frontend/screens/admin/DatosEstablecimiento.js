@@ -1,24 +1,21 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { View, Text, ActivityIndicator, ScrollView, Button, Image, FlatList, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, ScrollView, Button, Image, FlatList, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Fondo from '../../components/Fondo';
 import Evento from '../../components/Evento';
-import Review from '../../components/Review';
+import ReviewAdmin from '../../components/ReviewAdmin';
 import Oferta from '../../components/Oferta';
 import Preferencia from '../../components/Preferencia';
 import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
 import Footer from '../../components/Footer';
 import { AdminContext } from '../../context/AdminContext';
-import { useFocusEffect } from '@react-navigation/native';
 
 const DatosEstablecimiento = ({ navigation, route }) => {
-  const { adminId } = useContext(AdminContext);
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const { id } = route.params;
+  const { adminId, token } = useContext(AdminContext);
+  const [data, setData] = useState(route.params.establecimiento);
+  const { _id: { $oid: id } } = route.params.establecimiento;
 
   useEffect(() => {
     navigation.setOptions({
@@ -30,40 +27,6 @@ const DatosEstablecimiento = ({ navigation, route }) => {
       ),
     });
   }, [navigation, id]);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/establecimientos/${id}`);
-      const establecimientoData = response.data;
-      setData(establecimientoData);
-      setLoading(false);
-      setError(false);
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
-      setError(true);
-    }
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      setLoading(true);
-      fetchData();
-    }, [id])
-  );
-
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" style={commonStyles.centered} />;
-  }
-
-  if (error) {
-    return (
-      <View style={commonStyles.centered}>
-        <Text style={commoncommonStyles.errorText}>Error al cargar los datos</Text>
-        <Button title="Reintentar" onPress={fetchData} />
-      </View>
-    );
-  }
 
   const handleOferta = (id) => {
     navigation.navigate('DatosOferta', { id });
@@ -190,8 +153,8 @@ const DatosEstablecimiento = ({ navigation, route }) => {
             <Text style={commonStyles.sectionLabel}>Reviews:</Text>
             <FlatList
               data={data.reviews}
-              keyExtractor={(item) => item.toString()}
-              renderItem={({ item }) => <Review reviewId={item} />}
+              keyExtractor={(item) => item._id.$oid}
+              renderItem={({ item }) => <ReviewAdmin review={item} />}
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={commonStyles.lista}
@@ -201,10 +164,10 @@ const DatosEstablecimiento = ({ navigation, route }) => {
         <TouchableOpacity style={commonStyles.deleteButton} onPress={handleDelete}>
           <Icon name="trash" size={35} color="red" />
           <Text style={commonStyles.deleteButtonText}>Eliminar Establecimiento</Text>
-        </TouchableOpacity>  
+        </TouchableOpacity>
       </ScrollView>
-      <Footer 
-        showAddButton={false} 
+      <Footer
+        showAddButton={false}
         onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
         onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />

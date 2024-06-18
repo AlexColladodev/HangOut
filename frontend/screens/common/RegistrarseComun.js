@@ -4,14 +4,13 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import Fondo from '../../components/Fondo';
-import styles from '../../styles/stylesTipoAdmin';
-import commonStyles from '../../styles/stylesCommon';
 import axios from 'axios';
 import SeleccionarPreferencia from '../../components/SeleccionarPreferencia';
 import BASE_URL from '../../config_ip';
-import ambientes from '../../components/Ambientes'
-import stylesTipoUsuario from '../../styles/stylesTipoUsuario';
-import stylesTipoAdmin from '../../styles/stylesTipoAdmin';
+import ambientes from '../../components/Ambientes';
+import inputStyles from '../../styles/inputStyles';
+import commonStyles from '../../styles/commonStyles';
+import ambienteStyles from '../../styles/ambienteStyles';
 
 const RegistrarseComun = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
@@ -19,14 +18,12 @@ const RegistrarseComun = ({ navigation }) => {
   const [accountType, setAccountType] = useState("");
   const [isAccountTypeValid, setIsAccountTypeValid] = useState(true);
   const [imageUri, setImageUri] = useState(null);
-
   const [nombre, setNombre] = useState('');
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [correoElectronico, setCorreoElectronico] = useState('');
   const [telefono, setTelefono] = useState('');
   const [dni, setDni] = useState('');
-
   const [ambientesSeleccionados, setAmbientesSeleccionados] = useState([]);
 
   const seleccionAmbiente = index => {
@@ -110,20 +107,19 @@ const RegistrarseComun = ({ navigation }) => {
       formData.append('imagen', null);
     }
 
-
     try {
       if (accountType === "Administrador de Establecimiento") {
         formData.append('dni', dni);
         await axios.post(`${BASE_URL}/administrador_establecimiento`, formData, {
           headers: {
-              'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data'
           }
         });
       } else {
         formData.append('preferencias', selectedAmbientes);
         await axios.post(`${BASE_URL}/usuario_generico`, formData, {
           headers: {
-              'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data'
           }
         });
       }
@@ -152,29 +148,29 @@ const RegistrarseComun = ({ navigation }) => {
           <Fondo />
         </View>
         <View style={commonStyles.dataContainer}>
-          <View style={styles.inputContainer}>
-            <TextInput placeholder="Nombre" style={styles.input} onChangeText={setNombre} value={nombre} />
-            <TextInput placeholder="Nombre Usuario" style={styles.input} onChangeText={setNombreUsuario} value={nombreUsuario} />
-            <TextInput placeholder="Contraseña" secureTextEntry={true} style={styles.input} onChangeText={setContraseña} value={contraseña} />
-            <TextInput placeholder="Correo Electrónico" keyboardType="email-address" style={styles.input} onChangeText={setCorreoElectronico} value={correoElectronico} />
-            <TextInput placeholder="Teléfono" keyboardType="phone-pad" style={styles.input} onChangeText={setTelefono} value={telefono} />
+          <View style={inputStyles.inputContainer}>
+            <TextInput placeholder="Nombre" style={inputStyles.input} onChangeText={setNombre} value={nombre} />
+            <TextInput placeholder="Nombre Usuario" style={inputStyles.input} onChangeText={setNombreUsuario} value={nombreUsuario} />
+            <TextInput placeholder="Contraseña" secureTextEntry={true} style={inputStyles.input} onChangeText={setContraseña} value={contraseña} />
+            <TextInput placeholder="Correo Electrónico" keyboardType="email-address" style={inputStyles.input} onChangeText={setCorreoElectronico} value={correoElectronico} />
+            <TextInput placeholder="Teléfono" keyboardType="phone-pad" style={inputStyles.input} onChangeText={setTelefono} value={telefono} />
 
-            <View style={styles.datePickerContainer}>
-              <Text style={styles.pickerLabel}>Fecha de Nacimiento</Text>
-              <View style={styles.dateRow}>
+            <View style={inputStyles.datePickerContainer}>
+              <Text style={inputStyles.pickerLabel}>Fecha de Nacimiento</Text>
+              <View style={inputStyles.dateRow}>
                 <TextInput
                   value={date.getDate().toString()}
-                  style={[styles.dateInput, styles.datePart]}
+                  style={[inputStyles.dateInput, inputStyles.datePart]}
                   editable={false}
                 />
                 <TextInput
                   value={date.toLocaleString('default', { month: 'short' })}
-                  style={[styles.dateInput, styles.datePart]}
+                  style={[inputStyles.dateInput, inputStyles.datePart]}
                   editable={false}
                 />
                 <TextInput
                   value={date.getFullYear().toString()}
-                  style={[styles.dateInput, styles.datePart]}
+                  style={[inputStyles.dateInput, inputStyles.datePart]}
                   editable={false}
                 />
                 <Button onPress={showDatepicker} title="Cambiar" color="#FF5252" />
@@ -191,8 +187,8 @@ const RegistrarseComun = ({ navigation }) => {
               )}
             </View>
 
-            <View style={styles.pickerContainer}>
-              <Text style={styles.pickerLabel}>Tipo de Cuenta</Text>
+            <View style={inputStyles.pickerContainer}>
+              <Text style={inputStyles.pickerLabel}>Tipo de Cuenta</Text>
               <Picker
                 selectedValue={accountType}
                 onValueChange={(itemValue, itemIndex) => setAccountType(itemValue)}
@@ -206,10 +202,10 @@ const RegistrarseComun = ({ navigation }) => {
             </View>
 
             {accountType === "Administrador de Establecimiento" && (
-              <View style={stylesTipoAdmin.inputContainer}>
-                <Text style={stylesTipoAdmin.dniLabel}>DNI:</Text>
-                <TextInput 
-                  style={stylesTipoAdmin.input}
+              <View style={inputStyles.inputContainer}>
+                <Text style={inputStyles.dniLabel}>DNI:</Text>
+                <TextInput
+                  style={inputStyles.input}
                   placeholder="Ingrese su DNI"
                   value={dni}
                   onChangeText={setDni}
@@ -218,22 +214,22 @@ const RegistrarseComun = ({ navigation }) => {
             )}
 
             {accountType === "Usuario" && (
-              <View style={commonStyles.dataContainer}>
-                <Text style={stylesTipoUsuario.preferencesTitle}>Preferencias:</Text>
-                <SeleccionarPreferencia 
+              <View style={inputStyles.dataContainer}>
+                <Text style={inputStyles.preferencesTitle}>Preferencias:</Text>
+                <SeleccionarPreferencia
                   ambientes={ambientes}
                   seleccionados={ambientesSeleccionados}
                   seleccionAmbiente={seleccionAmbiente}
-                  styles={stylesTipoUsuario}
+                  styles={ambienteStyles}
                 />
               </View>
             )}
 
             <Button title="Seleccionar Foto de Perfil" onPress={selectImage} />
-            {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
+            {imageUri && <Image source={{ uri: imageUri }} style={inputStyles.image} />}
           </View>
-          <TouchableOpacity style={styles.boton} onPress={handleSubmit}>
-            <Text style={styles.botonTexto}>Crear Cuenta</Text>
+          <TouchableOpacity style={commonStyles.saveButton} onPress={handleSubmit}>
+            <Text style={commonStyles.saveButtonText}>Crear Cuenta</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -241,4 +237,4 @@ const RegistrarseComun = ({ navigation }) => {
   );
 };
 
-export default RegistrarseComun
+export default RegistrarseComun;

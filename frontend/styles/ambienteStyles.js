@@ -34,6 +34,50 @@ const ambienteStyles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'center',
       },
+          tagWrapper: {
+      alignItems: 'center',
+      marginHorizontal: 5,
+    },
+    tag: {
+      padding: 10,
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 5,
+    },
+    tagSelected: {
+      backgroundColor: '#d3d3d3',
+    },
+    tagImage: {
+      width: 50,
+      height: 50,
+    },
+    tagText: {
+      marginTop: 5,
+      fontSize: 12,
+      textAlign: 'center',
+    },
+    tagWrapperUser: {
+      alignItems: 'center',
+      marginHorizontal: 5,
+    },
+    tagUser: {
+      padding: 10,
+      borderWidth: 1,
+      borderColor: '#ccc',
+      borderRadius: 5,
+    },
+    tagSelectedUser: {
+      backgroundColor: '#d3d3d3',
+    },
+    tagImageUser: {
+      width: 50,
+      height: 50,
+    },
+    tagTextUser: {
+      marginTop: 5,
+      fontSize: 12,
+      textAlign: 'center',
+    },
 });
 
 export default ambienteStyles;

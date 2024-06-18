@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { AdminContext } from '../context/AdminContext';
+import { UserContext } from '../context/UserContext';
 
 const Footer = ({ 
   onHangoutPressAdmin, 
@@ -9,9 +10,11 @@ const Footer = ({
   onAddPress, 
   onProfilePressAdmin, 
   onProfilePressUser, 
-  showAddButton 
+  showAddButton,
+  onCreateActivity
 }) => {
   const { adminId } = useContext(AdminContext);
+  const { userId } = useContext(UserContext)
 
   const handleHangoutPress = () => {
     if (showAddButton && onHangoutPressUser) {
@@ -29,13 +32,19 @@ const Footer = ({
     }
   };
 
+  const handleCreateActivity = () => {
+    if(showAddButton && onCreateActivity){
+      onCreateActivity(userId)
+    }
+  }
+
   return (
     <View style={styles.footerContainer}>
       <TouchableOpacity onPress={handleHangoutPress} style={styles.footerButton}>
         <Image source={require('../assets/hangout_icon.png')} style={styles.iconImage} />
       </TouchableOpacity>
       {showAddButton && (
-        <TouchableOpacity onPress={onAddPress} style={styles.footerButton}>
+        <TouchableOpacity onPress={handleCreateActivity} style={styles.footerButton}>
           <Icon name="plus-circle" size={40} color="#000" />
         </TouchableOpacity>
       )}

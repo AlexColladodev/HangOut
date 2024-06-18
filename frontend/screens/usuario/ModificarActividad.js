@@ -1,61 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, TextInput, Button, Alert, Platform, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 import moment from 'moment';
-import 'moment/locale/es'; 
+import 'moment/locale/es';
 import Fondo from '../../components/Fondo';
-import styles from '../../styles/stylesModify';
-import commonStyles from '../../styles/stylesCommon';
+import commonStyles from '../../styles/commonStyles';
+import inputStyles from '../../styles/inputStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header'
 import Footer from '../../components/Footer';
+import { UserContext } from '../../context/UserContext';
 
-const ModificarActividad = () => {
-  const [data, setData] = useState({
-    nombre_actividad: '',
-    descripcion_actividad: '',
-    fecha_actividad: new Date(),
-    hora_actividad: new Date(),
-    ubicacion: '',
-  });
-  const [loading, setLoading] = useState(true);
+const ModificarActividad = ({ navigation, route }) => {
+  const { actividad } = route.params;
+  const [data, setData] = useState(actividad);
   const [showFecha, setShowFecha] = useState(false);
   const [showHora, setShowHora] = useState(false);
+  const [fechaActividad, setFechaActividad] = useState(new Date(data.fecha_actividad.$date));
+  const [horaActividad, setHoraActividad] = useState(new Date(`1970-01-01T${data.hora_actividad}`));
+  const { userId, token } = useContext(UserContext);
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/actividades/665b5af16bd71b0279ca3939`)
-      .then(response => {
-        const fetchedData = response.data;
-        setData({
-          nombre_actividad: fetchedData.nombre_actividad,
-          descripcion_actividad: fetchedData.descripcion_actividad,
-          fecha_actividad: new Date(fetchedData.fecha_actividad.$date),
-          hora_actividad: new Date(`1970-01-01T${fetchedData.hora_actividad}Z`),
-          ubicacion: fetchedData.ubicacion,
-        });
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-        setLoading(false);
-      });
-  }, []);
+    navigation.setOptions({
+      title: 'Modificar Actividad'
+    });
+  }, [navigation]);
 
   const handleInputChange = (field, value) => {
     setData(prevState => ({ ...prevState, [field]: value }));
   };
 
   const onChangeFecha = (event, selectedDate) => {
-    const currentDate = selectedDate || data.fecha_actividad;
-    setShowFecha(Platform.OS === 'ios');
-    setData(prevState => ({ ...prevState, fecha_actividad: currentDate }));
+    setShowFecha(false);
+    if (selectedDate) {
+      setFechaActividad(selectedDate);
+    }
   };
 
   const onChangeHora = (event, selectedDate) => {
-    const currentDate = selectedDate || data.hora_actividad;
-    setShowHora(Platform.OS === 'ios');
-    setData(prevState => ({ ...prevState, hora_actividad: currentDate }));
+    setShowHora(false);
+    if (selectedDate) {
+      setHoraActividad(selectedDate);
+    }
   };
 
   const showDatepicker = () => {
@@ -67,19 +53,36 @@ const ModificarActividad = () => {
   };
 
   const handleSubmit = () => {
-    const { nombre_actividad, descripcion_actividad, fecha_actividad, hora_actividad, ubicacion } = data;
+    const { nombre_actividad, descripcion_actividad, ubicacion, participantes } = data;
+
+    const fechaActividadISO = fechaActividad.toISOString().split('T')[0];
+    const horaActividadISO = horaActividad.toTimeString().split(' ')[0];
+    const fechaNuevaActividadISO = fechaActividad.toISOString();
+
     const updatedData = {
       nombre_actividad,
       descripcion_actividad,
-      fecha_actividad: fecha_actividad.toISOString().split('T')[0],
-      hora_actividad: hora_actividad.toTimeString().split(' ')[0],
+      fecha_actividad: fechaActividadISO,
+      hora_actividad: horaActividadISO,
       ubicacion,
-      id_usuario_creador: '665b56ff6bd71b0279ca391c',
+      id_usuario_creador: userId,
+      participantes
     };
 
-    axios.put(`${BASE_URL}/actividades/665b5af16bd71b0279ca3939`, updatedData)
+    let id = data._id.$oid;
+
+    axios.put(`${BASE_URL}/actividades/${id}`, updatedData)
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
+
+        const nuevaActividad = {
+          ...updatedData,
+          _id: data._id,
+          fecha_actividad: { $date: fechaNuevaActividadISO },
+          perfil_participantes: data.perfil_participantes
+        };
+
+        navigation.navigate('DatosActividad', { actividad: nuevaActividad });
       })
       .catch(error => {
         console.error('Error detail:', error.response.data);
@@ -87,13 +90,9 @@ const ModificarActividad = () => {
       });
   };
 
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
-  }
-
   if (!data) {
     return (
-      <View style={styles.container}>
+      <View style={commonStyles.container}>
         <Text style={commonStyles.label}>Error al cargar los datos</Text>
       </View>
     );
@@ -101,24 +100,23 @@ const ModificarActividad = () => {
 
   return (
     <View style={{ flex: 1 }}>
-    <Header titulo="Modificar Actividad" onBackPress={() => (navigation.goBack())} />
       <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
         <Fondo />
       </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <View style={commonStyles.dataContainer}>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Nombre Actividad:</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Nombre Actividad:</Text>
             <TextInput
-              style={styles.input}
+              style={inputStyles.input}
               value={data.nombre_actividad}
               onChangeText={(value) => handleInputChange('nombre_actividad', value)}
             />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Descripción Actividad:</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Descripción Actividad:</Text>
             <TextInput
-              style={[styles.input, styles.textArea]}
+              style={[inputStyles.input]}
               value={data.descripcion_actividad}
               onChangeText={(value) => handleInputChange('descripcion_actividad', value)}
               multiline
@@ -126,29 +124,29 @@ const ModificarActividad = () => {
               textAlignVertical="top"
             />
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Fecha Actividad:</Text>
-            <View style={styles.dateRow}>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Fecha Actividad:</Text>
+            <View style={inputStyles.dateRow}>
               <TextInput
-                value={moment(data.fecha_actividad).format('DD')}
-                style={[styles.dateInput, styles.datePart]}
+                value={fechaActividad.getDate().toString()}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={moment(data.fecha_actividad).format('MMMM')}
-                style={[styles.dateInput, styles.datePart]}
+                value={fechaActividad.toLocaleString('default', { month: 'short' })}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={moment(data.fecha_actividad).format('YYYY')}
-                style={[styles.dateInput, styles.datePart]}
+                value={fechaActividad.getFullYear().toString()}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <Button onPress={showDatepicker} title="Cambiar" color="#FF5252" />
             </View>
             {showFecha && (
               <DateTimePicker
-                value={data.fecha_actividad}
+                value={fechaActividad}
                 mode="date"
                 is24Hour={true}
                 display="default"
@@ -156,24 +154,24 @@ const ModificarActividad = () => {
               />
             )}
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Hora Actividad:</Text>
-            <View style={styles.dateRow}>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Hora Actividad:</Text>
+            <View style={inputStyles.dateRow}>
               <TextInput
-                value={data.hora_actividad.getHours().toString()}
-                style={[styles.dateInput, styles.datePart]}
+                value={horaActividad.getHours().toString()}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <TextInput
-                value={data.hora_actividad.getMinutes().toString().padStart(2, '0')}
-                style={[styles.dateInput, styles.datePart]}
+                value={horaActividad.getMinutes().toString().padStart(2, '0')}
+                style={[inputStyles.dateInput, inputStyles.datePart]}
                 editable={false}
               />
               <Button onPress={showTimepicker} title="Cambiar" color="#FF5252" />
             </View>
             {showHora && (
               <DateTimePicker
-                value={data.hora_actividad}
+                value={horaActividad}
                 mode="time"
                 is24Hour={true}
                 display="default"
@@ -181,24 +179,24 @@ const ModificarActividad = () => {
               />
             )}
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Ubicación:</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Ubicación:</Text>
             <TextInput
-              style={styles.input}
+              style={inputStyles.input}
               value={data.ubicacion}
               onChangeText={(value) => handleInputChange('ubicacion', value)}
             />
           </View>
-          <TouchableOpacity style={styles.boton} onPress={handleSubmit}>
-            <Text style={styles.botonTexto}>Guardar</Text>
+          <TouchableOpacity style={commonStyles.saveButton} onPress={handleSubmit}>
+            <Text style={commonStyles.saveButtonText}>Guardar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <Footer 
-        onHangoutPress={() => console.log('Hangout Pressed')} 
-        onAddPress={() => console.log('Add Pressed')} 
-        onProfilePress={() => console.log('Profile Pressed')} 
-        showAddButton={true} 
+      <Footer
+        showAddButton={true}
+        onHangoutPressUser={() => navigation.navigate('InicioUsuario', { userId })}
+        onProfilePressUser={() => navigation.navigate('DatosUsuario', { userId })}
+        onCreateActivity={() => navigation.navigate('CrearActividad', { userId })}
       />
     </View>
   );

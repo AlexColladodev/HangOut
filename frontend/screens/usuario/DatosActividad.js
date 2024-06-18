@@ -1,119 +1,101 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, TouchableOpacity, FlatList } from 'react-native';
-import axios from 'axios';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import Fondo from '../../components/Fondo';
-import styles from '../../styles/stylesData';
 import Usuario from '../../components/Usuario';
-import commonStyles from '../../styles/stylesCommon';
-import BASE_URL from '../../config_ip';
-import Header from '../../components/Header'
+import commonStyles from '../../styles/commonStyles';
 import Footer from '../../components/Footer';
+import { UserContext } from '../../context/UserContext';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const DatosActividad = () => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/actividades/665b5a566bd71b0279ca3933`);
-      setData(response.data);
-      setLoading(false);
-      setError(false);
-    } catch (error) {
-      console.error(error);
-      setLoading(false);
-      setError(true);
-    }
-  };
-
-  const Modificar = () => {
-
-  };
+const DatosActividad = ({ navigation, route }) => {
+  const { userId } = useContext(UserContext);
+  const [data, setData] = useState(route.params.actividad);
+  const { actividad } = route.params;
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    navigation.setOptions({
+      title: 'Actividad',
+      headerRight: () => (
+        <View style={{ flexDirection: 'row' }}>
+          {actividad && actividad.id_usuario_creador === userId ? (
+            <>
+              <TouchableOpacity onPress={() => navigation.navigate('ModificarActividad', { actividad })}>
+                <Icon name="edit" size={25} color="black" style={{ marginRight: 15 }} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('CompartirActividad', { actividadId: actividad._id.$oid })}>
+                <Icon name="share-alt" size={25} color="black" style={{ marginRight: 15 }} />
+              </TouchableOpacity>
+            </>
+          ) : null}
+        </View>
+      ),
+    });
+  }, [navigation, actividad, userId]);
 
-  if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.centered} />;
-  }
+  const formattedDate = actividad.fecha_actividad ? new Date(actividad.fecha_actividad.$date).toLocaleDateString() : '';
 
-  if (error) {
-    return (
-      <View style={styles.centered}>
-        <Text style={commonStyles.errorText}>Error al cargar los datos</Text>
-        <Button title="Reintentar" onPress={fetchData} />
-      </View>
-    );
-  }
-
-  const formattedDate = new Date(data.fecha_actividad.$date).toLocaleDateString();
+  const handleUsuarioPress = (usuario) => {
+    navigation.navigate('DatosAmigos', { usuario });
+  };
 
   return (
     <View style={{ flex: 1 }}>
-    <Header titulo="Datos Actividad" onBackPress={() => (navigation.goBack())} />
       <View style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 0 }}>
         <Fondo />
       </View>
       <ScrollView style={commonStyles.container} contentContainerStyle={commonStyles.contentContainer}>
         <View style={commonStyles.dataContainer}>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Nombre Actividad:</Text>
-            <View style={styles.box}>
-            <Text style={styles.fieldValue}>{data.nombre_actividad}</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Nombre Actividad:</Text>
+            <View style={commonStyles.box}>
+              <Text style={commonStyles.fieldValue}>{actividad.nombre_actividad}</Text>
             </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Descripción Actividad:</Text>
-            <View style={styles.box}>
-            <Text style={styles.fieldValue}>{data.descripcion_actividad}</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Descripción Actividad:</Text>
+            <View style={commonStyles.box}>
+              <Text style={commonStyles.fieldValue}>{actividad.descripcion_actividad}</Text>
             </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Fecha Actividad:</Text>
-            <View style={styles.box}>
-            <Text style={styles.fieldValue}>{formattedDate}</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Fecha Actividad:</Text>
+            <View style={commonStyles.box}>
+              <Text style={commonStyles.fieldValue}>{formattedDate}</Text>
             </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Hora Actividad:</Text>
-            <View style={styles.box}>
-            <Text style={styles.fieldValue}>{data.hora_actividad}</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Hora Actividad:</Text>
+            <View style={commonStyles.box}>
+              <Text style={commonStyles.fieldValue}>{actividad.hora_actividad}</Text>
             </View>
           </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Ubicación:</Text>
-            <View style={styles.box}>
-            <Text style={styles.fieldValue}>{data.ubicacion}</Text>
+          <View style={commonStyles.fieldContainer}>
+            <Text style={commonStyles.fieldLabel}>Ubicación:</Text>
+            <View style={commonStyles.box}>
+              <Text style={commonStyles.fieldValue}>{actividad.ubicacion}</Text>
             </View>
           </View>
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionLabel}>Participantes:</Text>
+          <View style={commonStyles.sectionContainer}>
+            <Text style={commonStyles.sectionLabel}>Participantes:</Text>
             <FlatList
-              data={data.participantes}
-              keyExtractor={(item) => item.toString()}
-              renderItem={({ item }) => <Usuario id={item} />}
+              data={actividad.perfil_participantes}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => <Usuario data={item} onPress={() => handleUsuarioPress(item)} />}
               horizontal
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.lista}
+              contentContainerStyle={commonStyles.lista}
             />
           </View>
-          <TouchableOpacity style={styles.boton} onPress={Modificar}>
-            <Text style={styles.botonTexto}>Modificar</Text>
-          </TouchableOpacity>
         </View>
-        </ScrollView>
-        <Footer 
-        onHangoutPress={() => console.log('Hangout Pressed')} 
-        onAddPress={() => console.log('Add Pressed')} 
-        onProfilePress={() => console.log('Profile Pressed')} 
-        showAddButton={true} 
+      </ScrollView>
+      <Footer
+        showAddButton={true}
+        onHangoutPressUser={() => navigation.navigate('InicioUsuario', { userId })}
+        onProfilePressUser={() => navigation.navigate('DatosUsuario', { userId })}
+        onCreateActivity={() => navigation.navigate('CrearActividad', { userId })}
       />
     </View>
   );
 };
-
-
 
 export default DatosActividad;

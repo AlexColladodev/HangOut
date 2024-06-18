@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
-import { ScrollView, View, Text, TextInput, TouchableOpacity, Alert, Button, Image, Dimensions } from 'react-native';
+import { ScrollView, View, Text, TextInput, TouchableOpacity, Alert, Button, Image } from 'react-native';
 import Fondo from '../../components/Fondo';
 import inputStyles from '../../styles/inputStyles';
 import ambienteStyles from '../../styles/ambienteStyles';
@@ -104,7 +104,7 @@ const CrearEstablecimiento = ({ navigation, route }) => {
               onChangeText={setCIF}
             />
             <Text style={commonStyles.label}>Ambiente:</Text>
-            <SeleccionarPreferencia 
+            <SeleccionarPreferencia
               ambientes={ambientes}
               seleccionados={ambientesSeleccionados}
               seleccionAmbiente={seleccionAmbiente}
@@ -119,8 +119,8 @@ const CrearEstablecimiento = ({ navigation, route }) => {
           </View>
         </View>
       </ScrollView>
-      <Footer 
-        showAddButton={false} 
+      <Footer
+        showAddButton={false}
         onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
         onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />

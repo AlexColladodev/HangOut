@@ -3,7 +3,6 @@ from bson import ObjectId
 from marshmallow.exceptions import ValidationError as MarshmallowValidationError
 from db import mongo
 
-
 class ObjectIdField(fields.Field):
     def _serialize(self, value, attr, obj, **kwargs):
         if value is None:
@@ -15,13 +14,12 @@ class ObjectIdField(fields.Field):
             return ObjectId(value)
         except Exception:
             raise MarshmallowValidationError("El ID proporcionado no es válido.")
-        
+
 def validar_existencia_id(value):
     try:
         oid = ObjectId(value)
     except Exception:
         raise ValidationError("Id de Usuario debe ser un ObjectId válido.")
-
     if mongo.db.usuarios_genericos.find_one({"_id": oid}) is None:
         raise ValidationError("Id de Usuario no válido")
 

@@ -1,0 +1,119 @@
+\chapter{Implementación}
+
+En esta sección se describen las etapas llevadas a cabo durante el proceso de la implementación del proyecto, los desafíos encontrados y las soluciones adoptadas. También se incluyen ejemplos de código y capturas de pantalla que ilustran el profreso y los resultados obtenidos.
+
+\section{Preparación del Entorno de Desarrollo}
+
+Antes de iniciar la implementación, se realizó la configuración del entorno de desarrollo. Esto incluyó la instalación de todas las dependencias necesarias y la configuración de herramientas de desarrollo mencionadas en el apartado previo, como Visual Studio Code y Postman.
+
+
+\section{Servidor}
+
+En este apartado, se describe la implementación en el lado del servidor de la aplicación. Se definirá cómo se realizó la estructura del código y su implementación, proporcionando algunos ejemplos para la creación de la API. A continuación, se definirán los pasos seguidos para lograr esta implementación.
+
+\begin{enumerate}
+    \item \textbf{Definición de los Endpoints: }Se definieron los endpoints necesarios para gestionar las llamadas relacionadas con la administración de usuarios, establecimientos, eventos, ofertas y reseñas.
+
+    \item \textbf{Implementación del Modelo: } En esta etapa se implementaron las clases necesarias a partir del diagrama UML del capítulo anterior. Estas clases se encargan de gestionar la comunicación con la base de datos y proporcionar una estructura clara y manejable para los datos utilizados en la aplicación.
+
+    \item \textbf{Implementación de Esquemas: } Se implementaron esquemas para la correcta validación de los datos enviados a la API. Para cada entidad se creó un archivo de esquema específico, lo cual organiza mejor el código y asegura que los datos recibidos cumplan con los requisitos esperados. Esta estructuración facilita la gestión y validación de datos, asegurando la integridad y la consistencia.
+
+    \item \textbf{Implementación de los Endpoints: } La implementación de los endpoints se realizó siguiendo una estructura RESTful. Para cada entidad se creó un archivo de servicio y un bluepring, lo cual evita la repetición de definiciones para cada endpoint. Esta estructura modular garantiza una comunicación eficiente y coherente. La organización del código mediante blueprints además facilita la futura escalabilidad de la API.
+
+    \item \textbf{Pruebas en Postman: } Se realizaron diferentes pruebas para comprobar el correcto funcionamiento de todos los endpoints utilizando la herramienta descrita anteriormente, Postman. Se verificaron las llamadas POST para inserciones a la base de datos, las llamadas GET para obtener información, las llamadas PUT para la modificación de datos y las llamadas DELETE para eliminarlos.
+\end{enumerate}
+
+\subsection{Servicios}
+
+Las principales peticiones que atiende el servidor son las de creación, consulta, modificación y eliminación de las entidades. Estas operaciones pueden ser realizadas por un usuario genérico o un administrador de establecimiento, dependiendo de las entidades que gestionen.
+
+\subsubsection{Autenticación y Roles de Usuario}
+
+Los usuarios podrán iniciar sesión con su cuenta, lo que generará un token de acceso que servirá en las cabeceras de las peticiones HTTP para identificar al usuario que realiza la solicitud. En algunas operaciones, este token será obligatorio para poder completarse.
+
+Al iniciar sesión, al usuario también se le asignará un "rol". Esto es necesario para mostrar las pantallas correspondientes a su rol cuando el usuario inicie sesión. Esto asegura que cada usuario vea y acceda únicamente a las funcionalidades que le correspondan según su tipo de usuario.
+
+\subsubsection{Wilson Score}
+
+En el diagrama de clases del diseño lógico, cada establecimiento está asociado con reseñas que tienen una calificación entre 0 y 5. Esto da a lugar a una calificación media para cada establecimiento, calculada como la suma de todas las calificaciones divididas por el número total de reseñas del establecimiento. Aunque ordenar los establecimientos por calificación media puede ser útil, es importante considerar la fiabilidad de esta calificación. Por ejemplo, un establecimiento con sólo 2 reseñas y una media de 4.5 no es comparable con otro que tiene 250 reseñas y la misma calificación media. Para abordar este problema, se puede aplicar el método de Wilson Score.
+
+\[ S_w = \frac{1}{{1 + \frac{1}{n} z^2}} \left[ p + \frac{1}{2n} - z\sqrt{\frac{p(1-p)}{n} + \frac{z2}{4n2}} \right] \]
+
+Este método ajusta las calificaciones en función al tamaño de la muestra, proporcionando una estimación más precisa de la calidad del establecimiento. Así se tiene en cuenta tanto la calificación media como la confibialidad de esa calificación en función al número de reseñas. Es una herramienta útil para ordenar los establecimientos de manera más precisa.
+
+\[
+    \text{Media del establecimiento} = \frac{\sum \text{calificaciones de reseñas}}{n}
+\]
+
+Convertimos la media a una proporción en una escala de 0 a 1:
+
+\[
+    p = \frac{\text{Media del establecimiento}}{5}
+\]
+
+El valor crítico $z$ para un 95\% de confianza es aproximadamente 1.96.
+
+Calculamos el denominador:
+
+\[
+    \text{Denominador} = 1 + \frac{z^2}{n}
+\]
+
+Ajustamos la probabilidad en el centro:
+
+\[
+    \text{Probabilidad ajustada en el centro} = p + \frac{z^2}{2n}
+\]
+
+La desviación estándar ajustada es:
+
+\[
+    \text{Desviación estándar ajustada} = \sqrt{\frac{p(1-p) + \frac{z^2}{4n}}{n}}
+\]
+
+Finalmente, el límite inferior del Wilson Score se calcula como:
+
+\[
+    \text{Límite inferior} = \frac{\text{Probabilidad ajustada en el centro} - z \cdot \text{Desviación estándar ajustada}}{\text{Denominador}}
+\]
+
+El Wilson Score se obtiene multiplicando el límite inferior por 5:
+
+\[
+    \text{Wilson Score} = \text{Límite inferior} \cdot 5
+\]
+
+\clearpage
+\begin{algorithm}
+    \caption{Cálculo del Wilson Score y ordenamiento de establecimientos}
+    \label{alg:wilson_score_ordenamiento}
+    \begin{algorithmic}[1]
+        \Require{$\text{establecimientos}$}
+        \Ensure{Lista de establecimientos ordenados por Wilson Score}
+
+        \Function{wilson\_score}{establecimiento}
+        \State \textit{Obtener reseñas del establecimiento}
+        \State \textit{Calcular media de calificaciones}
+        \State \textit{Convertir media a proporción en escala de 0 a 1}
+        \State \textit{Calcular límite inferior del Wilson Score}
+        \State \Return Wilson Score
+        \EndFunction
+
+        \Function{ordenar\_establecimientos}{establecimientos}
+        \State $puntajes \leftarrow []$
+        \For{cada $establecimiento$ en $establecimientos$}
+        \State $puntaje \leftarrow$ \textit{wilson\_score(establecimiento)}
+        \State Añadir $(establecimiento, puntaje)$ a $puntajes$
+        \EndFor
+        \State Ordenar $puntajes$ por puntaje de forma descendente
+        \State $ordenados \leftarrow [puntaje[0] \text{ para } puntaje \text{ en } puntajes]$
+        \State \Return $ordenados$
+        \EndFunction
+    \end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Filtrar Establecimientos}
+
+Existen dos filtrados de establecimientos distintos para el backend, uno para personalizar la experiencia de usuario y el otro el filtro usual para poder buscar las preferencias deseadas. El filtro personalizado está basado en las preferencias indicadas por el usuario en su cuenta, es un filtro con una lógica OR es decir que mostrará todos los establecimientos que cumplan con alguna de las preferencias del usuario. Mientras que el otro filtro seguirá una lógica AND en donde se mostrarán únicamente establecimientos con cumplan con todas especificaciones indicadas por el usuario en su seleccionador de ambientes en su página inicial. Ambos filtros estarán también ordenados por el wilson score haciendo que en todo momento al usuario se le muestren las mejores opciones gracias a la valoración de otros usuarios.
+
+\section{Cliente}

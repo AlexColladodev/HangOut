@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Button, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, Button, TouchableOpacity, Image, Alert } from 'react-native';
 import axios from 'axios';
 import Fondo from '../../components/Fondo';
 import commonStyles from '../../styles/commonStyles';
 import BASE_URL from '../../config_ip';
-import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import { AdminContext } from '../../context/AdminContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -14,7 +13,7 @@ const DatosEvento = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const { id } = route.params;
-  const { adminId } = useContext(AdminContext);
+  const { adminId, token } = useContext(AdminContext);
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -68,9 +67,7 @@ const DatosEvento = ({ navigation, route }) => {
   const formattedTime = data.hora_evento;
 
   const handleDelete = () => {
-    
-    let id_establecimiento = data.id_establecimiento
-
+    let id_establecimiento = data.id_establecimiento;
     Alert.alert(
       'Confirmar Eliminación',
       '¿Estás seguro de que deseas eliminar este establecimiento?',
@@ -85,7 +82,7 @@ const DatosEvento = ({ navigation, route }) => {
             axios.delete(`${BASE_URL}/eventos/${id}`)
               .then(response => {
                 Alert.alert('Éxito', 'Evento eliminado correctamente');
-                navigation.navigate('DatosEstablecimiento', { id: id_establecimiento });
+                navigation.navigate('InicioAdmin', { adminId });
               })
               .catch(error => {
                 console.error(error);
@@ -143,10 +140,10 @@ const DatosEvento = ({ navigation, route }) => {
         <TouchableOpacity style={commonStyles.deleteButton} onPress={handleDelete}>
           <Icon name="trash" size={35} color="red" />
           <Text style={commonStyles.deleteButtonText}>Eliminar Evento</Text>
-        </TouchableOpacity>  
+        </TouchableOpacity>
       </ScrollView>
-      <Footer 
-        showAddButton={false} 
+      <Footer
+        showAddButton={false}
         onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
         onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
       />

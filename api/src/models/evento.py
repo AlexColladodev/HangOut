@@ -8,7 +8,6 @@ from pymongo.errors import PyMongoError
 from pymongo import ASCENDING
 
 class Evento:
-
     def __init__(self, data: Dict) -> None:
         self.nombre_evento = data.get("nombre_evento")
         self.descripcion_evento = data.get("descripcion_evento")
@@ -22,7 +21,6 @@ class Evento:
         try:
             if self.fecha_evento:
                 self.fecha_evento = datetime.combine(self.fecha_evento, self.hora_evento if self.hora_evento else datetime.min.time())
-
             data_insertar = {
                 "nombre_evento": self.nombre_evento,
                 "descripcion_evento": self.descripcion_evento,
@@ -32,7 +30,6 @@ class Evento:
                 "id_establecimiento": str(self.id_establecimiento),
                 "imagen_url": self.imagen_url
             }
-
             id = str(mongo.db.eventos.insert_one(data_insertar).inserted_id)
             return {"message": "Evento con id: " + id + " creado con éxito", "id_evento": id}
         except PyMongoError as e:
@@ -44,20 +41,16 @@ class Evento:
             evento_eliminar = mongo.db.eventos.find_one({"_id": ObjectId(id)})
             if not evento_eliminar:
                 raise ValueError("Evento no encontrado")
-            
             id_establecimiento = evento_eliminar.get("id_establecimiento")
-            
             resultado_update = mongo.db.establecimientos.update_one(
                 {"_id": ObjectId(id_establecimiento)},
                 {"$pull": {"eventos": id}}
             )
             if resultado_update.modified_count == 0:
                 raise RuntimeError("No se pudo eliminar el evento del establecimiento")
-            
             resultado_delete = mongo.db.eventos.delete_one({"_id": ObjectId(id)})
             if resultado_delete.deleted_count == 0:
                 raise RuntimeError("No se pudo eliminar el evento")
-
             return {"message": "Evento eliminado con éxito"}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al eliminar evento: {e}")
@@ -76,7 +69,6 @@ class Evento:
             evento = mongo.db.eventos.find_one({"_id": ObjectId(id)})
             if not evento:
                 raise ValueError("Evento no encontrado")
-
             return json_util.dumps(evento)
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar evento: {e}")
@@ -96,7 +88,6 @@ class Evento:
         try:
             data.pop("id_establecimiento", None)
             data.pop("imagen_url", None)
-
             if 'fecha_evento' in data:
                 fecha_evento = datetime.strptime(data['fecha_evento'], '%Y-%m-%d').date()
                 if 'hora_evento' in data and data['hora_evento']:
@@ -105,11 +96,9 @@ class Evento:
                     hora_evento = time.min
                 data['fecha_evento'] = datetime.combine(fecha_evento, hora_evento)
                 data.pop('hora_evento', None)
-
             resultado = mongo.db.eventos.update_one({"_id": ObjectId(id)}, {"$set": data})
             if resultado.modified_count == 0:
                 raise RuntimeError("Se debe cambiar algún dato para actualizar el evento")
-
             return {"message": "Evento actualizado con éxito"}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al consultar evento: {e}")

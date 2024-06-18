@@ -51,7 +51,7 @@ def consultar_reviews():
 def consultar_review(id):
     try:
         respuesta = Review.consultar_review(id)
-        return respuesta, 200
+        return Response(respuesta, mimetype="application/json"), 200
     except ValueError as e:
         return jsonify({"error": str(e)}), 404
     except RuntimeError as e:
