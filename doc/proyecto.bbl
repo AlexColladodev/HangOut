@@ -1,0 +1,183 @@
+\begin{thebibliography}{28}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[de~Granada()]{ugr}
+Universidad de~Granada.
+\newblock Origen del estudiantado.
+\newblock Transparente.
+\newblock URL
+  \url{https://transparente.ugr.es/areas/estudiantado/origen-estudiantes}.
+
+\bibitem[Tripadvisor()]{tripadvisor}
+Tripadvisor.
+\newblock About tripadvisor.
+\newblock Tripadvisor.
+\newblock URL \url{https://tripadvisor.mediaroom.com/us-about-us}.
+
+\bibitem[Yelp()]{yelp}
+Yelp.
+\newblock Fast facts.
+\newblock Yelp.
+\newblock URL \url{https://www.yelp-press.com/company/fast-facts/default.aspx}.
+
+\bibitem[with Google()]{google}
+Think with Google.
+\newblock How the travel research process plays out in time-to-make-a-plan
+  moments.
+\newblock Think with Google.
+\newblock URL
+  \url{https://www.thinkwithgoogle.com/consumer-insights/consumer-trends/travel-research-process-make-a-plan-moments/}.
+
+\bibitem[Academy()]{santander}
+Santander~Open Academy.
+\newblock Metodologías de desarrollo de software.
+\newblock Santander Open Academy.
+\newblock URL
+  \url{https://www.santanderopenacademy.com/es/blog/metodologias-desarrollo-software.html}.
+
+\bibitem[Amazon({\natexlab{a}})]{amazon_asus}
+Amazon.
+\newblock Asus tuf gaming f15 fx506hc-hn004, {\natexlab{a}}.
+\newblock URL
+  \url{https://www.amazon.es/ASUS-TUF-Gaming-F15-FX506HC-HN004/dp/B097T3XB81}.
+
+\bibitem[Amazon({\natexlab{b}})]{amazon_samsung}
+Amazon.
+\newblock Samsung galaxy prism versión alemana, {\natexlab{b}}.
+\newblock URL
+  \url{https://www.amazon.es/Samsung-Galaxy-Prism-Versión-Alemana/dp/B07MTXWLRP}.
+
+\bibitem[Amazon({\natexlab{c}})]{amazon_benq}
+Amazon.
+\newblock Benq gw2480 pantalla inteligente superestrecho, {\natexlab{c}}.
+\newblock URL
+  \url{https://www.amazon.es/BenQ-GW2480-Pantalla-Inteligente-superestrecho/dp/B073NTCT4Q}.
+
+\bibitem[Social()]{seguridad_social}
+Seguridad Social.
+\newblock Cotización / recaudación de trabajadores.
+\newblock Seguridad Social.
+\newblock URL
+  \url{https://www.seg-social.es/wps/portal/wss/internet/Trabajadores/CotizacionRecaudacionTrabajadores/36537#36538}.
+
+\bibitem[Malan and Bredemeyer(2001)]{malan_bredemeyer}
+R.~Malan and D.~Bredemeyer.
+\newblock Functional requirements and use cases.
+\newblock Bredemeyer Consulting, 2001.
+
+\bibitem[Glinz(2007)]{glinz}
+M.~Glinz.
+\newblock On non-functional requirements.
+\newblock In \emph{15th IEEE international requirements engineering conference
+  (RE 2007)}, pages 21--26. IEEE, October 2007.
+
+\bibitem[IBM()]{ibm}
+IBM.
+\newblock Use case models.
+\newblock IBM Documentation.
+\newblock URL
+  \url{https://www.ibm.com/docs/es/dmrt/9.5?topic=approaches-use-case-models}.
+
+\bibitem[Garlan(2008)]{garlan}
+D.~Garlan.
+\newblock \emph{Software architecture}.
+\newblock 2008.
+
+\bibitem[Laskey and Laskey(2009)]{laskey}
+K.~B. Laskey and K.~Laskey.
+\newblock Service oriented architecture.
+\newblock \emph{Wiley Interdisciplinary Reviews: Computational Statistics},
+  1\penalty0 (1):\penalty0 101--105, 2009.
+
+\bibitem[Foundation({\natexlab{a}})]{python_faq}
+Python~Software Foundation.
+\newblock General python faq.
+\newblock Python.org, {\natexlab{a}}.
+\newblock URL \url{https://www.python.org/doc/essays/blurb/}.
+
+\bibitem[Basics()]{python_basics}
+Python Basics.
+\newblock What is flask python?
+\newblock Python Basics.
+\newblock URL \url{https://pythonbasics.org/what-is-flask-python/}.
+
+\bibitem[MongoDB()]{mongodb}
+MongoDB.
+\newblock ¿qué es mongodb?
+\newblock MongoDB.
+\newblock URL \url{https://www.mongodb.com/es/company/what-is-mongodb}.
+
+\bibitem[Foundation({\natexlab{b}})]{nodejs}
+Node.js Foundation.
+\newblock About.
+\newblock Node.js, {\natexlab{b}}.
+\newblock URL \url{https://nodejs.org/en/about}.
+
+\bibitem[GeeksforGeeks()]{geeksforgeeks}
+GeeksforGeeks.
+\newblock Jdk in java.
+\newblock GeeksforGeeks.
+\newblock URL \url{https://www.geeksforgeeks.org/jdk-in-java/}.
+
+\bibitem[Native()]{react_native}
+React Native.
+\newblock Learn once, write anywhere.
+\newblock React Native.
+\newblock URL \url{https://reactnative.dev}.
+
+\bibitem[Microsoft()]{vscode}
+Microsoft.
+\newblock Visual studio code documentation.
+\newblock Visual Studio Code.
+\newblock URL \url{https://code.visualstudio.com/docs}.
+
+\bibitem[Developers()]{android}
+Android Developers.
+\newblock Introducción a android studio.
+\newblock Android Developers.
+\newblock URL \url{https://developer.android.com/studio/intro?hl=es-419}.
+
+\bibitem[Postman()]{postman}
+Postman.
+\newblock What is postman?
+\newblock Postman.
+\newblock URL \url{https://www.postman.com/product/what-is-postman/}.
+
+\bibitem[Berardi et~al.(2005)Berardi, Calvanese, and De~Giacomo]{berardi}
+D.~Berardi, D.~Calvanese, and G.~De~Giacomo.
+\newblock Reasoning on uml class diagrams.
+\newblock \emph{Artificial intelligence}, 168\penalty0 (1-2):\penalty0 70--118,
+  2005.
+
+\bibitem[Rusenova()]{polina_rusenova}
+Polina Rusenova.
+\newblock Eventify - event and party app case study.
+\newblock Behance.
+\newblock URL
+  \url{https://www.behance.net/gallery/197875467/Eventify-event-party-app-case-study?tracking_source=search_projects|mobile+design+ui+party+app&l=2}.
+
+\bibitem[Talton~III et~al.(2019)Talton~III, Dusad, Koiliaris, and
+  Kumar]{talton}
+J.~O. Talton~III, K.~Dusad, K.~Koiliaris, and R.~S. Kumar.
+\newblock How do people sort by ratings?
+\newblock In \emph{Proceedings of the 2019 CHI Conference on Human Factors in
+  Computing Systems}, pages 1--10, May 2019.
+
+\bibitem[React()]{react}
+React.
+\newblock Componentes y propiedades.
+\newblock React.
+\newblock URL
+  \url{https://es.legacy.reactjs.org/docs/components-and-props.html}.
+
+\bibitem[Zhu et~al.(1997)Zhu, Hall, and May]{zhu}
+H.~Zhu, P.~A. Hall, and J.~H. May.
+\newblock Software unit test coverage and adequacy.
+\newblock \emph{Acm computing surveys (csur)}, 29\penalty0 (4):\penalty0
+  366--427, 1997.
+
+\end{thebibliography}

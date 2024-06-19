@@ -121,13 +121,24 @@ class Establecimiento:
             raise RuntimeError(f"Error de base de datos al actualizar ambiente de establecimiento: {e}")
 
     @staticmethod
-    def filtrar_personalizado(ambientes_solicitados: List[str]) -> List[List]:
+    def filtrar_personalizado(id) -> List[List]:
         try:
+            usuario = mongo.db.usuarios_genericos.find_one({"_id": ObjectId(id)})
+            if not usuario:
+                raise RuntimeError(f"Usuario con id {id} no encontrado.")
+
+            ambientes_solicitados = usuario.get("preferencias", [])
+            if not ambientes_solicitados:
+                raise RuntimeError(f"El usuario con id {id} no tiene preferencias definidas.")
+            
             establecimientos = mongo.db.establecimientos.find({
                 "ambiente": {"$in": ambientes_solicitados}
             }, {"_id": 1})
+
             ids_establecimientos = [str(doc["_id"]) for doc in establecimientos]
+
             ids_ordenados = Establecimiento.ordenar(ids_establecimientos)
+
             resultado = []
             for id_establecimiento in ids_ordenados:
                 establecimiento = mongo.db.establecimientos.find_one({"_id": ObjectId(id_establecimiento)})
@@ -137,7 +148,9 @@ class Establecimiento:
                     media_data["media"],
                     media_data["n_reviews"]
                 ])
+
             return json_util.dumps(resultado)
+
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos al filtrar establecimientos por ambientes: {e}")
 

@@ -13,7 +13,7 @@ import { UserContext } from '../../context/UserContext';
 import ambienteStyles from '../../styles/ambienteStyles';
 import { useFocusEffect } from '@react-navigation/native';
 
-const InicioUsuario = ({ navigation }) => {
+const InicioUsuario = ({ navigation, route }) => {
   const [preferenciaEstablecimientos, setPreferenciaEstablecimientos] = useState([]);
   const [establecimientos, setEstablecimientos] = useState([]);
   const [eventos, setEventos] = useState([]);
@@ -84,14 +84,29 @@ const InicioUsuario = ({ navigation }) => {
     }
   };
 
-  const fetchData = async () => {
-    await Promise.all([fetchPreferenciaEstablecimientos(), fetchEstablecimientos(), fetchEventos(), fetchActividades()]);
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    try {
+      await Promise.all([fetchPreferenciaEstablecimientos(), fetchEstablecimientos(), fetchEventos(), fetchActividades()]);
+    } catch (err) {
+      setError(err.message);
+    }
     setLoading(false);
-  };
+  }, [userId]);
 
   useEffect(() => {
-    fetchData();
-  }, [userId]);
+    if (userId) {
+      fetchData();
+    }
+  }, [userId, fetchData]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (route.params?.refresh) {
+        fetchData();
+      }
+    }, [fetchData, route.params])
+  );
 
   const handleSelectAmbiente = async (index) => {
     let updatedSelectedAmbientes = [...selectedAmbientes];
@@ -118,12 +133,6 @@ const InicioUsuario = ({ navigation }) => {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      fetchData();
-    }, [navigation])
-  );
-
   if (loading) {
     return (
       <View style={commonStyles.container}>
@@ -146,7 +155,6 @@ const InicioUsuario = ({ navigation }) => {
 
   const handleActividadPress = (actividad) => {
     navigation.navigate('DatosActividad', { actividad });
-
   };
 
   const handleEventoPressUsuario = (id) => {

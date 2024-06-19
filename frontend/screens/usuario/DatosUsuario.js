@@ -174,7 +174,7 @@ const DatosUsuario = ({ navigation }) => {
       </ScrollView>
       <Footer
         showAddButton={true}
-        onHangoutPressUser={() => navigation.navigate('InicioUsuario', { userId })}
+        onHangoutPressUser={() => navigation.navigate('InicioUsuario', { userId, refresh: true })}
         onProfilePressUser={() => navigation.navigate('DatosUsuario', { userId })}
         onCreateActivity={() => navigation.navigate('CrearActividad', { userId })}
       />

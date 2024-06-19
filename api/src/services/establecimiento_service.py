@@ -171,10 +171,11 @@ def add_evento():
 @jwt_required()
 def filtrar():
     usuario = get_jwt_identity()
-    lista_preferencias = usuario.get("preferencias")
+    id = str(usuario.get("_id"))
+    print(id)
 
     try:
-        respuesta = Establecimiento.filtrar_personalizado(lista_preferencias)
+        respuesta = Establecimiento.filtrar_personalizado(id)
         return Response(respuesta, mimetype="application/json"), 200
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500

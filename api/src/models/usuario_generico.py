@@ -47,6 +47,14 @@ class UsuarioGenerico:
             return {"message": "Usuario eliminado con éxito"}
         except PyMongoError as e:
             raise RuntimeError(f"Error en la base de datos al eliminar a un usuario: {e}")
+    
+    @staticmethod
+    def consultar_usuarios():
+        try:
+            usuarios_genericos = mongo.db.usuarios_genericos.find()
+            return json_util.dumps(usuarios_genericos)
+        except PyMongoError as e:
+            raise RuntimeError(f"Error de base de datos al consultar usuarios genericos de establecimientos: {e}")
 
     @staticmethod
     def consultar_usuario(id):
@@ -119,22 +127,29 @@ class UsuarioGenerico:
             if nombre and nombre != usuario_actual.get("nombre_usuario"):
                 usuario = mongo.db.usuarios_genericos.find_one({"nombre_usuario": nombre, "_id": {"$ne": ObjectId(id)}})
                 administrador = mongo.db.administradores_establecimientos.find_one({"nombre_usuario": nombre})
+
                 if usuario is not None or administrador is not None:
                     raise ValueError("Nombre de usuario en uso")
+                
             for campo, valor in data.items():
                 if usuario_actual.get(campo) != valor:
                     cambios[campo] = valor
+
             if 'fecha_nac' in cambios:
                 if isinstance(cambios['fecha_nac'], str):
                     try:
                         cambios['fecha_nac'] = datetime.fromisoformat(cambios['fecha_nac'])
                     except ValueError as e:
                         raise RuntimeError(f"Formato de fecha inválido: {e}")
+                    
             if cambios:
                 resultado = mongo.db.usuarios_genericos.update_one({"_id": ObjectId(id)}, {"$set": cambios})
+
                 if resultado.modified_count == 0:
                     raise RuntimeError("No se pudo actualizar al usuario")
+                
                 return {"message": "Usuario actualizado con éxito"}
+            
             return {"message": "No hubo cambios que realizar"}
         except PyMongoError as e:
             raise RuntimeError(f"Error en la base de datos al actualizar al usuario: {e}")

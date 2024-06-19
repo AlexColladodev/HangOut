@@ -4,12 +4,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { AdminContext } from '../context/AdminContext';
 import { UserContext } from '../context/UserContext';
 
-const Footer = ({ 
-  onHangoutPressAdmin, 
-  onHangoutPressUser, 
-  onAddPress, 
-  onProfilePressAdmin, 
-  onProfilePressUser, 
+const Footer = ({
+  onHangoutPressAdmin,
+  onHangoutPressUser,
+  onAddPress,
+  onProfilePressAdmin,
+  onProfilePressUser,
   showAddButton,
   onCreateActivity
 }) => {
@@ -18,7 +18,7 @@ const Footer = ({
 
   const handleHangoutPress = () => {
     if (showAddButton && onHangoutPressUser) {
-      onHangoutPressUser();
+      onHangoutPressUser(userId);
     } else if (!showAddButton && onHangoutPressAdmin) {
       onHangoutPressAdmin(adminId);
     }
@@ -26,14 +26,14 @@ const Footer = ({
 
   const handleProfilePress = () => {
     if (showAddButton && onProfilePressUser) {
-      onProfilePressUser();
+      onProfilePressUser(userId);
     } else if (!showAddButton && onProfilePressAdmin) {
       onProfilePressAdmin(adminId);
     }
   };
 
   const handleCreateActivity = () => {
-    if(showAddButton && onCreateActivity){
+    if (showAddButton && onCreateActivity) {
       onCreateActivity(userId)
     }
   }

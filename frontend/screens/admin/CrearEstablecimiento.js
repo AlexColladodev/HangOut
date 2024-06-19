@@ -76,7 +76,7 @@ const CrearEstablecimiento = ({ navigation, route }) => {
       });
       let id = response.data.id;
       Alert.alert('Success', 'Establecimiento guardado exitosamente');
-      navigation.navigate('DatosEstablecimiento', { id });
+      navigation.navigate('InicioAdmin', {});
     } catch (error) {
       console.error('Error: ', error.response.data.error);
       Alert.alert('Error', error.response.data.error);

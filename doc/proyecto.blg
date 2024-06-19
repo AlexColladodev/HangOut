@@ -1,0 +1,71 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: proyecto.aux
+Reallocating 'name_of_file' (item size: 1) to 9 items.
+The style file: unsrtnat.bst
+Reallocating 'name_of_file' (item size: 1) to 22 items.
+Database file #1: apartados/referencias.bib
+Warning--empty year in ugr
+Warning--empty year in tripadvisor
+Warning--empty year in yelp
+Warning--empty year in google
+Warning--empty year in santander
+Warning--empty year in amazon_asus
+Warning--empty year in amazon_samsung
+Warning--empty year in amazon_benq
+Warning--empty year in seguridad_social
+Warning--empty year in ibm
+Warning--empty publisher in garlan
+Warning--empty year in python_faq
+Warning--empty year in python_basics
+Warning--empty year in mongodb
+Warning--empty year in nodejs
+Warning--empty year in geeksforgeeks
+Warning--empty year in react_native
+Warning--empty year in vscode
+Warning--empty year in android
+Warning--empty year in postman
+Warning--empty year in polina_rusenova
+Warning--empty year in react
+You've used 28 entries,
+            2481 wiz_defined-function locations,
+            683 strings with 7690 characters,
+and the built_in function-call counts, 8283 in all, are:
+= -- 722
+> -- 260
+< -- 27
++ -- 133
+- -- 74
+* -- 437
+:= -- 1267
+add.period$ -- 103
+call.type$ -- 28
+change.case$ -- 55
+chr.to.int$ -- 25
+cite$ -- 50
+duplicate$ -- 440
+empty$ -- 898
+format.name$ -- 106
+if$ -- 1827
+int.to.chr$ -- 4
+int.to.str$ -- 29
+missing$ -- 7
+newline$ -- 166
+num.names$ -- 84
+pop$ -- 316
+preamble$ -- 1
+purify$ -- 28
+quote$ -- 0
+skip$ -- 320
+stack$ -- 0
+substring$ -- 151
+swap$ -- 77
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 193
+warning$ -- 22
+while$ -- 63
+width$ -- 0
+write$ -- 368
+(There were 22 warnings)

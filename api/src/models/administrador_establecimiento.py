@@ -145,3 +145,4 @@ class AdministradorEstablecimiento:
             return {"message": "Eliminado de la lista de establecimiento del administrador"}
         except PyMongoError as e:
             raise RuntimeError(f"Error de base de datos de eliminar un establecimiento de la lista de administrador: {e}")
+
