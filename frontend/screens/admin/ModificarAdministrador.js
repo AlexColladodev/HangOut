@@ -11,7 +11,7 @@ import { AdminContext } from '../../context/AdminContext';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ModificarAdministrador = ({ navigation, route }) => {
-  const { adminId, token } = useContext(AdminContext);
+  const { token } = useContext(AdminContext);
   const [data, setData] = useState(route.params.data);
   const [showFecha, setShowFecha] = useState(false);
   const [fechaNacimiento, setFechaNacimiento] = useState(new Date(data.fecha_nac.$date));
@@ -46,18 +46,17 @@ const ModificarAdministrador = ({ navigation, route }) => {
       imagen_url,
     };
 
-    let id = data._id.$oid;
-
     try {
-      const response = await axios.put(`${BASE_URL}/administrador_establecimiento/${id}`, updatedData, {
+      const response = await axios.put(`${BASE_URL}/administrador_establecimiento`, updatedData, {
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
       });
 
       if (response.status === 200) {
         Alert.alert('Éxito', 'Datos del administrador actualizados con éxito');
-        navigation.navigate('DatosAdministrador', { id });
+        navigation.navigate('DatosAdministrador');
       } else {
         const errorMsg = response.data.error || 'Hubo un problema al actualizar los datos';
         Alert.alert('Error', errorMsg);
@@ -148,8 +147,8 @@ const ModificarAdministrador = ({ navigation, route }) => {
       </ScrollView>
       <Footer
         showAddButton={false}
-        onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
-        onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
+        onHangoutPressAdmin={() => navigation.navigate('InicioAdmin')}
+        onProfilePressAdmin={() => navigation.navigate('DatosAdministrador')}
       />
     </View>
   );

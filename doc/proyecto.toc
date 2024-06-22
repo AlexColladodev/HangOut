@@ -2,54 +2,60 @@
 \contentsline {chapter}{\numberline {1}Introducción}{4}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Contexto y motivación}{4}{section.1.1}%
 \contentsline {section}{\numberline {1.2}Objetivos}{5}{section.1.2}%
-\contentsline {chapter}{\numberline {2}Estado del Arte}{7}{chapter.2}%
+\contentsline {chapter}{\numberline {2}Estado de la Cuestión}{7}{chapter.2}%
 \contentsline {section}{\numberline {2.1}Aplicaciones Similares}{7}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Soluciones HangOut}{10}{section.2.2}%
-\contentsline {chapter}{\numberline {3}Planificación}{12}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Metodología de Desarrollo Ágil}{12}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Ejemplos de Metodologías}{13}{subsection.3.1.1}%
-\contentsline {section}{\numberline {3.2}Cronograma y Planificación}{14}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Diagrama de Gantt}{14}{subsection.3.2.1}%
-\contentsline {section}{\numberline {3.3}Recursos y Materiales}{15}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Recursos Humanos}{15}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Materiales}{15}{subsection.3.3.2}%
-\contentsline {section}{\numberline {3.4}Presupuesto}{15}{section.3.4}%
-\contentsline {chapter}{\numberline {4}Análisis}{17}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Requisitos Funcionales}{17}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Gestión de Usuarios}{18}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Gestión de Establecimientos}{19}{subsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.1.3}Gestión de Eventos}{21}{subsection.4.1.3}%
-\contentsline {subsection}{\numberline {4.1.4}Gestión de Ofertas}{22}{subsection.4.1.4}%
-\contentsline {subsection}{\numberline {4.1.5}Gestión de Actividades}{23}{subsection.4.1.5}%
-\contentsline {subsection}{\numberline {4.1.6}Gestión de Reseñas}{24}{subsection.4.1.6}%
-\contentsline {section}{\numberline {4.2}Requisitos No Funcionales}{25}{section.4.2}%
-\contentsline {section}{\numberline {4.3}Modelos de Caso de Uso}{27}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Actores del Sistema}{27}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}Escenarios de Casos de Uso}{28}{subsection.4.3.2}%
-\contentsline {chapter}{\numberline {5}Diseño}{39}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Arquitectura Software}{39}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Arquitectura Orientada a Servicios}{40}{subsection.5.1.1}%
-\contentsline {section}{\numberline {5.2}Tecnologías Utilizadas}{40}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Desarrollo Backend}{41}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}Desarrollo Frontend}{42}{subsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.2.3}Herramientas de Desarrollo}{43}{subsection.5.2.3}%
-\contentsline {section}{\numberline {5.3}Modelo de Datos}{44}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Diseño Lógico}{44}{section.5.4}%
-\contentsline {section}{\numberline {5.5}Diseño de MockUps para Frontend}{45}{section.5.5}%
-\contentsline {chapter}{\numberline {6}Implementación}{49}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Preparación del Entorno de Desarrollo}{49}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Servidor}{49}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}Servicios}{50}{subsection.6.2.1}%
-\contentsline {subsubsection}{Autenticación y Roles de Usuario}{50}{section*.64}%
-\contentsline {subsubsection}{Wilson Score}{51}{section*.65}%
-\contentsline {subsubsection}{Filtrar Establecimientos}{53}{section*.66}%
-\contentsline {section}{\numberline {6.3}Cliente}{53}{section.6.3}%
-\contentsline {subsection}{\numberline {6.3.1}Componentes Personalizados}{54}{subsection.6.3.1}%
-\contentsline {subsection}{\numberline {6.3.2}Pantallas}{55}{subsection.6.3.2}%
-\contentsline {subsection}{\numberline {6.3.3}Integración con Backend}{56}{subsection.6.3.3}%
-\contentsline {subsection}{\numberline {6.3.4}Navegación}{57}{subsection.6.3.4}%
-\contentsline {subsubsection}{Navegación Inicial}{57}{section*.67}%
-\contentsline {subsubsection}{Navegación del Usuario Genérico}{57}{section*.68}%
-\contentsline {subsubsection}{Navegación del Adminstrador de Establecimiento}{57}{section*.69}%
-\contentsline {chapter}{\numberline {7}Pruebas}{61}{chapter.7}%
-\contentsline {chapter}{\numberline {8}Despliegue}{63}{chapter.8}%
+\contentsline {chapter}{\numberline {3}Planificación}{14}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Metodología de Desarrollo Ágil}{15}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Ejemplos de Metodologías}{15}{subsection.3.1.1}%
+\contentsline {section}{\numberline {3.2}Cronograma y Planificación}{18}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Diagrama de Gantt}{18}{subsection.3.2.1}%
+\contentsline {section}{\numberline {3.3}Recursos y Materiales}{19}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Recursos Humanos}{19}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Materiales}{20}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}Presupuesto}{20}{section.3.4}%
+\contentsline {chapter}{\numberline {4}Análisis}{22}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Requisitos Funcionales}{22}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Gestión de Usuarios}{23}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Gestión de Establecimientos}{24}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Gestión de Eventos}{26}{subsection.4.1.3}%
+\contentsline {subsection}{\numberline {4.1.4}Gestión de Ofertas}{27}{subsection.4.1.4}%
+\contentsline {subsection}{\numberline {4.1.5}Gestión de Actividades}{28}{subsection.4.1.5}%
+\contentsline {subsection}{\numberline {4.1.6}Gestión de Reseñas}{29}{subsection.4.1.6}%
+\contentsline {section}{\numberline {4.2}Requisitos No Funcionales}{30}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Modelos de Caso de Uso}{32}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Actores del Sistema}{32}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Escenarios de Casos de Uso}{33}{subsection.4.3.2}%
+\contentsline {chapter}{\numberline {5}Diseño}{44}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Arquitectura Software}{44}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Arquitectura Orientada a Servicios}{45}{subsection.5.1.1}%
+\contentsline {section}{\numberline {5.2}Tecnologías Utilizadas}{45}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Desarrollo Backend}{46}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Desarrollo Frontend}{48}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Herramientas de Desarrollo}{48}{subsection.5.2.3}%
+\contentsline {section}{\numberline {5.3}Modelo de Datos}{50}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Diseño Lógico}{51}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Diseño de MockUps para Frontend}{51}{section.5.5}%
+\contentsline {chapter}{\numberline {6}Implementación}{56}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Preparación del Entorno de Desarrollo}{56}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Servidor}{56}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Servicios}{57}{subsection.6.2.1}%
+\contentsline {subsubsection}{Autenticación y Roles de Usuario}{57}{section*.69}%
+\contentsline {subsubsection}{Wilson Score}{58}{section*.70}%
+\contentsline {subsubsection}{Filtrar Establecimientos}{60}{section*.71}%
+\contentsline {section}{\numberline {6.3}Cliente}{60}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}Componentes Personalizados}{61}{subsection.6.3.1}%
+\contentsline {subsection}{\numberline {6.3.2}Pantallas}{62}{subsection.6.3.2}%
+\contentsline {subsection}{\numberline {6.3.3}Integración con Backend}{63}{subsection.6.3.3}%
+\contentsline {subsection}{\numberline {6.3.4}Navegación}{64}{subsection.6.3.4}%
+\contentsline {subsubsection}{Navegación Inicial}{64}{section*.72}%
+\contentsline {subsubsection}{Navegación del Usuario Genérico}{64}{section*.73}%
+\contentsline {subsubsection}{Navegación del Adminstrador de Establecimiento}{64}{section*.74}%
+\contentsline {chapter}{\numberline {7}Pruebas}{68}{chapter.7}%
+\contentsline {chapter}{\numberline {8}Despliegue}{70}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Despliegue APK}{70}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Servidor}{71}{section.8.2}%
+\contentsline {section}{\numberline {8.3}HangOut}{71}{section.8.3}%
+\contentsline {subsection}{\numberline {8.3.1}Enlace a Vídeos}{80}{subsection.8.3.1}%
+\contentsline {chapter}{\numberline {9}Conclusiones y Trabajo Futuro}{81}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Conclusión}{81}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Trabajo Futuro}{82}{section.9.2}%

@@ -1,4 +1,4 @@
-\chapter{Estado del Arte}
+\chapter{Estado de la Cuestión}
 \section{Aplicaciones Similares}
 
 Existen múltiples aplicaciones diseñadas para facilitar la búsqueda de eventos y establecimientos sociales. Por
@@ -9,17 +9,17 @@ según las reseñas y valoraciones de otros usuarios.
     \item \textbf{TripAdvisor:} Tripadvisor es la plataforma de orientación de viajes más grande del mundo. Ayuda a
           cientos de millones de personas cada mes en la planificación, reserva y realización de viajes. Los viajeros usan
           el sitio y la aplicación para descubrir alojamientos, actividades y restaurantes basados en las recomendaciones
-          de otros viajeros.\cite{tripadvisor}
+          de otros viajeros \cite{tripadvisor}.
 
     \item \textbf{Yelp:} Yelp conecta a las personas con excelentes negocios locales. Con información confiable
           sobre negocios locales, fotos y contenido de reseñas, Yelp proporciona una plataforma local integral para que
           los consumidores descubran, se conecten y realicen transacciones con negocios de todos los tamaños, facilitando
           la solicitud de presupuestos, la unión a listas de espera, la realización de reservas y la programación de citas
-          o compras.\cite{yelp}
+          o compras \cite{yelp}.
 
     \item \textbf{Google:} Google Maps permite a los turistas descubrir una amplia variedad de establecimientos de
           ocio, como restaurantes, bares, parques, museos y otros puntos de interés. La función de búsqueda integrada
-          facilita encontrar lugares específicos o explorar categorías de interés en una zona determinada.\cite{google}
+          facilita encontrar lugares específicos o explorar categorías de interés en una zona determinada \cite{google}.
 
 \end{enumerate}
 
@@ -76,7 +76,20 @@ A continuación, se muestran imágenes de las aplicaciones mencionadas para su m
     \label{fig:comparacion_apps}
 \end{figure}
 
-Estas aplicaciones aunque sean excelentes en muchos aspectos tienen ciertas limitaciones como pueden ser:
+Además de estas opciones comerciales, existen otros proyectos académicos que siguen este mismo enfoque, por ejemplo:
+
+\begin{enumerate}
+    \item \textbf{Sebastián Alfredo Castro Rampersad}, \textit{Plataforma de Gestión y Venta de Entradas
+              para locales de ocio nocturno}. Plataforma para la gestión y venta de entradas para locales de ocio nocturno, orientada a mejorar la experiencia tanto de los locales como de los consumidores. Permite a los locales publicar y gestionar entradas, mientras que los consumidores pueden adquirirlas de manera sencilla. La plataforma incluye una aplicación web administrativa para los locales, una aplicación móvil para el escaneo de entradas en el punto de acceso, y una aplicación móvil para la compra de entradas por parte de los consumidores \cite{Sebastian}.
+    \item \textbf{Eduardo Campos Diago}, \textit{Aplicación Móvil para la Localización de Restaurantes}. Plataforma para la localización de restaurantes, diseñada para facilitar a los usuarios encontrar establecimientos basados en comidas específicas, aprovechando las capacidades de los dispositivos móviles con Android. Esta aplicación se orienta principalmente al turismo y ocio, permitiendo no solo encontrar restaurantes sino también evaluar platos y agregar nuevos restaurantes a la base de datos, actuando parcialmente como red social \cite{Campos}.
+    \item \textbf{Raquel García del Val}, \textit{ Diseño de una Aplicación para Promover el Ocio Rural}. Aplicación diseñada para promover el turismo y el ocio rural al proporcionar una plataforma donde los usuarios pueden explorar y completar rutas de senderismo. Al finalizar las rutas, los usuarios reciben descuentos en restaurantes y comercios locales, incentivando así la exploración y el disfrute de las áreas rurales \cite{Garcia}.
+\end{enumerate}
+
+Las aplicaciones discutidas anteriormente ofrecen numerosas ventajas, destacándose por su robustez y la amplia base de usuarios que gestionan. Estas características aseguran una experiencia de usuario confiable y eficiente, lo cual es crucial para aplicaciones que manejan grandes volúmenes de datos y transacciones frecuentes.
+
+Por otro lado, los trabajos mencionados ilustran claramente las ventajas de las soluciones tecnológicas actuales en la organización de actividades turísticas. Estas soluciones facilitan la planificación y ejecución de actividades, mejorando la accesibilidad a la información y optimizando la experiencia del turista.
+
+Sin embargo, como ocurre con todas las soluciones tecnológicas, estas aplicaciones y trabajos también presentan ciertas limitaciones. Entre ellas se incluyen:
 
 \begin{enumerate}
 
@@ -102,36 +115,24 @@ Estas aplicaciones aunque sean excelentes en muchos aspectos tienen ciertas limi
 
 \end{enumerate}
 
-\section{Soluciones HangOut}
+\begin{landscape}
+    \begin{table}
+        \centering
+        \caption{Comparación de características de aplicaciones para el turismo}
+        \label{tab:comparison}
+        \small
+        \begin{tabularx}{\linewidth}{|X|X|X|X|X|X|X|}
+            \hline
+                                                   & \textbf{TripAdvisor} & \textbf{Yelp} & \textbf{Google Maps} & \textbf{Sebastián Castro} & \textbf{Eduardo Campos} & \textbf{Raquel García} \\ \hline
+            \textbf{Búsqueda por Filtros}          & Sí                   & Sí            & Sí                   & Sí                        & Sí                      & Sí                     \\ \hline
+            \textbf{Centralizado}                  & Sí                   & Sí            & Sí                   & Sí                        & Sí                      & Sí                     \\ \hline
+            \textbf{Exclusivo}                     & No                   & No            & No                   & Sí                        & No                      & No                     \\ \hline
+            \textbf{Organización Social}           & No                   & No            & No                   & No                        & No                      & No                     \\ \hline
+            \textbf{Promoción de Establecimientos} & Sí                   & No            & No                   & Sí                        & No                      & Parcialmente           \\ \hline
+        \end{tabularx}
+    \end{table}
+\end{landscape}
 
-Para solucionar estas limitaciones se ha desarrollado HangOut, una aplicación móvil diseñada para asistir a las personas para encontrar un establecimiento o evento adecuado a sus gustos que integra y mejora las funcionalidades existentes con características innovadoras:
-
-
-\begin{enumerate}
-    \item \textbf{Centralización de la Información:} HangOut centraliza la información de diversos establecimientos y eventos, permitiendo al usuario encontrar rápidamente opciones que se ajusten a sus preferencias sin necesidad de consultar múltiples fuentes.
-
-    \item \textbf{Interacción y Organización Social:} La aplicación permite a los usuarios seguir a otros, crear actividades y organizar salidas grupales de manera más eficiente, eliminando la necesidad de coordinarse a través de múltiples aplicaciones de mensajería.
-
-    \item \textbf{Herramientas para Administradores de Establecimiento:} HangOut proporciona a los administradores una plataforma para gestionar sus perfiles de establecimiento indicando el ambiente, eventos y ofertas, facilitando así la promoción y gestión de sus servicios de manera más eficaz.
-
-    \item \textbf{Enfoque Exclusivo:} La aplicación se distingue por su enfoque exclusivo en el ocio y la eficiencia en la organización de eventos. Combinando la funcionalidad de creaciones de actividades en grupos específicos con la búsqueda de establecimientos y la personalización según las preferencias del usuario, ofreciendo una solución más específica para el ocio.
-\end{enumerate}
-
-\begin{table}[H]
-    \centering
-    \label{tab:comparison}
-    \small
-    \begin{tabularx}{\textwidth}{|X|X|X|X|X|X|}
-        \hline
-                                               & \textbf{TripAdvisor} & \textbf{Yelp} & \textbf{Google Maps} \\ \hline
-        \textbf{Búsqueda por Filtros}          & Si                   & Si            & Si                   \\ \hline
-        \textbf{Centralizado}                  & Si                   & Si            & Si                   \\ \hline
-        \textbf{Exclusivo}                     & No                   & No            & No                   \\ \hline
-        \textbf{Organización Social}           & No                   & No            & No                   \\ \hline
-        \textbf{Promoción de Establecimientos} & Si                   & No            & No                   \\ \hline
-    \end{tabularx}
-    \caption{Comparación de características de aplicaciones para el turismo}
-
-\end{table}
+Todas estas limitaciones subrayan la necesidad de idear una nueva solución. En este contexto, surge \textit{HangOut}, una aplicación móvil diseñada para superar estos desafíos. La descripción detallada de la aplicación móvil, junto con sus funcionalidades y beneficios, será descrita en los siguientes capítulos.
 
 

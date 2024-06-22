@@ -18,7 +18,7 @@ const ModificarUsuario = ({ navigation, route }) => {
   const [preferenciaSeleccionada, setPreferenciaSeleccionada] = useState([]);
   const [data, setData] = useState(route.params.data);
   const [fechaNacimiento, setFechaNacimiento] = useState(new Date(data.usuario.fecha_nac.$date));
-  const { userId, token } = useContext(UserContext);
+  const { token } = useContext(UserContext);
 
   useEffect(() => {
     navigation.setOptions({
@@ -70,10 +70,14 @@ const ModificarUsuario = ({ navigation, route }) => {
       reviews,
     };
 
-    axios.put(`${BASE_URL}/usuario_generico/${userId}`, updatedData)
+    axios.put(`${BASE_URL}/usuario_generico`, updatedData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(response => {
         Alert.alert('Éxito', 'Los datos han sido actualizados.');
-        navigation.navigate('DatosUsuario', { userId });
+        navigation.navigate('DatosUsuario');
       })
       .catch(error => {
         console.error(error);
@@ -176,9 +180,9 @@ const ModificarUsuario = ({ navigation, route }) => {
       </ScrollView>
       <Footer
         showAddButton={true}
-        onHangoutPressUser={() => navigation.navigate('InicioUsuario', { userId })}
-        onProfilePressUser={() => navigation.navigate('DatosUsuario', { userId })}
-        onCreateActivity={() => navigation.navigate('CrearActividad', { userId })}
+        onHangoutPressUser={() => navigation.navigate('InicioUsuario')}
+        onProfilePressUser={() => navigation.navigate('DatosUsuario')}
+        onCreateActivity={() => navigation.navigate('CrearActividad')}
       />
     </View>
   );

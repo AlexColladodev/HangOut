@@ -40,8 +40,12 @@ def crear_administrador_establecimiento():
     except Exception as e:
         return jsonify({"error": f"{e}"}), 500
 
-@blueprint.route("/<id>", methods=["DELETE"])
-def eliminar_administrador_establecimiento(id):
+@blueprint.route("", methods=["DELETE"])
+@jwt_required()
+def eliminar_administrador_establecimiento():
+    admin = get_jwt_identity()
+    id = str(admin.get("_id"))
+
     try:
         respuesta = AdministradorEstablecimiento.eliminar_administrador_establecimiento(id)
         return jsonify(respuesta), 200
@@ -62,8 +66,12 @@ def consultar_administradores_establecimiento():
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar administradores de establecimientos: {e}"}), 500
 
-@blueprint.route("/<id>", methods=["GET"])
-def consultar_administrador_establecimiento(id):
+@blueprint.route("/mi_perfil", methods=["GET"])
+@jwt_required()
+def consultar_administrador_establecimiento():
+    admin = get_jwt_identity()
+    id = str(admin.get("_id"))
+
     try:
         respuesta = AdministradorEstablecimiento.consultar_administrador_establecimiento(id)
         return Response(respuesta, mimetype="application/json"), 200
@@ -74,9 +82,13 @@ def consultar_administrador_establecimiento(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado al consultar administradores de establecimientos: {e}"}), 500
 
-@blueprint.route("/<id>", methods=["PUT"])
-def actualizar_administrador_establecimiento(id):
+@blueprint.route("", methods=["PUT"])
+@jwt_required()
+def actualizar_administrador_establecimiento():
     data = request.json
+    admin = get_jwt_identity()
+    id = str(admin.get("_id"))
+
     try:
         respuesta = AdministradorEstablecimiento.actualizar_administrador_establecimiento(id, data)
         return jsonify(respuesta), 200

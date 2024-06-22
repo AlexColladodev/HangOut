@@ -12,7 +12,7 @@ const DatosAdministrador = ({ navigation }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const { adminId, token } = useContext(AdminContext);
+  const { token } = useContext(AdminContext);
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -27,7 +27,11 @@ const DatosAdministrador = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/administrador_establecimiento/${adminId}`);
+      const response = await axios.get(`${BASE_URL}/administrador_establecimiento/mi_perfil`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const { administrador } = response.data;
       setData(administrador);
       setLoading(false);
@@ -109,8 +113,8 @@ const DatosAdministrador = ({ navigation }) => {
       </ScrollView>
       <Footer
         showAddButton={false}
-        onHangoutPressAdmin={() => navigation.navigate('InicioAdmin', { adminId })}
-        onProfilePressAdmin={() => navigation.navigate('DatosAdministrador', { adminId })}
+        onHangoutPressAdmin={() => navigation.navigate('InicioAdmin')}
+        onProfilePressAdmin={() => navigation.navigate('DatosAdministrador')}
       />
     </View>
   );

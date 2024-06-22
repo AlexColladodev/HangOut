@@ -17,7 +17,7 @@ const CrearActividad = ({ navigation }) => {
   const [horaActividad, setHoraActividad] = useState(new Date());
   const [showFecha, setShowFecha] = useState(false);
   const [showHora, setShowHora] = useState(false);
-  const { userId, token } = useContext(UserContext);
+  const { token } = useContext(UserContext);
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -55,11 +55,14 @@ const CrearActividad = ({ navigation }) => {
         ubicacion: ubicacionActividad,
         fecha_actividad: fechaFormat,
         hora_actividad: horaFormat,
-        id_usuario_creador: userId,
       };
-      const response = await axios.post(`${BASE_URL}/usuario_generico/nueva_actividad`, actividad);
+      const response = await axios.post(`${BASE_URL}/usuario_generico/nueva_actividad`, actividad, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       Alert.alert("Éxito", "Actividad creada correctamente");
-      navigation.navigate('DatosUsuario', { userId });
+      navigation.navigate('DatosUsuario');
     } catch (error) {
       Alert.alert("Error", "Hubo un problema al crear la actividad");
     }
@@ -154,9 +157,9 @@ const CrearActividad = ({ navigation }) => {
       </ScrollView>
       <Footer
         showAddButton={true}
-        onHangoutPressUser={() => navigation.navigate('InicioUsuario', { userId })}
-        onProfilePressUser={() => navigation.navigate('DatosUsuario', { userId })}
-        onCreateActivity={() => navigation.navigate('CrearActividad', { userId })}
+        onHangoutPressUser={() => navigation.navigate('InicioUsuario')}
+        onProfilePressUser={() => navigation.navigate('DatosUsuario')}
+        onCreateActivity={() => navigation.navigate('CrearActividad')}
       />
     </View>
   );

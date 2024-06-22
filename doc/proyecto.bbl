@@ -1,4 +1,4 @@
-\begin{thebibliography}{28}
+\begin{thebibliography}{42}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -32,12 +32,51 @@ Think with Google.
 \newblock URL
   \url{https://www.thinkwithgoogle.com/consumer-insights/consumer-trends/travel-research-process-make-a-plan-moments/}.
 
+\bibitem[Rampersad(2023)]{Sebastian}
+Sebastián Alfredo~Castro Rampersad.
+\newblock Plataforma de gestión y venta de entradas para locales de ocio
+  nocturno.
+\newblock Master's thesis, Universidade da Coruña, A Coruña, septiembre 2023.
+\newblock Trabajo de Fin de Grado, Grado en Ingeniería Informática, Mención
+  en Ingeniería de Software.
+
+\bibitem[Campos~de Diago(2013)]{Campos}
+Eduardo Campos~de Diago.
+\newblock Aplicaci{\'o}n m{\'o}vil de localizaci{\'o}n de ocio para android.
+\newblock 2013.
+
+\bibitem[Garc{\'\i}a~del Val(2022)]{Garcia}
+Raquel Garc{\'\i}a~del Val.
+\newblock \emph{Dise{\~n}o de aplicaci{\'o}n m{\'o}vil para el ocio rural}.
+\newblock PhD thesis, Universitat Polit{\`e}cnica de Val{\`e}ncia, 2022.
+
 \bibitem[Academy()]{santander}
 Santander~Open Academy.
 \newblock Metodologías de desarrollo de software.
 \newblock Santander Open Academy.
 \newblock URL
   \url{https://www.santanderopenacademy.com/es/blog/metodologias-desarrollo-software.html}.
+
+\bibitem[Kirovska and Koceski(2015)]{kanban_img}
+Nevenka Kirovska and Saso Koceski.
+\newblock Usage of kanban methodology at software development teams.
+\newblock \emph{Journal of applied economics and business}, 3\penalty0
+  (3):\penalty0 25--34, 2015.
+
+\bibitem[Karabiyik et~al.(2020)Karabiyik, Jaiswal, Thomas, and
+  J.~Magana]{scrum_img}
+Tugba Karabiyik, Aparajita Jaiswal, Paul Thomas, and Alejandra J.~Magana.
+\newblock Understanding the interactions between the scrum master and the
+  development team: A game-theoretic approach.
+\newblock \emph{Mathematics}, 8\penalty0 (9):\penalty0 1553, 2020.
+
+\bibitem[Alves et~al.(2019)Alves, Ferreira, Maia, Le{\~a}o, and
+  Carneiro]{lean_img}
+Anabela~Carvalho Alves, Ana Ferreira, Laura~Costa Maia, Celina~Pinto Le{\~a}o,
+  and Paula Carneiro.
+\newblock A symbiotic relationship between lean production and ergonomics:
+  insights from industrial engineering final year projects.
+\newblock 2019.
 
 \bibitem[Amazon({\natexlab{a}})]{amazon_asus}
 Amazon.
@@ -64,16 +103,38 @@ Seguridad Social.
 \newblock URL
   \url{https://www.seg-social.es/wps/portal/wss/internet/Trabajadores/CotizacionRecaudacionTrabajadores/36537#36538}.
 
-\bibitem[Malan and Bredemeyer(2001)]{malan_bredemeyer}
-R.~Malan and D.~Bredemeyer.
+\bibitem[Malan et~al.(2001)Malan, Bredemeyer, et~al.]{malan_bredemeyer}
+Ruth Malan, Dana Bredemeyer, et~al.
 \newblock Functional requirements and use cases.
-\newblock Bredemeyer Consulting, 2001.
+\newblock \emph{Bredemeyer Consulting}, pages 335--1653, 2001.
+
+\bibitem[Shah and Rogers(1988)]{shah}
+Jami~J Shah and Mary~T Rogers.
+\newblock Functional requirements and conceptual design of the feature-based
+  modelling system.
+\newblock \emph{Computer-Aided Engineering Journal}, 5\penalty0 (1):\penalty0
+  9--15, 1988.
+
+\bibitem[Sagar and Abirami(2014)]{sagar}
+Vidhu Bhala R~Vidya Sagar and S~Abirami.
+\newblock Conceptual modeling of natural language functional requirements.
+\newblock \emph{Journal of Systems and Software}, 88:\penalty0 25--41, 2014.
 
 \bibitem[Glinz(2007)]{glinz}
-M.~Glinz.
+Martin Glinz.
 \newblock On non-functional requirements.
 \newblock In \emph{15th IEEE international requirements engineering conference
-  (RE 2007)}, pages 21--26. IEEE, October 2007.
+  (RE 2007)}, pages 21--26. IEEE, 2007.
+
+\bibitem[Chung et~al.(2012)Chung, Nixon, Yu, and Mylopoulos]{chung}
+Lawrence Chung, Brian~A Nixon, Eric Yu, and John Mylopoulos.
+\newblock \emph{Non-functional requirements in software engineering}, volume~5.
+\newblock Springer Science \& Business Media, 2012.
+
+\bibitem[Gross and Yu(2001)]{gross}
+Daniel Gross and Eric Yu.
+\newblock From non-functional requirements to design through patterns.
+\newblock \emph{Requirements Engineering}, 6:\penalty0 18--36, 2001.
 
 \bibitem[IBM()]{ibm}
 IBM.
@@ -82,16 +143,33 @@ IBM.
 \newblock URL
   \url{https://www.ibm.com/docs/es/dmrt/9.5?topic=approaches-use-case-models}.
 
-\bibitem[Garlan(2008)]{garlan}
-D.~Garlan.
-\newblock \emph{Software architecture}.
-\newblock 2008.
+\bibitem[Garlan and Shaw(1993)]{garlan}
+David Garlan and Mary Shaw.
+\newblock An introduction to software architecture.
+\newblock In \emph{Advances in software engineering and knowledge engineering},
+  pages 1--39. World Scientific, 1993.
+
+\bibitem[Hofmeister et~al.(2000)Hofmeister, Nord, and Soni]{hofmeister}
+Christine Hofmeister, Robert Nord, and Dilip Soni.
+\newblock \emph{Applied software architecture}.
+\newblock Addison-Wesley Professional, 2000.
+
+\bibitem[Richards(2015)]{richards}
+Mark Richards.
+\newblock \emph{Software architecture patterns}, volume~4.
+\newblock O'Reilly Media, Incorporated 1005 Gravenstein Highway North,
+  Sebastopol, CA~…, 2015.
 
 \bibitem[Laskey and Laskey(2009)]{laskey}
 K.~B. Laskey and K.~Laskey.
 \newblock Service oriented architecture.
 \newblock \emph{Wiley Interdisciplinary Reviews: Computational Statistics},
   1\penalty0 (1):\penalty0 101--105, 2009.
+
+\bibitem[Erl(1900)]{erl}
+Thomas Erl.
+\newblock \emph{Service-oriented architecture}.
+\newblock Citeseer, 1900.
 
 \bibitem[Foundation({\natexlab{a}})]{python_faq}
 Python~Software Foundation.
@@ -117,17 +195,17 @@ Node.js Foundation.
 \newblock Node.js, {\natexlab{b}}.
 \newblock URL \url{https://nodejs.org/en/about}.
 
-\bibitem[GeeksforGeeks()]{geeksforgeeks}
-GeeksforGeeks.
-\newblock Jdk in java.
-\newblock GeeksforGeeks.
-\newblock URL \url{https://www.geeksforgeeks.org/jdk-in-java/}.
-
 \bibitem[Native()]{react_native}
 React Native.
 \newblock Learn once, write anywhere.
 \newblock React Native.
 \newblock URL \url{https://reactnative.dev}.
+
+\bibitem[GeeksforGeeks()]{geeksforgeeks}
+GeeksforGeeks.
+\newblock Jdk in java.
+\newblock GeeksforGeeks.
+\newblock URL \url{https://www.geeksforgeeks.org/jdk-in-java/}.
 
 \bibitem[Microsoft()]{vscode}
 Microsoft.
@@ -179,5 +257,11 @@ H.~Zhu, P.~A. Hall, and J.~H. May.
 \newblock Software unit test coverage and adequacy.
 \newblock \emph{Acm computing surveys (csur)}, 29\penalty0 (4):\penalty0
   366--427, 1997.
+
+\bibitem[Documentation(2024)]{easbuild}
+Expo Documentation.
+\newblock Eas build.
+\newblock Expo, 2024.
+\newblock URL \url{https://docs.expo.dev/build/introduction/}.
 
 \end{thebibliography}

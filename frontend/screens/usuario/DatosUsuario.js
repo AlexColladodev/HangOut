@@ -31,7 +31,11 @@ const DatosUsuario = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/usuario_generico/${userId}`);
+      const response = await axios.get(`${BASE_URL}/usuario_generico/mi_perfil`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setData(response.data);
       setLoading(false);
       setError(false);

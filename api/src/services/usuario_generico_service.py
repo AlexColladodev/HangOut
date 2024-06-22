@@ -43,9 +43,12 @@ def crear_usuario_generico():
     except Exception as e:
         return jsonify({"error": f"{e}"}), 500
 
-@blueprint.route("/<id>", methods=["DELETE"])
-def eliminar_usuario(id):
+@blueprint.route("", methods=["DELETE"])
+@jwt_required()
+def eliminar_usuario():
     try:
+        usuario = get_jwt_identity()
+        id = str(usuario.get("_id"))
         respuesta = UsuarioGenerico.eliminar_usuario_generico(id)
         return respuesta, 200
     except ValueError as e:
@@ -65,8 +68,11 @@ def consultar_usuarios():
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
-@blueprint.route("/<id>", methods=["GET"])
-def consultar_unico_usuario(id):
+@blueprint.route("/mi_perfil", methods=["GET"])
+@jwt_required()
+def consultar_unico_usuario():
+    usuario = get_jwt_identity()
+    id = str(usuario.get("_id"))
     try:
         respuesta = UsuarioGenerico.consultar_usuario(id)
         return Response(respuesta, mimetype="application/json"), 200
@@ -77,10 +83,13 @@ def consultar_unico_usuario(id):
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
-@blueprint.route("/<id>", methods=["PUT"])
-def actualizar_usuario(id):
+@blueprint.route("", methods=["PUT"])
+@jwt_required()
+def actualizar_usuario():
     data = request.json
-    
+    usuario = get_jwt_identity()
+    id = str(usuario.get("_id"))
+
     try:
         respuesta = UsuarioGenerico.actualizar_usuario(id, data)
         return respuesta, 200
@@ -92,9 +101,12 @@ def actualizar_usuario(id):
         return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 @blueprint.route("/nueva_actividad", methods=["POST"])
+@jwt_required()
 def add_actividad():
     data = request.json
-    id_usuario_creador = data.get("id_usuario_creador")
+    usuario = get_jwt_identity()
+    id_usuario_creador = str(usuario.get("_id"))
+    data["id_usuario_creador"] = id_usuario_creador
     
     try:
         respuesta_json = requests.post(url_actividad, json=data).json()
