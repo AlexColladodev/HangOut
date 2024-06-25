@@ -1,0 +1,15 @@
+\chapter{Testing}
+
+Las pruebas en el desarrollo de una aplicación móvil aseguran funcionalidad y confiabilidad, detectando errores para prevenir fallos catastróficos. Validan los requisitos y el diseño desde etapas tempranas, mejorando la precisión y reduciendo costos. Al gestionar sistemáticamente el proceso de pruebas, estas mejoran la calidad del software, haciéndolas indispensables en las prácticas modernas del desarrollo de aplicaciones \cite{zhu}.
+
+Las pruebas realizadas en el proyecto han sido pruebas unitarias en el backend para verificar el correcto funcionamiento de las funciones principales del modelo. Cada entidad realiza las pruebas utilizando un \textit{mock} para simular las peticiones y respuestas de las llamadas a la base de datos.
+
+Para estas pruebas, se utilizó \textit{pytest}, un marco de pruebas en Python que facilita la escritura de casos de pruebas simples y escalables. Pytest además tiene su propio mock gracias a la biblioteca \textit{pytest-mock} que permite la simulación de interacciones con la base de datos. Pytest tiene las siguientes características:
+
+\begin{enumerate}
+    \item \textbf{Detección automática de módulos y funciones de prueba}: Pytest encuentra y ejecuta automáticamente las pruebas definidas en el proyecto sin ninguna configuración adicional.
+    \item \textbf{Informes detallados}: Elimina la necesidad de recordar nombres específicos de métodos de aserción, proporcionando informas claros y detallados sobre los fallos.
+    \item \textbf{Fixtures modulares}: Permiten gestionar recursos pequeños o parametrizados a largo plazo, facilitando la reutilización y modularidad en las pruebas.
+\end{enumerate}
+
+Además de las pruebas unitarias realizadas, la aplicación se encuentra en fase alpha donde el único usuario que ha interactuado con la aplicación he sido yo. He realizado pruebas desde el frontend para comprobar el correcto funcionamiento de las pantallas y su navegación, y pruebas en Postman para comprobar el envío de información en formato JSON a los diferentes endpoints de la API.
