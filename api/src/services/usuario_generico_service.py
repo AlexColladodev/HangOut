@@ -82,6 +82,18 @@ def consultar_unico_usuario():
         return jsonify({"error": str(e)}), 500
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
+    
+@blueprint.route("/<id>", methods=["GET"])
+def consultar_usuario(id):
+    try:
+        respuesta = UsuarioGenerico.consultar_usuario(id)
+        return Response(respuesta, mimetype="application/json"), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
+    except RuntimeError as e:
+        return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": f"Error inesperado: {e}"}), 500
 
 @blueprint.route("", methods=["PUT"])
 @jwt_required()
@@ -213,4 +225,3 @@ def crear_review():
         return jsonify({"error": f"Error de validación: {e.messages}"}), 400
     except Exception as e:
         return jsonify({"error": f"Error inesperado: {e}"}), 500
-

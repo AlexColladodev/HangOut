@@ -1,6 +1,6 @@
 \chapter{Implementación}
 
-En esta sección se describen las etapas llevadas a cabo durante el proceso de la implementación del proyecto, los desafíos encontrados y las soluciones adoptadas. También se incluyen ejemplos de código y capturas de pantalla que ilustran el profreso y los resultados obtenidos.
+En esta sección se describen las etapas llevadas a cabo durante el proceso de la implementación del proyecto, los desafíos encontrados y las soluciones adoptadas. También se incluyen ejemplos de código y capturas de pantalla que ilustran el proceso y los resultados obtenidos.
 
 \section{Preparación del Entorno de Desarrollo}
 
@@ -12,7 +12,6 @@ Antes de iniciar la implementación, se realizó la configuración del entorno d
 En este apartado, se describe la implementación en el lado del servidor de la aplicación. Se definirá cómo se realizó la estructura del código y su implementación, proporcionando algunos ejemplos para la creación de la API. A continuación, se definirán los pasos seguidos para lograr esta implementación.
 
 \begin{enumerate}
-    \item \textbf{Definición de los Endpoints: }Se definieron los endpoints necesarios para gestionar las llamadas relacionadas con la administración de usuarios, establecimientos, eventos, ofertas y reseñas.
 
     \item \textbf{Implementación del Modelo: } En esta etapa se implementaron las clases necesarias a partir del diagrama UML del capítulo anterior. Estas clases se encargan de gestionar la comunicación con la base de datos y proporcionar una estructura clara y manejable para los datos utilizados en la aplicación.
 
@@ -35,7 +34,7 @@ Al iniciar sesión, al usuario también se le asignará un "rol". Esto es necesa
 
 \subsubsection{Wilson Score}
 
-En el diagrama de clases del diseño lógico, cada establecimiento está asociado con reseñas que tienen una calificación entre 0 y 5. Esto da a lugar a una calificación media para cada establecimiento, calculada como la suma de todas las calificaciones divididas por el número total de reseñas del establecimiento. Aunque ordenar los establecimientos por calificación media puede ser útil, es importante considerar la fiabilidad de esta calificación. Por ejemplo, un establecimiento con sólo 2 reseñas y una media de 4.5 no es comparable con otro que tiene 250 reseñas y la misma calificación media. Para abordar este problema, se puede aplicar el método de Wilson Score.\cite{talton}
+En el diagrama de clases del diseño lógico, cada establecimiento está asociado con reseñas que tienen una calificación entre 0 y 5. Esto da a lugar a una calificación media para cada establecimiento, calculada como la suma de todas las calificaciones divididas por el número total de reseñas del establecimiento. Aunque ordenar los establecimientos por calificación media puede ser útil, es importante considerar la fiabilidad de esta calificación. Por ejemplo, un establecimiento con sólo 2 reseñas y una media de 4.5 no es comparable con otro que tiene 250 reseñas y la misma calificación media. Para abordar este problema, se puede aplicar el método de Wilson Score \cite{talton}.
 
 \[ S_w = \frac{1}{{1 + \frac{1}{n} z^2}} \left[ p + \frac{1}{2n} - z\sqrt{\frac{p(1-p)}{n} + \frac{z2}{4n2}} \right] \]
 
@@ -133,7 +132,7 @@ Para la implementación del frontend ha sido necesario crear nuestros propios co
 
 \subsection{Componentes Personalizados}
 
-Los componentes en React Native son unidades reutilizables y aisladas que definen la interfaz de usuario de una aplicación. Los componentes se pueden definir como funciones o clases de JavaScript y reciben entradas llamadas "props". Los componentes funcionales son simples funciones JavaScript que retornan elementos de React, mientras que los componentes de clase pueden contener más lógica y estado interno. Los componentes permiten componer interfaces complejas a partir de piezas más pequeñas, facilitando la reutilización y el mantenimiento del código. \cite{react}
+Los componentes en React Native son unidades reutilizables y aisladas que definen la interfaz de usuario de una aplicación. Los componentes se pueden definir como funciones o clases de JavaScript y reciben entradas llamadas "props". Los componentes funcionales son simples funciones JavaScript que retornan elementos de React, mientras que los componentes de clase pueden contener más lógica y estado interno. Los componentes permiten componer interfaces complejas a partir de piezas más pequeñas, facilitando la reutilización y el mantenimiento del código \cite{react}.
 
 Para el desarrollo de la aplicación han sido creados los siguientes componentes:
 

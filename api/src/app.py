@@ -6,6 +6,7 @@ from flask_cors import CORS
 from db import init_mongo, mongo
 from uploads_config import configure_upload, photos 
 from services import usuario_generico_service, administrador_establecimientos_service, establecimiento_service, actividad_service, evento_service, oferta_service, review_service
+from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/HangOut"
@@ -27,6 +28,20 @@ app.register_blueprint(oferta_service.blueprint)
 app.register_blueprint(actividad_service.blueprint)
 app.register_blueprint(evento_service.blueprint)
 app.register_blueprint(review_service.blueprint)
+
+# Configuración de Swagger UI
+SWAGGER_URL = '/swagger'
+API_URL = '/static/openapi.yaml'  # Ruta del archivo OpenAPI
+
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "HangOut API"
+    }
+)
+
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 @app.route("/login", methods=["POST"])
 def login():

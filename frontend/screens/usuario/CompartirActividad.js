@@ -17,7 +17,7 @@ const CompartirActividad = ({ navigation, route }) => {
   useEffect(() => {
     const fetchSeguidosYParticipantes = async () => {
       try {
-        const usuarioResponse = await axios.get(`${BASE_URL}/usuario_generico/${userId}`, {
+        const usuarioResponse = await axios.get(`${BASE_URL}/usuario_generico/mi_perfil`, {
           headers: {
             Authorization: `Bearer ${token}`
           }

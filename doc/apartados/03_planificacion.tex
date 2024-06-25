@@ -29,30 +29,30 @@ Este tipo de metodologías de desarrollo tienen ciertas características claves 
 \subsection{Ejemplos de Metodologías}
 
 \begin{enumerate}
-    \item \textbf{Kanban:} Se basa en dividir las tareas en porciones más pequeñas y organizarlas en un tablero de trabajo con columnas de tareas pendientes, en curso y finalizadas. Este sistema crea un flujo de trabajo visual que ayuda a priorizar las tareas y mejorar el valor del producto.
+    \item \textbf{Kanban:} Se basa en dividir las tareas en porciones más pequeñas y organizarlas en un tablero de trabajo con columnas de tareas pendientes, en curso y finalizadas. Este sistema crea un flujo de trabajo visual que ayuda a priorizar las tareas y mejorar el valor del producto \cite{kanban_img}.
 
           \begin{figure}[H]
               \centering
               \includegraphics[width=0.5\textwidth]{imagenes/Kanban.png}
-              \caption{Kanban \cite{kanban_img}}
+              \caption{Kanban}
               \label{fig:kanban}
           \end{figure}
 
-    \item \textbf{Scrum:} Es una metodología incremental que organiza los requisitos y tareas en ciclos cortos y fijos, denominados sprints. Las etapas incluyen la planificación del sprint, ejecución, reuniones diarias y revisión de los resultados. Cada iteración completa estas etapas, permitiendo entregar un producto funcional al final de cada sprint.
+    \item \textbf{Scrum:} Es una metodología incremental que organiza los requisitos y tareas en ciclos cortos y fijos, denominados sprints. Las etapas incluyen la planificación del sprint, ejecución, reuniones diarias y revisión de los resultados. Cada iteración completa estas etapas, permitiendo entregar un producto funcional al final de cada sprint \cite{scrum_img}.
 
           \begin{figure}[H]
               \centering
               \includegraphics[width=0.5\textwidth]{imagenes/Scrum.jpg}
-              \caption{Scrum \cite{scrum_img}}
+              \caption{Scrum}
               \label{fig:scrum}
           \end{figure}
 
-    \item \textbf{Lean:} Enfocada en equipos pequeños y altamente capacitados, promueve la rápida ejecución de tareas y valora principalmente el compromiso y la capacidad de aprendizaje del equipo. Los ciclos cortos permiten adaptarse rápidamente a los cambios y mejorar el producto.
+    \item \textbf{Lean:} Enfocada en equipos pequeños y altamente capacitados, promueve la rápida ejecución de tareas y valora principalmente el compromiso y la capacidad de aprendizaje del equipo. Los ciclos cortos permiten adaptarse rápidamente a los cambios y mejorar el producto \cite{lean_img}.
 
           \begin{figure}[H]
               \centering
               \includegraphics[width=0.5\textwidth]{imagenes/Lean.jpg}
-              \caption{Scrum \cite{lean_img}}
+              \caption{Lean}
               \label{fig:lean}
           \end{figure}
 
@@ -69,17 +69,17 @@ Para llevar a cabo mi proyecto, decidí utilizar una metodología de desarrollo 
 
 \end{enumerate}
 
+\section{Cronograma y Planificación}
+
+El proyecto comenzó a mitad de febrero de 2024, con la meta de ser completado a finales de junio del mismo año. Para visualizar la planificación del mismo, se presenta un Diagrama de Gantt. Este diagrama es una representación gráfica del cronograma del proyecto, donde las tareas se describen en el  eje vertical y el tiempo empleado en cada una de ellas en el eje horizontal. El diagrama muestra las fechas de inicio y finalización del proyecto, facilitando el seguimiento y la gestión de las distintas etapas del desarrollo.
+\vspace{0.5cm}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{imagenes/DiagramaEtapas.jpg}
+    \includegraphics[width=1\textwidth]{imagenes/DiagramaEtapas.jpg}
     \caption{Diagrama de las etapas del proyecto}
     \label{fig:diagrama_etapas}
 \end{figure}
 
-
-\section{Cronograma y Planificación}
-
-El proyecto comenzó a mitad de febrero de 2024, con la meta de ser completado a finales de junio del mismo año. Para visualizar la planificación del mismo, se presenta un Diagrama de Gantt. Este diagrama es una representación gráfica del cronograma del proyecto, donde las tareas se describen en el  eje vertical y el tiempo empleado en cada una de ellas en el eje horizontal. El diagrama muestra las fechas de inicio y finalización del proyecto, facilitando el seguimiento y la gestión de las distintas etapas del desarrollo.
 
 La aplicación se ha desarrollado utilizando tecnologías como Python y React Native, de las cuales no tenía experiencia previa. Por lo tanto, la planificación del proyecto se realizó teniendo en cuenta el tiempo necesario para aprender y familiarizarme con estos lenguajes. Este proceso incluyó la dedicación del tiempo adicional para la formación y la práctica de ambas tecnologías, asegurando así un desarrollo ágil y eficiente de la aplicación.
 
@@ -194,29 +194,42 @@ Para el desarrollo de la aplicación, el principal y único recurso humano he si
 
 \subsection{Materiales}
 
-Para el desarrollo del proyecto se ha utilizado un portátil personal y un segundo monitor, lo cual ha sido de gran ayuda a la hora de programar, permitiendo una mayor eficiencia y comodidad en la gestión de múltiples ventanas y herramientas. A parte de los materiales utilizados para el desarrollo también se ha utillzado un smartphone para la prueba del frontend utilizando la aplicación Expo Go:
+Para el desarrollo del proyecto se ha utilizado un portátil personal y un segundo monitor, lo cual ha sido de gran ayuda a la hora de programar, permitiendo una mayor eficiencia y comodidad en la gestión de múltiples ventanas y herramientas. A parte de los materiales utilizados para el desarrollo también se ha utillzado un smartphone para la prueba del frontend utilizando la aplicación Expo Go.
 
-\begin{enumerate}
-    \item \textbf{Portátil:} ASUS TUF F15 FX506HC - Portátil de 15.6" Full HD 144Hz (Intel Core i5-11400H, 16GB RAM, 512GB SSD, NVIDIA RTX 3050-4GB). Con valor actual de 699.99 \EUR{} \cite{amazon_asus}
+\renewcommand{\arraystretch}{1.5}
 
-    \item \textbf{Monitor:} BenQ GW2480 - Monitor IPS LED de 23.8 Pulgadas 1080p. Con valor actual de 99.99 \EUR{} \cite{amazon_samsung}
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{|>{\centering\arraybackslash}X|>{\centering\arraybackslash}c|>{\centering\arraybackslash}c|}
+        \hline
+        \textbf{Concepto}                                          & \textbf{Coste Unitario (€)} & \textbf{Coste Materiales (€)} \\
+        \hline
+        ASUS TUF F15 - Intel Core i5-11400H, 16GB RAM              & 699,99 \EUR{}               & \multirow{1.129,97 \EUR{}}    \\
+        \cline{1-2}
+        BenQ GW2480 - Monitor IPS LED de 23.8 Pulgadas 1080p       & 99,99 \EUR{}                &                               \\
+        \cline{1-2}
+        Samsung Galaxy S10e - Smartphone de 5.8”, Dual SIM, 128 GB & 329,99 \EUR{}               &                               \\
+        \hline
+    \end{tabularx}
+    \caption{Coste de Materiales}
+    \label{tab:presupuesto-proyecto}
+\end{table}
 
-    \item \textbf{Smartphone:} Samsung Galaxy S10e - Smartphone de 5.8”, Dual SIM, 128 GB. Con valor actual de 329.99 \EUR{} \cite{amazon_benq}
-\end{enumerate}
+\renewcommand{\arraystretch}{1}
 
 \section{Presupuesto}
 
-En este apartado se analiza y se describen los costes del proyecto utilizando información proporcionada por las bases de cotización para contingencias comunes del año 2024, según la Seguridad Social de España. El perfil será el de un ingeniero informático junior y teniendo en cuenta que las bases de cotización oscilan entre un mínimo de 1.847,40 \EUR{} y un máximo de 4.720,50 €. Se asumirá el uso de la base mínima de cotización y la duración de 5 meses del proyecto. \cite{seguridad_social}
+En este apartado se analiza y se describen los costes del proyecto utilizando información proporcionada por las bases de cotización para contingencias comunes del año 2024, según la Seguridad Social de España. El perfil será el de un ingeniero informático junior y teniendo en cuenta que las bases de cotización oscilan entre un mínimo de 1.847,40 \EUR{} y un máximo de 4.720,50 €. Se asumirá el uso de la base mínima de cotización y la duración de 4 meses del proyecto \cite{seguridad_social}.
 
 Con esta información el coste total del salario para un ingeniero informático junior durante la duración del proyecto sería de
 \[
-    \textbf{Salario Informatico Junior} = 1\,847{,}40 \text{ \EUR{}/mes} \times 5 \text{ meses} = 9\,237 \text{\EUR{}}
+    \textbf{Salario Informatico Junior} = 1.847{,}40 \text{ \EUR{}/mes} \times 4 \text{ meses} = 7.389{,}60 \text{\EUR{}}
 \]
 
 
 Si por su contraparte quisiéramos ver el coste total del salario para un ingeniero informático senior durante la duración del proyecto y utilizando el máximo de las bases de cotización mencionadas anteriormente, procederíamos de la siguiente manera:
 \[
-    \textbf{Salario Informatico Senior} = 4\,720{,}50 \text{ \EUR{}/mes} \times 5 \text{ meses} = 23\,602{,}50 \text{\EUR{}}
+    \textbf{Salario Informatico Senior} = 4.720{,}50 \text{ \EUR{}/mes} \times 4 \text{ meses} = 18.882{,}00 \text{\EUR{}}
 \]
 
 Estas estimaciones no toman costes adicionales más allá de los descritos anteriormente.
@@ -226,16 +239,30 @@ En lo que respecta a las licencias para este proyecto, todas las tecnologías ut
 Para estimar el coste del hardware mencionado en el apartado de materiales, es importante considerar la estimación de vida útil de un dispositivo, como puede ser un portátil o un smartphone, que es de 5 años.
 
 \[
-    \textbf{Coste Materiales} = 699{,}99 \text{ \EUR{}} + 329{,}99 \text{ \EUR{} } + 99{,}99 \text{ \EUR{}} = 1\,129{,}97 \text{ \EUR{}}
-\]
-
-\[
     \textbf{Coste Anual} = \frac{\text{Coste Material}}{5 \text{ años}} = 225{,}99 \text{ \EUR{}}
 \]
 
 \[
-    \textbf{Coste Duración Proyecto} = \left( \frac{\text{Coste Anual}}{12 \text{ meses}} \right) \times 5 \text{ meses} = 94{,}16 \text{ \EUR{}}
+    \textbf{Materiales x 4 Meses} = \left( \frac{\text{Coste Anual}}{12 \text{ meses}} \right) \times 4 \text{ meses} = 75{,}33 \text{ \EUR{}}
 \]
 
-Sumando el coste del hardware al coste de los recursos humanos para un ingeniero informático junior, el coste total del proyecto durante estos 5 meses es de 9 331,16 \EUR{}. Para un ingeniero informático senior, el coste total del proyecto sería de 23 696,66 \EUR{}.
+Sumando los costes mencionados anteriormente, obtenemos la siguiente tabla que especifica el costo total del proyecto:
 
+\renewcommand{\arraystretch}{1.5} % Espaciado entre filas
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \textbf{Concepto}  & \textbf{Mensual} & \textbf{4 Meses} & \textbf{Desarrollo + Materiales} \\
+        \hline
+        Informático Junior & 1 847,40 \EUR{}  & 7 389,60 \EUR{}  & 7 464,93 \EUR{}                  \\
+        \hline
+        Informático Senior & 4 720,50 \EUR{}  & 18 882 \EUR{}    & 18 887,33 \EUR{}                 \\
+        \hline
+    \end{tabular}
+    \caption{Presupuestos del proyecto}
+    \label{tab:presupuesto-proyecto}
+\end{table}
+
+\renewcommand{\arraystretch}{1} % Restablece el valor predeterminado

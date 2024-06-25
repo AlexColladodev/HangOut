@@ -24,7 +24,11 @@ const InicioAdmin = ({ navigation }) => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/administrador_establecimiento/${adminId}`);
+      const response = await axios.get(`${BASE_URL}/administrador_establecimiento/mi_perfil`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       setData(response.data);
       setLoading(false);
       setError(false);

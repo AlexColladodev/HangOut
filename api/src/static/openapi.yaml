@@ -1,0 +1,700 @@
+openapi: 3.0.1
+info:
+  title: HangOut API
+  description: API para la gestión de establecimientos y actividades orientadas al ocio.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Servidor local
+
+paths:
+  /administrador_establecimiento:
+    post:
+      summary: Crear un nuevo administrador de establecimiento
+      requestBody:
+        description: Datos del administrador a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdministradorEstablecimiento'
+      responses:
+        '200':
+          description: Administrador creado exitosamente
+        '400':
+          description: Error de validación
+        '500':
+          description: Error del servidor
+    get:
+      summary: Consultar todos los administradores de establecimientos
+      responses:
+        '200':
+          description: Lista de administradores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdministradorEstablecimiento'
+        '500':
+          description: Error del servidor
+
+  /establecimientos:
+    post:
+      summary: Crear un nuevo establecimiento
+      requestBody:
+        description: Datos del establecimiento a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Establecimiento'
+      responses:
+        '200':
+          description: Establecimiento creado exitosamente
+        '400':
+          description: Error de validación
+        '500':
+          description: Error del servidor
+    get:
+      summary: Consultar todos los establecimientos
+      responses:
+        '200':
+          description: Lista de establecimientos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Establecimiento'
+        '500':
+          description: Error del servidor
+
+  /establecimientos/{id}:
+    get:
+      summary: Consultar un establecimiento por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID del establecimiento
+      responses:
+        '200':
+          description: Detalles del establecimiento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Establecimiento'
+        '404':
+          description: Establecimiento no encontrado
+        '500':
+          description: Error del servidor
+    delete:
+      summary: Eliminar un establecimiento por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID del establecimiento
+      responses:
+        '200':
+          description: Establecimiento eliminado exitosamente
+        '404':
+          description: Establecimiento no encontrado
+        '500':
+          description: Error del servidor
+    put:
+      summary: Actualizar un establecimiento por ID
+      requestBody:
+        description: Datos del establecimiento a actualizar
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Establecimiento'
+      responses:
+        '200':
+          description: Establecimiento actualizado exitosamente
+        '404':
+          description: Establecimiento no encontrado
+        '500':
+          description: Error del servidor
+
+  /establecimientos/filtro_personalizado:
+    get:
+      summary: Filtrar establecimientos de manera personalizada para el usuario autenticado
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de establecimientos filtrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Establecimiento'
+        '500':
+          description: Error del servidor
+
+  /establecimientos/filtrar:
+    get:
+      summary: Filtrar establecimientos por ambiente
+      parameters:
+        - name: ambiente
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: true
+          description: Lista de ambientes para filtrar los establecimientos
+      responses:
+        '200':
+          description: Lista de establecimientos filtrados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Establecimiento'
+        '500':
+          description: Error del servidor
+
+  /establecimientos/ordenados:
+    get:
+      summary: Consultar establecimientos ordenados
+      responses:
+        '200':
+          description: Lista de establecimientos ordenados
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Establecimiento'
+        '500':
+          description: Error del servidor
+
+  /eventos:
+    post:
+      summary: Crear un nuevo evento
+      requestBody:
+        description: Datos del evento a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evento'
+      responses:
+        '200':
+          description: Evento creado exitosamente
+        '400':
+          description: Error de validación
+        '500':
+          description: Error del servidor
+    get:
+      summary: Consultar todos los eventos
+      responses:
+        '200':
+          description: Lista de eventos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Evento'
+        '500':
+          description: Error del servidor
+
+  /eventos/{id}:
+    get:
+      summary: Consultar un evento por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID del evento
+      responses:
+        '200':
+          description: Detalles del evento
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evento'
+        '404':
+          description: Evento no encontrado
+        '500':
+          description: Error del servidor
+    delete:
+      summary: Eliminar un evento por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID del evento
+      responses:
+        '200':
+          description: Evento eliminado exitosamente
+        '404':
+          description: Evento no encontrado
+        '500':
+          description: Error del servidor
+    put:
+      summary: Actualizar un evento por ID
+      requestBody:
+        description: Datos del evento a actualizar
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evento'
+      responses:
+        '200':
+          description: Evento actualizado exitosamente
+        '404':
+          description: Evento no encontrado
+        '500':
+          description: Error del servidor
+
+  /ofertas:
+    post:
+      summary: Crear una nueva oferta
+      requestBody:
+        description: Datos de la oferta a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Oferta'
+      responses:
+        '200':
+          description: Oferta creada exitosamente
+        '400':
+          description: Error de validación
+        '500':
+          description: Error del servidor
+    get:
+      summary: Consultar todas las ofertas
+      responses:
+        '200':
+          description: Lista de ofertas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Oferta'
+        '500':
+          description: Error del servidor
+
+  /ofertas/{id}:
+    get:
+      summary: Consultar una oferta por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID de la oferta
+      responses:
+        '200':
+          description: Detalles de la oferta
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Oferta'
+        '404':
+          description: Oferta no encontrada
+        '500':
+          description: Error del servidor
+    delete:
+      summary: Eliminar una oferta por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID de la oferta
+      responses:
+        '200':
+          description: Oferta eliminada exitosamente
+        '404':
+          description: Oferta no encontrada
+        '500':
+          description: Error del servidor
+    put:
+      summary: Actualizar una oferta por ID
+      requestBody:
+        description: Datos de la oferta a actualizar
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Oferta'
+      responses:
+        '200':
+          description: Oferta actualizada exitosamente
+        '404':
+          description: Oferta no encontrada
+        '500':
+          description: Error del servidor
+
+  /usuario_generico:
+    post:
+      summary: Crear un nuevo usuario genérico
+      requestBody:
+        description: Datos del usuario a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioGenerico'
+      responses:
+        '200':
+          description: Usuario creado exitosamente
+        '400':
+          description: Error de validación
+        '500':
+          description: Error del servidor
+    get:
+      summary: Consultar todos los usuarios genéricos
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsuarioGenerico'
+        '500':
+          description: Error del servidor
+
+  /usuario_generico/mi_perfil:
+    get:
+      summary: Consultar el perfil del usuario autenticado
+      responses:
+        '200':
+          description: Perfil del usuario
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioGenerico'
+        '404':
+          description: Usuario no encontrado
+        '500':
+          description: Error del servidor
+
+  /actividades:
+    post:
+      summary: Crear una nueva actividad
+      requestBody:
+        description: Datos de la actividad a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Actividad'
+      responses:
+        '200':
+          description: Actividad creada exitosamente
+        '400':
+          description: Error de validación
+        '500':
+          description: Error del servidor
+    get:
+      summary: Consultar todas las actividades
+      responses:
+        '200':
+          description: Lista de actividades
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Actividad'
+        '500':
+          description: Error del servidor
+
+  /actividades/{id}:
+    get:
+      summary: Consultar una actividad por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID de la actividad
+      responses:
+        '200':
+          description: Detalles de la actividad
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Actividad'
+        '404':
+          description: Actividad no encontrada
+        '500':
+          description: Error del servidor
+    delete:
+      summary: Eliminar una actividad por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID de la actividad
+      responses:
+        '200':
+          description: Actividad eliminada exitosamente
+        '404':
+          description: Actividad no encontrada
+        '500':
+          description: Error del servidor
+
+  /reviews:
+    post:
+      summary: Crear una nueva review
+      requestBody:
+        description: Datos de la review a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        '200':
+          description: Review creada exitosamente
+        '400':
+          description: Error de validación
+        '500':
+          description: Error del servidor
+    get:
+      summary: Consultar todas las reviews
+      responses:
+        '200':
+          description: Lista de reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+        '500':
+          description: Error del servidor
+
+  /reviews/{id}:
+    get:
+      summary: Consultar una review por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID de la review
+      responses:
+        '200':
+          description: Detalles de la review
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '404':
+          description: Review no encontrada
+        '500':
+          description: Error del servidor
+    delete:
+      summary: Eliminar una review por ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID de la review
+      responses:
+        '200':
+          description: Review eliminada exitosamente
+        '404':
+          description: Review no encontrada
+        '500':
+          description: Error del servidor
+
+components:
+  schemas:
+    AdministradorEstablecimiento:
+      type: object
+      properties:
+        nombre:
+          type: string
+        nombre_usuario:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        establecimientos:
+          type: array
+          items:
+            type: string
+        dni:
+          type: string
+        telefono:
+          type: string
+        fecha_nac:
+          type: string
+        imagen_url:
+          type: string
+
+    Establecimiento:
+      type: object
+      properties:
+        cif:
+          type: string
+        nombre_establecimiento:
+          type: string
+        id_administrador:
+          type: string
+        ambiente:
+          type: array
+          items:
+            type: string
+        ofertas:
+          type: array
+          items:
+            type: string
+        eventos:
+          type: array
+          items:
+            type: string
+        reviews:
+          type: array
+          items:
+            type: string
+        imagen_url:
+          type: string
+
+    Evento:
+      type: object
+      properties:
+        nombre_evento:
+          type: string
+        descripcion_evento:
+          type: string
+        fecha_evento:
+          type: string
+        precio:
+          type: number
+          format: float
+        hora_evento:
+          type: string
+        id_establecimiento:
+          type: string
+        imagen_url:
+          type: string
+
+    Oferta:
+      type: object
+      properties:
+        nombre_oferta:
+          type: string
+        descripcion_oferta:
+          type: string
+        precio_oferta:
+          type: number
+          format: float
+        id_establecimiento:
+          type: string
+        imagen_url:
+          type: string
+
+    UsuarioGenerico:
+      type: object
+      properties:
+        nombre:
+          type: string
+        nombre_usuario:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        seguidos:
+          type: array
+          items:
+            type: string
+        preferencias:
+          type: array
+          items:
+            type: string
+        actividades_creadas:
+          type: array
+          items:
+            type: string
+        reviews:
+          type: array
+          items:
+            type: string
+        fecha_nac:
+          type: string
+        imagen_url:
+          type: string
+
+    Actividad:
+      type: object
+      properties:
+        nombre_actividad:
+          type: string
+        descripcion_actividad:
+          type: string
+        ubicacion:
+          type: string
+        fecha_actividad:
+          type: string
+        hora_actividad:
+          type: string
+        id_usuario_creador:
+          type: string
+        participantes:
+          type: array
+          items:
+            type: string
+
+    Review:
+      type: object
+      properties:
+        calificacion:
+          type: number
+          format: float
+        mensaje:
+          type: string
+        id_usuario:
+          type: string
+        id_establecimiento:
+          type: string
+        fecha_creacion:
+          type: string
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
